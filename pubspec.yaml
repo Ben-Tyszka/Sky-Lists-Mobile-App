@@ -1,0 +1,26 @@
+name: sky_lists
+description: A modern, real-time list app
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+  provider: ^4.0.1
+
+  firebase_auth: ^0.15.3
+  cloud_firestore: ^0.13.0+1
+
+  intl: ^0.16.0
+  vibration: 1.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
