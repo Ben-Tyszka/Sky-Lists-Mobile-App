@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 
 import 'package:sky_lists/models/sky_list_item.dart';
 import 'package:sky_lists/models/sky_list_meta.dart';
+import 'package:sky_lists/models/sky_list_profile.dart';
+import 'package:sky_lists/models/sky_list_shared.dart';
 
 class DatabaseService {
   final Firestore _db = Firestore.instance;
@@ -147,5 +149,112 @@ class DatabaseService {
       'addedAt': FieldValue.serverTimestamp(),
       'hidden': false,
     });
+  }
+
+  ///Searches for an email to a registered user, if match returns users uid
+  Future<String> searchForEmail({@required String emailToSearchFor}) async {
+    final query = await _db
+        .collection("users")
+        .where(
+          "email",
+          isEqualTo: emailToSearchFor,
+        )
+        .getDocuments();
+    if (query.documents.isEmpty) return null;
+    return query.documents.first.documentID;
+  }
+
+  ///Searches for an phone to a registered user, if match returns users uid
+  Future<String> searchForPhoneNumber(
+      {@required String phoneToSearchFor}) async {
+    final query = await _db
+        .collection("users")
+        .where(
+          "phoneNumber",
+          isEqualTo: phoneToSearchFor,
+        )
+        .getDocuments();
+    if (query.documents.isEmpty) return null;
+
+    return query.documents.first.documentID;
+  }
+
+  ///Shares a list to some user
+  Future<void> shareList(
+      {@required SkyListMeta list,
+      @required ownerId,
+      @required sharedWithId}) async {
+    await list.docRef.collection("sharedwith").document(sharedWithId).setData(
+      {
+        "sharedAt": FieldValue.serverTimestamp(),
+      },
+    );
+
+    await _db
+        .collection("users")
+        .document(sharedWithId)
+        .collection("sharedwithme")
+        .document(list.id)
+        .setData(
+      {
+        "owner": ownerId,
+        "sharedAt": FieldValue.serverTimestamp(),
+      },
+    );
+
+    await _db
+        .collection("users")
+        .document(ownerId)
+        .collection("sharehistory")
+        .document(sharedWithId)
+        .setData(
+      {
+        "count": FieldValue.increment(1),
+        "lastShared": FieldValue.serverTimestamp(),
+      },
+      merge: true,
+    );
+  }
+
+  /// Get a stream of everyone that a list is shared with
+  Stream<List<SkyListShared>> streamListSharedWith({
+    @required SkyListMeta list,
+    int limit = 10,
+    Timestamp afterSharedAt,
+  }) {
+    final baseQuery = list.docRef.collection('sharedwith').limit(limit).orderBy(
+          "sharedAt",
+          descending: true,
+        );
+    return afterSharedAt == null
+        ? baseQuery.snapshots().map((query) =>
+            query.documents.map((doc) => SkyListShared.fromFirestore(doc)))
+        : baseQuery
+            .startAfter([
+              afterSharedAt,
+            ])
+            .snapshots()
+            .map((query) =>
+                query.documents.map((doc) => SkyListShared.fromFirestore(doc)));
+  }
+
+  Future<SkyListProfile> getUsersProfile({@required userId}) async {
+    final userDoc = await _db.collection("users").document(userId).get();
+    return SkyListProfile.fromFirestore(userDoc);
+  }
+
+  ///Shares a list to some user
+  Future<void> removeFromSharedList(
+      {@required SkyListMeta list,
+      @required ownerId,
+      @required sharedWithId}) async {
+    await list.docRef.collection("sharedwith").document(sharedWithId).delete();
+
+    await _db
+        .collection("users")
+        .document(sharedWithId)
+        .collection("sharedwithme")
+        .document(list.id)
+        .delete();
   }
 }

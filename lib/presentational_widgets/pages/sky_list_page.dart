@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/sky_list_page_arguments.dart';
+import 'package:sky_lists/presentational_widgets/pages/sky_list_share_with_page.dart';
 import 'package:sky_lists/stateful_widgets/forms/list_title_form.dart';
 import 'package:sky_lists/stateful_widgets/sky_list_pagination.dart';
 import 'package:sky_lists/database_service.dart';
@@ -23,6 +24,17 @@ class SkyListPage extends StatelessWidget {
       ),
       child: Scaffold(
         appBar: AppBar(
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.share,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, SkyListShareWithPage.routeName,
+                    arguments: args);
+              },
+            )
+          ],
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
