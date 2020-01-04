@@ -238,7 +238,7 @@ class DatabaseService {
                 query.documents.map((doc) => SkyListShared.fromFirestore(doc)));
   }
 
-  Future<SkyListProfile> getUsersProfile({@required userId}) async {
+  Future<SkyListProfile> getUsersProfile({@required String userId}) async {
     final userDoc = await _db.collection("users").document(userId).get();
     return SkyListProfile.fromFirestore(userDoc);
   }
@@ -256,5 +256,17 @@ class DatabaseService {
         .collection("sharedwithme")
         .document(list.id)
         .delete();
+  }
+
+  Stream<List<SkyListProfile>> getCommonSharedWith({@required String userId}) {
+    return _db
+        .collection('users')
+        .document(userId)
+        .collection('sharehistory')
+        .orderBy('count', descending: true)
+        .limit(4)
+        .snapshots()
+        .map((query) =>
+            query.documents.map((doc) => SkyListProfile.fromFirestore(doc)));
   }
 }
