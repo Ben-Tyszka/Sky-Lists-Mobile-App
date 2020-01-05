@@ -7,6 +7,7 @@ import 'package:sky_lists/models/sky_list_item.dart';
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/models/sky_list_profile.dart';
 import 'package:sky_lists/models/sky_list_shared.dart';
+import 'package:sky_lists/models/sky_list_shared_meta.dart';
 
 class DatabaseService {
   final Firestore _db = Firestore.instance;
@@ -43,6 +44,19 @@ class DatabaseService {
     @required SkyListMeta list,
   }) {
     return list.docRef.snapshots().map((doc) => SkyListMeta.fromFirestore(doc));
+  }
+
+  /// Get a stream of the metadata for one skylist
+  Stream<SkyListMeta> streamListMetaFromSharedMeta({
+    @required SkyListSharedMeta list,
+  }) {
+    return _db
+        .collection('shopping lists')
+        .document(list.owner)
+        .collection('lists')
+        .document(list.listId)
+        .snapshots()
+        .map((doc) => SkyListMeta.fromFirestore(doc));
   }
 
   /// Create a list
@@ -246,8 +260,8 @@ class DatabaseService {
   ///Shares a list to some user
   Future<void> removeFromSharedList(
       {@required SkyListMeta list,
-      @required ownerId,
-      @required sharedWithId}) async {
+      @required String ownerId,
+      @required String sharedWithId}) async {
     await list.docRef.collection("sharedwith").document(sharedWithId).delete();
 
     await _db
@@ -268,5 +282,41 @@ class DatabaseService {
         .snapshots()
         .map((query) =>
             query.documents.map((doc) => SkyListProfile.fromFirestore(doc)));
+  }
+
+  /// Get a stream of a dart list objects that contain the metadata for each SkyList
+  Stream<List<SkyListSharedMeta>> streamListsSharedWithMe({
+    @required String userId,
+    int limit = 10,
+    Timestamp afterSharedAt,
+  }) {
+    final baseQuery = _db
+        .collection("users")
+        .document(userId)
+        .collection("sharedwithme")
+        .limit(limit)
+        .orderBy(
+          "sharedAt",
+          descending: true,
+        );
+
+    return afterSharedAt == null
+        ? baseQuery.snapshots().map((query) =>
+            query.documents.map((doc) => SkyListSharedMeta.fromFirestore(doc)))
+        : baseQuery
+            .startAfter([
+              afterSharedAt,
+            ])
+            .snapshots()
+            .map((query) => query.documents
+                .map((doc) => SkyListSharedMeta.fromFirestore(doc)));
+  }
+
+  ///Gets a users display name
+  Future<String> getUserDisplayName({@required String userId}) async {
+    final query = await _db.collection("users").document(userId).get();
+
+    if (!query.exists) return null;
+    return query.data['name'];
   }
 }
