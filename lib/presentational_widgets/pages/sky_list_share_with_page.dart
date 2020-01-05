@@ -4,8 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/common_shared_with.dart';
 import 'package:sky_lists/presentational_widgets/pages/sky_list_page_arguments.dart';
+import 'package:sky_lists/presentational_widgets/qr_code_dialog.dart';
 import 'package:sky_lists/stateful_widgets/forms/share_with_form.dart';
 import 'package:sky_lists/stateful_widgets/sky_list_shared_with_pagination.dart';
+import 'package:sky_lists/utils/custom_icons.dart';
 import 'package:sky_lists/database_service.dart';
 
 class SkyListShareWithPage extends StatelessWidget {
@@ -22,14 +24,27 @@ class SkyListShareWithPage extends StatelessWidget {
       ),
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.close,
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(CustomIcons.qrcode),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => QrCodeAlertDialog(),
+                );
+              },
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+            IconButton(
+              icon: Icon(
+                Icons.check,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
           title: Text('Share List'),
         ),
         body: Column(

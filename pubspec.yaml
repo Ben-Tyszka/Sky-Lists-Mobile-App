@@ -19,6 +19,7 @@ dependencies:
   vibration: ^1.2.2
   validators: ^2.0.0+1
   random_color: ^1.0.3
+  qr_flutter: ^3.2.0
 
 dev_dependencies:
   flutter_test:
@@ -26,3 +27,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: CustomIcons
+      fonts:
+        - asset: fonts/CustomIcons.ttf
