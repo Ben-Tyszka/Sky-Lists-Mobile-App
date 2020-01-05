@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:sky_lists/presentational_widgets/bottom_nav_bar_logged_in_page.dart';
 import 'package:sky_lists/stateful_widgets/forms/new_list_form.dart';
-
+import 'package:sky_lists/stateful_widgets/shared_sky_lists_pagination.dart';
 import 'package:sky_lists/stateful_widgets/sky_lists_pagination.dart';
 
 class LoggedInHomePage extends StatefulWidget {
@@ -15,7 +16,7 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
     with TickerProviderStateMixin {
   final List<Widget> _children = [
     SkyListsPagination(),
-    Container(),
+    SharedSkyListsPagination(),
   ];
 
   TabController _controller;
