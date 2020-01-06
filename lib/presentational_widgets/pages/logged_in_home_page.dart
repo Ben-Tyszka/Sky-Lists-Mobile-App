@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sky_lists/presentational_widgets/bottom_nav_bar_logged_in_page.dart';
+import 'package:sky_lists/presentational_widgets/pages/qr_scanner_page.dart';
 import 'package:sky_lists/stateful_widgets/forms/new_list_form.dart';
 import 'package:sky_lists/stateful_widgets/shared_sky_lists_pagination.dart';
 import 'package:sky_lists/stateful_widgets/sky_lists_pagination.dart';
@@ -44,7 +45,16 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Sky Lists'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.camera),
+            onPressed: () {
+              Navigator.pushNamed(context, QRScannerPage.routeName);
+            },
+          ),
+        ],
       ),
       body: TabBarView(
         controller: _controller,

@@ -194,7 +194,7 @@ class DatabaseService {
   }
 
   ///Shares a list to some user
-  Future<void> shareList(
+  Future<String> shareList(
       {@required SkyListMeta list,
       @required ownerId,
       @required sharedWithId}) async {
@@ -228,6 +228,7 @@ class DatabaseService {
       },
       merge: true,
     );
+    return '';
   }
 
   /// Get a stream of everyone that a list is shared with
@@ -329,5 +330,21 @@ class DatabaseService {
       "name": name,
       "email": email,
     });
+  }
+
+  String getOwnerFromListMeta({@required SkyListMeta list}) {
+    return list.docRef.parent().parent().documentID;
+  }
+
+  Future<SkyListMeta> getListMetaFromIds(
+      {@required String ownerId, @required String listId}) async {
+    final snapshot = await _db
+        .collection('shopping lists')
+        .document(ownerId)
+        .collection('lists')
+        .document(listId)
+        .get();
+
+    return SkyListMeta.fromFirestore(snapshot);
   }
 }
