@@ -142,7 +142,7 @@ class _ShareWithFormState extends State<ShareWithForm> {
               ? CircularProgressIndicator()
               : FlatButton.icon(
                   icon: Icon(
-                    Icons.share,
+                    Icons.send,
                   ),
                   label: Text('Share'),
                   onPressed: onPressed,

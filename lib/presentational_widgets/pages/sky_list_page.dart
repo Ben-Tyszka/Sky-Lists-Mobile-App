@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,8 +31,36 @@ class SkyListPage extends StatelessWidget {
                 Icons.share,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, SkyListShareWithPage.routeName,
-                    arguments: args);
+                final isEmailVerified =
+                    Provider.of<FirebaseUser>(context).isEmailVerified;
+                if (isEmailVerified) {
+                  Navigator.pushNamed(context, SkyListShareWithPage.routeName,
+                      arguments: args);
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Please Verify Email'),
+                      content: Text(
+                          'You must verify your email before you can share a list.'),
+                      actions: <Widget>[
+                        FlatButton(
+                          onPressed: () {
+                            Provider.of<FirebaseUser>(context)
+                                .sendEmailVerification();
+                          },
+                          child: Text('Resend Email'),
+                        ),
+                        FlatButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('Close'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
             )
           ],
