@@ -1,20 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class SkyListShared {
+class SkyListSharePageMeta {
   final String sharedWithId;
   final DocumentReference docRef;
   final Timestamp sharedAt;
 
-  SkyListShared({
+  SkyListSharePageMeta({
     this.sharedWithId,
     this.docRef,
     this.sharedAt,
   });
 
-  factory SkyListShared.fromFirestore(DocumentSnapshot doc) {
+  factory SkyListSharePageMeta.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data;
 
-    return SkyListShared(
+    return SkyListSharePageMeta(
       sharedWithId: doc.documentID,
       docRef: doc.reference,
       sharedAt: data['sharedAt'] ?? Timestamp.now(),

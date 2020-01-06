@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sky_lists/models/sky_list_item.dart';
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/models/sky_list_profile.dart';
-import 'package:sky_lists/models/sky_list_shared.dart';
+import 'package:sky_lists/models/sky_list_share_page_meta.dart';
 import 'package:sky_lists/models/sky_list_shared_meta.dart';
 
 class DatabaseService {
@@ -232,7 +232,7 @@ class DatabaseService {
   }
 
   /// Get a stream of everyone that a list is shared with
-  Stream<List<SkyListShared>> streamListSharedWith({
+  Stream<List<SkyListSharePageMeta>> streamListSharedWith({
     @required SkyListMeta list,
     int limit = 10,
     Timestamp afterSharedAt,
@@ -242,15 +242,15 @@ class DatabaseService {
           descending: true,
         );
     return afterSharedAt == null
-        ? baseQuery.snapshots().map((query) =>
-            query.documents.map((doc) => SkyListShared.fromFirestore(doc)))
+        ? baseQuery.snapshots().map((query) => query.documents
+            .map((doc) => SkyListSharePageMeta.fromFirestore(doc)))
         : baseQuery
             .startAfter([
               afterSharedAt,
             ])
             .snapshots()
-            .map((query) =>
-                query.documents.map((doc) => SkyListShared.fromFirestore(doc)));
+            .map((query) => query.documents
+                .map((doc) => SkyListSharePageMeta.fromFirestore(doc)));
   }
 
   Future<SkyListProfile> getUsersProfile({@required String userId}) async {

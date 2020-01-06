@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:sky_lists/models/sky_list_meta.dart';
-import 'package:sky_lists/models/sky_list_shared.dart';
+import 'package:sky_lists/models/sky_list_share_page_meta.dart';
 import 'package:sky_lists/presentational_widgets/sky_list_shared_with_builder.dart';
 import 'package:sky_lists/database_service.dart';
 
@@ -15,11 +15,11 @@ class SkyListSharedWithPagination extends StatefulWidget {
 class _SkyListSharedWithPaginationState
     extends State<SkyListSharedWithPagination> {
   ScrollController _controller;
-  List<SkyListShared> _people = [];
+  List<SkyListSharePageMeta> _people = [];
   bool _isLoading = true;
   bool _morePeopleAvailable = true;
   bool _gettingMorePeople = false;
-  SkyListShared _lastPerson;
+  SkyListSharePageMeta _lastPerson;
 
   final _db = DatabaseService();
 

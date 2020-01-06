@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/models/sky_list_profile.dart';
-import 'package:sky_lists/models/sky_list_shared.dart';
+import 'package:sky_lists/models/sky_list_share_page_meta.dart';
 import 'package:sky_lists/database_service.dart';
 
 class SkyListSharedWithBuilder extends StatelessWidget {
@@ -16,7 +16,7 @@ class SkyListSharedWithBuilder extends StatelessWidget {
   });
 
   final ScrollController controller;
-  final List<SkyListShared> data;
+  final List<SkyListSharePageMeta> data;
   final bool isLoading;
   final bool isGettingMorePeople;
 
