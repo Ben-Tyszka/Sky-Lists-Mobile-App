@@ -10,6 +10,7 @@ import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/sky_list_share_with_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/startup_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/terms_of_service_page.dart';
+import 'package:sky_lists/presentational_widgets/pages/account_page.dart';
 
 class SkyListsApp extends StatelessWidget {
   @override
@@ -31,6 +32,7 @@ class SkyListsApp extends StatelessWidget {
         PrivacyPolicyPage.routeName: (context) => PrivacyPolicyPage(),
         SendPasswordResetPage.routeName: (context) => SendPasswordResetPage(),
         QRScannerPage.routeName: (context) => QRScannerPage(),
+        AccountPage.routeName: (context) => AccountPage(),
       },
     );
   }

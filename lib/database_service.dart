@@ -77,7 +77,17 @@ class DatabaseService {
   }
 
   /// Delete a list
-  void deleteList({@required SkyListMeta list}) {
+  void deleteList({@required SkyListMeta list}) async {
+    final querySnapshot =
+        await list.docRef.collection("sharedwith").getDocuments();
+    querySnapshot.documents.forEach((doc) async {
+      _db
+          .collection("users")
+          .document(doc.documentID)
+          .collection("sharedwithme")
+          .document(list.id)
+          .delete();
+    });
     list.docRef.delete();
   }
 
@@ -194,7 +204,7 @@ class DatabaseService {
   }
 
   ///Shares a list to some user
-  Future<String> shareList(
+  Future<void> shareList(
       {@required SkyListMeta list,
       @required ownerId,
       @required sharedWithId}) async {
@@ -228,7 +238,6 @@ class DatabaseService {
       },
       merge: true,
     );
-    return '';
   }
 
   /// Get a stream of everyone that a list is shared with
@@ -346,5 +355,28 @@ class DatabaseService {
         .get();
 
     return SkyListMeta.fromFirestore(snapshot);
+  }
+
+  Future<void> deleteUser({@required String userId}) async {
+    //deleteList
+    final docs = await _db
+        .collection('shopping lists')
+        .document(userId)
+        .collection('lists')
+        .getDocuments();
+
+    docs.documents.forEach((doc) {
+      final list = SkyListMeta.fromFirestore(doc);
+      deleteList(list: list);
+    });
+
+    await _db.collection('shopping lists').document(userId).delete();
+    await _db.collection('users').document(userId).delete();
+  }
+
+  void updateDisplayName({@required String userId, @required String newName}) {
+    _db.collection('users').document(userId).updateData({
+      'name': newName,
+    });
   }
 }
