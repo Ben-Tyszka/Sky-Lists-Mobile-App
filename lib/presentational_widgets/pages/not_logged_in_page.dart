@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
+import 'package:sky_lists/presentational_widgets/pages/create_account_page.dart';
 import 'package:sky_lists/stateful_widgets/forms/login_form.dart';
 import 'package:sky_lists/utils/authentication_service.dart';
 
@@ -26,7 +27,9 @@ class NotLoggedInPage extends StatelessWidget {
               backgroundColor: Theme.of(context).buttonColor,
               icon: Icons.email,
               text: 'Sign up with Email',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, CreateAccountPage.routeName);
+              },
             ),
             Divider(),
             SignInButton(

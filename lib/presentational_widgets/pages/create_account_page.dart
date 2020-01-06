@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
+import 'package:sky_lists/stateful_widgets/forms/create_account_form.dart';
 
 class CreateAccountPage extends StatelessWidget {
-  static final routeName = '/create_account_page';
+  static final String routeName = '/create_account_page';
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class CreateAccountPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: null,
+          child: CreateAccountForm(),
         ),
       ),
     );

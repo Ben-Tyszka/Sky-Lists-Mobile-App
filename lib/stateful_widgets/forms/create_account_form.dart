@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:sky_lists/presentational_widgets/create_account.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
+import 'package:sky_lists/presentational_widgets/pages/privacy_policy_page.dart';
+import 'package:sky_lists/presentational_widgets/pages/terms_of_service_page.dart';
 import 'package:sky_lists/database_service.dart';
 
 class CreateAccountForm extends StatefulWidget {
@@ -132,11 +134,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
   }
 
   _seePrivacy(BuildContext context) {
-    Navigator.pushNamed(context, '/privacy');
+    Navigator.pushNamed(context, PrivacyPolicyPage.routeName);
   }
 
   _seeTOS(BuildContext context) {
-    Navigator.pushNamed(context, '/tos');
+    Navigator.pushNamed(context, TermsOfServicePage.routeName);
   }
 
   _formFieldStateChange(bool value, FormFieldState<bool> formFieldState) {

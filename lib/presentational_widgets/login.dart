@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:sky_lists/presentational_widgets/pages/send_password_reset_page.dart';
 
 import 'package:sky_lists/utils/validation.dart';
 
@@ -107,7 +108,8 @@ class Login extends StatelessWidget {
                     TextSpan(
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.pushNamed(context, '/passwordreset');
+                          Navigator.pushNamed(
+                              context, SendPasswordResetPage.routeName);
                         },
                       text: 'Reset it here',
                       style: Theme.of(context).textTheme.caption.copyWith(

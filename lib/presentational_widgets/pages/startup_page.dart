@@ -4,7 +4,7 @@ import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart'
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 
 class StartupPage extends StatelessWidget {
-  static final routeName = '/startup';
+  static final String routeName = '/startup';
 
   @override
   Widget build(BuildContext context) {
