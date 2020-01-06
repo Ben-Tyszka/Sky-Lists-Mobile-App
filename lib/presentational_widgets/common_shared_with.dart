@@ -25,9 +25,9 @@ class CommonSharedWith extends StatelessWidget {
             return ActionChip(
               onPressed: () {
                 _db.shareList(
-                    list: Provider.of<SkyListMeta>(context),
-                    ownerId: Provider.of<FirebaseUser>(context).uid,
-                    sharedWithId: snapshot.data[index].docRef.documentID);
+                  list: Provider.of<SkyListMeta>(context),
+                  shareWithId: snapshot.data[index].docRef.documentID,
+                );
               },
               label: Text(snapshot.data[index].name),
               backgroundColor: RandomColor().randomColor(),

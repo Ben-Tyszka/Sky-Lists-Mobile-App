@@ -101,8 +101,7 @@ class _QRScannerPageState extends State<QRScannerPage> {
         _db
             .shareList(
           list: list,
-          ownerId: data.ownerId,
-          sharedWithId: Provider.of<FirebaseUser>(context),
+          shareWithId: Provider.of<FirebaseUser>(context),
         )
             .then((val) {
           Navigator.popAndPushNamed(

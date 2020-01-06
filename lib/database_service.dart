@@ -205,10 +205,9 @@ class DatabaseService {
 
   ///Shares a list to some user
   Future<void> shareList(
-      {@required SkyListMeta list,
-      @required ownerId,
-      @required sharedWithId}) async {
-    await list.docRef.collection("sharedwith").document(sharedWithId).setData(
+      {@required SkyListMeta list, @required shareWithId}) async {
+    final String ownerId = list.docRef.parent().parent().documentID;
+    await list.docRef.collection("sharedwith").document(shareWithId).setData(
       {
         "sharedAt": FieldValue.serverTimestamp(),
       },
@@ -216,7 +215,7 @@ class DatabaseService {
 
     await _db
         .collection("users")
-        .document(sharedWithId)
+        .document(shareWithId)
         .collection("sharedwithme")
         .document(list.id)
         .setData(
@@ -230,7 +229,7 @@ class DatabaseService {
         .collection("users")
         .document(ownerId)
         .collection("sharehistory")
-        .document(sharedWithId)
+        .document(shareWithId)
         .setData(
       {
         "count": FieldValue.increment(1),

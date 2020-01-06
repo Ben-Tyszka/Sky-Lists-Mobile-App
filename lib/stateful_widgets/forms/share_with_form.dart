@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -69,12 +68,10 @@ class _ShareWithFormState extends State<ShareWithForm> {
       });
     } else {
       final list = Provider.of<SkyListMeta>(context);
-      final user = Provider.of<FirebaseUser>(context);
 
       await _db.shareList(
         list: list,
-        ownerId: user.uid,
-        sharedWithId: toShareWithId,
+        shareWithId: toShareWithId,
       );
       setState(() {
         _message = '';
