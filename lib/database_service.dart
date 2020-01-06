@@ -312,11 +312,22 @@ class DatabaseService {
                 .map((doc) => SkyListSharedMeta.fromFirestore(doc)));
   }
 
-  ///Gets a users display name
+  ///Sets a users profile data
   Future<String> getUserDisplayName({@required String userId}) async {
     final query = await _db.collection("users").document(userId).get();
 
     if (!query.exists) return null;
     return query.data['name'];
+  }
+
+  void updateUserProfile({
+    @required String userId,
+    @required String name,
+    @required String email,
+  }) {
+    _db.collection('users').document(userId).setData({
+      "name": name,
+      "email": email,
+    });
   }
 }

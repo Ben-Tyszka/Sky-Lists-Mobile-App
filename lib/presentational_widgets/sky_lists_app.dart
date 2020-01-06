@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:sky_lists/presentational_widgets/pages/create_account_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
@@ -21,6 +22,7 @@ class SkyListsApp extends StatelessWidget {
         LoggedInHomePage.routeName: (context) => LoggedInHomePage(),
         SkyListPage.routeName: (context) => SkyListPage(),
         SkyListShareWithPage.routeName: (context) => SkyListShareWithPage(),
+        CreateAccountPage.routeName: (context) => CreateAccountPage(),
       },
     );
   }
