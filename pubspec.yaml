@@ -22,7 +22,9 @@ dependencies:
   flutter_facebook_login: ^3.0.0
   google_sign_in: ^4.1.1
   url_launcher: ^5.4.1
-  fast_qr_reader_view: ^0.1.5
+  fast_qr_reader_view:
+    git:
+      url: git://github.com/facundomedica/fast_qr_reader_view.git
   permission_handler: ^4.0.0
   soundpool: ^0.6.0
   get_version: ^0.2.0+1

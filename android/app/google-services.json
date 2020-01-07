@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "563495218092",
+    "firebase_url": "https://sky-lists.firebaseio.com",
+    "project_id": "sky-lists",
+    "storage_bucket": "sky-lists.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563495218092:android:4165879e67551e63",
+        "android_client_info": {
+          "package_name": "app.skylists.sky"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563495218092-5fr48s5n9hr94753khjo49iik1cqkhd3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9V3WDb9tg316LTxRJZhdMSuwbGp9T9Lo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563495218092-5fr48s5n9hr94753khjo49iik1cqkhd3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
