@@ -18,7 +18,12 @@ class SkyListsApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sky Lists',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        brightness: Brightness.light,
+        primarySwatch: Colors.orange[800],
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.orange[800],
       ),
       initialRoute: StartupPage.routeName,
       routes: {
