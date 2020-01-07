@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sky_lists/presentational_widgets/delete_account.dart';
 import 'package:sky_lists/presentational_widgets/sign_out_button.dart';
+import 'package:sky_lists/stateful_widgets/about_app.dart';
 import 'package:sky_lists/stateful_widgets/forms/name_change_form.dart';
 
 class AccountPage extends StatelessWidget {
@@ -38,6 +39,14 @@ class AccountPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Account'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.info_outline),
+            onPressed: () {
+              showDialog(context: context, builder: (context) => AboutApp());
+            },
+          ),
+        ],
       ),
       body: Column(
         children:
