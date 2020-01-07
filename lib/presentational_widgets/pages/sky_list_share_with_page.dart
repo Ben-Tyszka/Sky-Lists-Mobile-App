@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/common_shared_with.dart';
-import 'package:sky_lists/presentational_widgets/pages/sky_list_page_arguments.dart';
+import 'package:sky_lists/utils/sky_list_page_arguments.dart';
 import 'package:sky_lists/presentational_widgets/qr_code_dialog.dart';
 import 'package:sky_lists/stateful_widgets/forms/share_with_form.dart';
 import 'package:sky_lists/stateful_widgets/sky_list_shared_with_pagination.dart';

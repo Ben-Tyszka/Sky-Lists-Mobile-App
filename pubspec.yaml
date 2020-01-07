@@ -1,7 +1,7 @@
 name: sky_lists
 description: A modern, real-time list app
 
-version: 1.0.0+1
+version: 0.3+17
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

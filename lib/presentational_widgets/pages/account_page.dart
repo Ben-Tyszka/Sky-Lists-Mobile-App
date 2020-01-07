@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:sky_lists/presentational_widgets/delete_account.dart';
+import 'package:sky_lists/presentational_widgets/sign_out_button.dart';
 import 'package:sky_lists/stateful_widgets/forms/name_change_form.dart';
 
 class AccountPage extends StatelessWidget {
@@ -21,11 +22,15 @@ class AccountPage extends StatelessWidget {
         },
       ),
       Divider(),
+      SignOutButton(),
+      Divider(),
       DeleteAccount(),
     ];
 
     final emailVerifiedColumn = [
       NameChangeForm(),
+      Divider(),
+      SignOutButton(),
       Divider(),
       DeleteAccount(),
     ];

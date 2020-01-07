@@ -7,7 +7,7 @@ import 'package:sky_lists/database_service.dart';
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/new_list_dialog.dart';
 import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
-import 'package:sky_lists/presentational_widgets/pages/sky_list_page_arguments.dart';
+import 'package:sky_lists/utils/sky_list_page_arguments.dart';
 import 'package:sky_lists/utils/timestamp_to_formmated_date.dart';
 
 class NewListForm extends StatefulWidget {
