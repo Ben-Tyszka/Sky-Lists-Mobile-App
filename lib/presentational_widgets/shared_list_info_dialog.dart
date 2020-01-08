@@ -48,12 +48,7 @@ class SharedListInfoDialog extends StatelessWidget {
             icon: Icon(Icons.delete),
             color: Colors.red,
             label: Text('Hold to unshare'),
-            onPressed: () {
-              Scaffold.of(context).hideCurrentSnackBar();
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('Hold button to unshare'),
-              ));
-            },
+            onPressed: () {},
             onLongPress: () {
               Scaffold.of(context).hideCurrentSnackBar();
               Vibration.vibrate();

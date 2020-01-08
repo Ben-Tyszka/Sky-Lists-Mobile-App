@@ -1,4 +1,4 @@
-package com.example.sky_lists
+package app.skylists.sky
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
