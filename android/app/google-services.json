@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "563495218092-dk50iqblbfor23dl579sm402le5963a6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.skylists.sky",
+            "certificate_hash": "477d938891fe994bb5100b7dbfb5709302f34a68"
+          }
+        },
+        {
+          "client_id": "563495218092-4491a0an3kk0c2rkmlledq43c3csjms2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.skylists.sky",
+            "certificate_hash": "24f94da9a01c5b2855daa33f73e9b988e2749025"
+          }
+        },
+        {
           "client_id": "563495218092-5fr48s5n9hr94753khjo49iik1cqkhd3.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -30,6 +46,13 @@
             {
               "client_id": "563495218092-5fr48s5n9hr94753khjo49iik1cqkhd3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "563495218092-u0vkvulo5nfodmgfvehfu8re074haajc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.skylists.skylists"
+              }
             }
           ]
         }
