@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +34,8 @@ class _SkyListPaginationState extends State<SkyListPagination> {
         final delta = MediaQuery.of(context).size.height;
 
         if (maxScroll - current <= delta) {
-          print('Loading more list items');
+          log('More list items are set to be loaded',
+              name: 'SkyListPagination didChangeDependencies()');
           _loadMoreItems();
         }
       });
@@ -57,6 +60,7 @@ class _SkyListPaginationState extends State<SkyListPagination> {
       setState(() {
         _isLoading = false;
       });
+      log('List items were updated', name: 'SkyListPagination stream');
     });
   }
 
@@ -84,7 +88,15 @@ class _SkyListPaginationState extends State<SkyListPagination> {
       setState(() {
         _gettingMoreLists = false;
       });
+      log('Additional list items were updated',
+          name: 'SkyListPagination _loadMoreLists()');
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override

@@ -59,7 +59,7 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
       setState(() {
         _isLoading = false;
       });
-      log('Lists were updated', name: 'Sky Lists Pagination _getLists()');
+      log('Lists were updated', name: 'SkyListsPagination stream');
     });
   }
 
@@ -88,8 +88,14 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
       });
 
       log('Additional lists were updated',
-          name: 'Sky Lists Pagination _loadMoreLists()');
+          name: 'SkyListsPagination _loadMoreLists()');
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override

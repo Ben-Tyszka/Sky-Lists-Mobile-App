@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +26,9 @@ class _SkyListSharedWithPaginationState
   final _db = DatabaseService();
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     _controller = ScrollController()
       ..addListener(() {
         final maxScroll = _controller.position.maxScrollExtent;
@@ -32,19 +36,18 @@ class _SkyListSharedWithPaginationState
         final delta = MediaQuery.of(context).size.height;
 
         if (maxScroll - current <= delta) {
-          print('Loading more list shared with');
+          log('More list shared with people are set to be loaded',
+              name: 'SkyListSharedWithPagination didChangeDependencies()');
           _loadMorePeople();
         }
       });
-    getSharedWith();
 
-    super.initState();
-  }
-
-  getSharedWith() {
     setState(() {
       _isLoading = true;
     });
+
+    final list = Provider.of<SkyListMeta>(context);
+    assert(list != null);
 
     _db
         .streamListSharedWith(
@@ -59,6 +62,8 @@ class _SkyListSharedWithPaginationState
       setState(() {
         _isLoading = false;
       });
+      log('List shared with people were updated',
+          name: 'SkyListSharedWithPagination stream');
     });
   }
 
@@ -87,7 +92,15 @@ class _SkyListSharedWithPaginationState
       setState(() {
         _gettingMorePeople = false;
       });
+      log('Additional shared with list people were updated',
+          name: 'SkyListSharedWithPagination _loadMoreLists()');
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override

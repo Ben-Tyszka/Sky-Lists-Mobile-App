@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,7 +35,8 @@ class _SharedSkyListsPaginationState extends State<SharedSkyListsPagination> {
         final delta = MediaQuery.of(context).size.height;
 
         if (maxScroll - current <= delta) {
-          print('Loading more lists');
+          log('More lists are set to be loaded',
+              name: 'SharedSkyListsPagination didChangeDependencies()');
           _loadMoreLists();
         }
       });
@@ -53,6 +56,7 @@ class _SharedSkyListsPaginationState extends State<SharedSkyListsPagination> {
       setState(() {
         _isLoading = false;
       });
+      log('Shared lists were updated', name: 'SharedSkyListsPagination stream');
     });
   }
 
@@ -81,7 +85,16 @@ class _SharedSkyListsPaginationState extends State<SharedSkyListsPagination> {
       setState(() {
         _gettingMoreLists = false;
       });
+
+      log('Additional lists were updated',
+          name: 'SharedSkyListsPagination _loadMoreLists()');
     });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
