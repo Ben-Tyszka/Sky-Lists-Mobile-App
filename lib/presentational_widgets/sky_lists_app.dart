@@ -11,6 +11,7 @@ import 'package:sky_lists/presentational_widgets/pages/sky_list_share_with_page.
 import 'package:sky_lists/presentational_widgets/pages/startup_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/terms_of_service_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/account_page.dart';
+import 'package:sky_lists/utils/sky_lists_app_theme.dart';
 
 /// Widget that encapsulates the entire application
 class SkyListsApp extends StatelessWidget {
@@ -20,14 +21,8 @@ class SkyListsApp extends StatelessWidget {
       title: 'Sky Lists',
 
       // Theme is set, for both light and dark modes, auto switches depending on user system settings
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primarySwatch: Colors.orange,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.orange,
-      ),
+      theme: brightTheme,
+      darkTheme: darkTheme,
 
       // Inital route is set to StartupPage for determination if user is logged in or not
       initialRoute: StartupPage.routeName,

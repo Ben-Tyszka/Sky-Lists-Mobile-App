@@ -17,7 +17,7 @@ DecodeData decodeQR(String raw) {
     throw Error();
   }
 
-  final String listId = data[0].substring(5);
+  final String listId = data[0].substring(QrCodeAlertDialog.leftPart.length);
   final String ownerId = data[1].split(QrCodeAlertDialog.rightPart)[0];
 
   return DecodeData(listId, ownerId);

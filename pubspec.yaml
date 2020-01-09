@@ -25,6 +25,8 @@ dependencies:
   permission_handler: ^4.0.0
   soundpool: ^0.6.0
   get_version: ^0.2.0+1
+  flutter_camera_ml_vision: ^2.2.4
+  firebase_ml_vision: ^0.9.3+5
 
 dev_dependencies:
   flutter_test:
