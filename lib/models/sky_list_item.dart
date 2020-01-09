@@ -7,6 +7,8 @@ class SkyListItem {
   final bool hidden;
   final bool checked;
   final Timestamp addedAt;
+  final int quantity;
+  final String descriptor;
 
   SkyListItem({
     this.id,
@@ -15,6 +17,8 @@ class SkyListItem {
     this.addedAt,
     this.hidden,
     this.checked,
+    this.quantity,
+    this.descriptor,
   });
 
   factory SkyListItem.fromFirestore(DocumentSnapshot doc) {
@@ -27,6 +31,8 @@ class SkyListItem {
       addedAt: data['addedAt'] ?? Timestamp.now(),
       hidden: data['hidden'] ?? false,
       checked: data['checked'] ?? false,
+      descriptor: data['descriptor'] ?? '',
+      quantity: data['quantity'] ?? 0,
     );
   }
 }

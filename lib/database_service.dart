@@ -146,12 +146,18 @@ class DatabaseService {
     item.docRef.setData({
       'hidden': status,
     });
+    item.docRef.parent().parent().setData({
+      'lastModified': FieldValue.serverTimestamp(),
+    });
   }
 
   /// Changes a list items checked state
   void setItemChecked({@required SkyListItem item, @required bool status}) {
     item.docRef.setData({
       'checked': status,
+    });
+    item.docRef.parent().parent().setData({
+      'lastModified': FieldValue.serverTimestamp(),
     });
   }
 
@@ -160,11 +166,17 @@ class DatabaseService {
     item.docRef.setData({
       'name': title,
     });
+    item.docRef.parent().parent().setData({
+      'lastModified': FieldValue.serverTimestamp(),
+    });
   }
 
   /// Deletes a list item
   void deleteItem({@required SkyListItem item}) {
     item.docRef.delete();
+    item.docRef.parent().parent().setData({
+      'lastModified': FieldValue.serverTimestamp(),
+    });
   }
 
   /// Get a stream of one SkyList's items
@@ -176,6 +188,32 @@ class DatabaseService {
       'checked': false,
       'addedAt': FieldValue.serverTimestamp(),
       'hidden': false,
+      'descriptor': '',
+      'quantity': 0,
+    });
+    list.docRef.setData({
+      'lastModified': FieldValue.serverTimestamp(),
+    });
+  }
+
+  /// Sets a list items quantity descriptor
+  void setItemDescriptor(
+      {@required SkyListItem item, @required String descriptor}) {
+    item.docRef.setData({
+      'descriptor': descriptor,
+    });
+    item.docRef.parent().parent().setData({
+      'lastModified': FieldValue.serverTimestamp(),
+    });
+  }
+
+  /// Sets a list items quantity descriptor
+  void setItemQuantity({@required SkyListItem item, @required int quantity}) {
+    item.docRef.setData({
+      'quantity': quantity,
+    });
+    item.docRef.parent().parent().setData({
+      'lastModified': FieldValue.serverTimestamp(),
     });
   }
 

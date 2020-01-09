@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:sky_lists/models/sky_list_item.dart';
-import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/item_title.dart';
 import 'package:sky_lists/database_service.dart';
 
@@ -37,10 +35,7 @@ class _ItemTitleFormState extends State<ItemTitleForm> {
     _db.setItemTitle(item: widget.item, title: value);
   }
 
-  void onSubmit(String value) {
-    final list = Provider.of<SkyListMeta>(context);
-    _db.addListItem(list: list);
-  }
+  void onSubmit(String value) {}
 
   @override
   Widget build(BuildContext context) {

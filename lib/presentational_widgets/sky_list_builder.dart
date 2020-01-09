@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 import 'package:sky_lists/models/sky_list_item.dart';
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/stateful_widgets/forms/item_title_form.dart';
 import 'package:sky_lists/database_service.dart';
-import 'package:vibration/vibration.dart';
+import 'package:sky_lists/stateful_widgets/forms/quantity_dialog_form.dart';
 
 class SkyListBuilder extends StatelessWidget {
   SkyListBuilder({
@@ -49,6 +50,14 @@ class SkyListBuilder extends StatelessWidget {
           });
         },
         child: ListTile(
+          onLongPress: () {
+            showDialog(
+              context: context,
+              builder: (context) => QuantityDialogForm(
+                item: item,
+              ),
+            );
+          },
           title: ItemTitleForm(item: item),
           leading: Checkbox(
             value: item.checked,
@@ -57,6 +66,9 @@ class SkyListBuilder extends StatelessWidget {
               _db.setItemChecked(item: item, status: val);
             },
           ),
+          trailing: item.quantity > 0
+              ? Text('${item.quantity} ${item.descriptor}')
+              : null,
         ),
       );
 
