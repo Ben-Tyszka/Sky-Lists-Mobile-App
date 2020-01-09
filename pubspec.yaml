@@ -18,7 +18,7 @@ dependencies:
   validators: ^2.0.0+1
   random_color: ^1.0.3
   qr_flutter: ^3.2.0
-  flutter_signin_button: ^1.0.0
+  flutter_auth_buttons: ^0.6.0
   flutter_facebook_login: ^3.0.0
   google_sign_in: ^4.1.1
   url_launcher: ^5.4.1

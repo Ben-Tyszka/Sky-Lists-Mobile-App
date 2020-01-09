@@ -12,11 +12,14 @@ import 'package:sky_lists/presentational_widgets/pages/startup_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/terms_of_service_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/account_page.dart';
 
+/// Widget that encapsulates the entire application
 class SkyListsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sky Lists',
+
+      // Theme is set, for both light and dark modes, auto switches depending on user system settings
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.orange,
@@ -25,8 +28,11 @@ class SkyListsApp extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.orange,
       ),
+
+      // Inital route is set to StartupPage for determination if user is logged in or not
       initialRoute: StartupPage.routeName,
       routes: {
+        // All pages are registered
         StartupPage.routeName: (context) => StartupPage(),
         NotLoggedInPage.routeName: (context) => NotLoggedInPage(),
         LoggedInHomePage.routeName: (context) => LoggedInHomePage(),

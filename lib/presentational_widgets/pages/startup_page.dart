@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 
+/// Page the user sees on app startup, determines if user is logged in and sends them to appropriate page
 class StartupPage extends StatefulWidget {
   static final String routeName = '/startup';
 
@@ -17,8 +18,11 @@ class _StartupPageState extends State<StartupPage> {
     switcher();
   }
 
+  ///  Determines if user is logged in or not, and then sends user to appropriate screen
   switcher() async {
+    // Future is needed here as value from provider may be null due to the stream still loading, not because user is logged out
     final user = await FirebaseAuth.instance.currentUser();
+
     if (user == null) {
       Navigator.popAndPushNamed(context, NotLoggedInPage.routeName);
     } else {

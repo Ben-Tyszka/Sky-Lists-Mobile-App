@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/create_account_page.dart';
 import 'package:sky_lists/stateful_widgets/forms/login_form.dart';
 import 'package:sky_lists/utils/authentication_service.dart';
 
+/// Page user sees when not logged in
 class NotLoggedInPage extends StatelessWidget {
+  /// Name for page route
   static final String routeName = '/not_logged_in_page';
 
   @override
@@ -36,23 +38,22 @@ class NotLoggedInPage extends StatelessWidget {
                 icon: Icon(Icons.email),
                 label: Text('Sign up with Email'),
                 onPressed: () {
+                  // Pushes the CreateAccountPage for user to make account
                   Navigator.pushNamed(context, CreateAccountPage.routeName);
                 },
               ),
               Divider(),
-              SignInButton(
-                Theme.of(context).brightness == Brightness.light
-                    ? Buttons.Google
-                    : Buttons.GoogleDark,
-                text: "Login with Google",
+              GoogleSignInButton(
                 onPressed: () {
+                  // Starts google login flow
                   loginToGoogle(key);
                 },
+                // Sets dark mode
+                darkMode: Theme.of(context).brightness == Brightness.dark,
               ),
-              SignInButton(
-                Buttons.Facebook,
-                text: "Login with Facebook",
+              FacebookSignInButton(
                 onPressed: () {
+                  // Starts facebook login flow
                   loginToFacebook(key);
                 },
               ),
