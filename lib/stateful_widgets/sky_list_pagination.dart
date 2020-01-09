@@ -22,7 +22,9 @@ class _SkyListPaginationState extends State<SkyListPagination> {
   final _db = DatabaseService();
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     _controller = ScrollController()
       ..addListener(() {
         final maxScroll = _controller.position.maxScrollExtent;
@@ -34,18 +36,17 @@ class _SkyListPaginationState extends State<SkyListPagination> {
           _loadMoreItems();
         }
       });
-    getItems();
-    super.initState();
-  }
 
-  getItems() {
+    final list = Provider.of<SkyListMeta>(context);
+    assert(list != null);
+
     setState(() {
       _isLoading = true;
     });
 
     _db
         .streamListItems(
-      list: Provider.of<SkyListMeta>(context),
+      list: list,
     )
         .listen((snapshots) {
       if (snapshots.isNotEmpty) {

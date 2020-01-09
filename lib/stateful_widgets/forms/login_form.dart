@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 import 'package:sky_lists/presentational_widgets/login.dart';
+import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -32,23 +37,30 @@ class _LoginFormState extends State<LoginForm> {
       _formKey.currentState.save();
 
       try {
+        Timeline.startSync('Email and Password Login');
         final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: _data.email, password: _data.password);
+        Timeline.finishSync();
+
         if (user != null) {
           Navigator.of(context).pushNamedAndRemoveUntil(
-              '/home', (Route<dynamic> route) => false);
+              LoggedInHomePage.routeName, (Route<dynamic> route) => false);
         }
-      } catch (error) {
+      } on PlatformException catch (error) {
         var message = '';
-
         if (error.code == 'ERROR_INVALID_EMAIL' ||
             error.code == 'ERROR_WRONG_PASSWORD') {
-          message = 'Wrong email/password';
+          message = 'Wrong email or password';
         } else if (error.code == 'ERROR_USER_NOT_FOUND' ||
             error.code == 'ERROR_USER_DISABLED') {
           message = 'This account is either disabled or does not exist';
         } else {
           message = 'Something went wrong';
+          log(
+            'Something went wrong while trying to log the user in',
+            name: 'Login Error',
+            error: jsonEncode(error),
+          );
         }
 
         _formKey.currentState.reset();

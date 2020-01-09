@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,11 +20,13 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
   bool _moreListsAvailable = true;
   bool _gettingMoreLists = false;
   SkyListMeta _lastListInData;
+  FirebaseUser _user;
 
   final _db = DatabaseService();
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _controller = ScrollController()
       ..addListener(() {
         final maxScroll = _controller.position.maxScrollExtent;
@@ -30,20 +34,24 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
         final delta = MediaQuery.of(context).size.height;
 
         if (maxScroll - current <= delta) {
-          print('Loading more lists');
+          log('More lists are set to be loaded',
+              name: 'SkyListsPagination didChangeDependencies()');
           _loadMoreLists();
         }
       });
-    getLists();
-    super.initState();
+
+    _user = Provider.of<FirebaseUser>(context);
+    _getLists();
   }
 
-  getLists() {
+  _getLists() {
+    if (_user == null) return;
+
     setState(() {
       _isLoading = true;
     });
-    final user = Provider.of<FirebaseUser>(context);
-    _db.streamLists(userId: user.uid).listen((snapshots) {
+
+    _db.streamLists(userId: _user.uid).listen((snapshots) {
       if (snapshots.isNotEmpty) {
         _lastListInData = snapshots.last;
       }
@@ -51,20 +59,22 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
       setState(() {
         _isLoading = false;
       });
+      log('Lists were updated', name: 'Sky Lists Pagination _getLists()');
     });
   }
 
-  _loadMoreLists() async {
+  _loadMoreLists() {
     if (!_moreListsAvailable) return;
     if (_gettingMoreLists) return;
+    assert(_user == null);
+
     setState(() {
       _gettingMoreLists = true;
     });
 
-    final user = Provider.of<FirebaseUser>(context);
     _db
         .streamLists(
-            userId: user.uid, afterLastModified: _lastListInData.lastModified)
+            userId: _user.uid, afterLastModified: _lastListInData.lastModified)
         .listen((snapshots) {
       if (snapshots.length < 10) {
         _moreListsAvailable = false;
@@ -76,6 +86,9 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
       setState(() {
         _gettingMoreLists = false;
       });
+
+      log('Additional lists were updated',
+          name: 'Sky Lists Pagination _loadMoreLists()');
     });
   }
 

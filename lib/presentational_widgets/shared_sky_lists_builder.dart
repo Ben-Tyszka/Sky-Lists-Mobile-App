@@ -6,7 +6,6 @@ import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
 import 'package:sky_lists/utils/sky_list_page_arguments.dart';
 import 'package:sky_lists/presentational_widgets/shared_list_info_dialog.dart';
-import 'package:sky_lists/stateful_widgets/forms/new_list_form.dart';
 import 'package:sky_lists/utils/timestamp_to_formmated_date.dart';
 import 'package:sky_lists/database_service.dart';
 
@@ -71,16 +70,7 @@ class SharedSkyListsBuilder extends StatelessWidget {
           )
         : data.length == 0
             ? Center(
-                child: FlatButton.icon(
-                  icon: Icon(
-                    Icons.add,
-                  ),
-                  label: Text('Add List'),
-                  onPressed: () {
-                    showDialog(
-                        context: context, builder: (context) => NewListForm());
-                  },
-                ),
+                child: Text('No Lists Have Been Shared With You'),
               )
             : listView;
   }

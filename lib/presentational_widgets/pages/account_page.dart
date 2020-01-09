@@ -13,28 +13,6 @@ class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<FirebaseUser>(context);
-    final emailNotVerifiedColumn = [
-      Text(
-          'Your email address is not verified. Check your inbox and follow the instructions to verify your account.'),
-      FlatButton(
-        child: Text('Resend email'),
-        onPressed: () {
-          user.sendEmailVerification();
-        },
-      ),
-      Divider(),
-      SignOutButton(),
-      Divider(),
-      DeleteAccount(),
-    ];
-
-    final emailVerifiedColumn = [
-      NameChangeForm(),
-      Divider(),
-      SignOutButton(),
-      Divider(),
-      DeleteAccount(),
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -49,8 +27,24 @@ class AccountPage extends StatelessWidget {
         ],
       ),
       body: Column(
-        children:
-            user.isEmailVerified ? emailVerifiedColumn : emailNotVerifiedColumn,
+        children: <Widget>[
+          if (user?.isEmailVerified ?? false) ...[
+            NameChangeForm(),
+          ] else ...[
+            Text(
+                'Your email address is not verified. Check your inbox and follow the instructions to verify your account.'),
+            FlatButton(
+              child: Text('Resend email'),
+              onPressed: () {
+                user.sendEmailVerification();
+              },
+            ),
+          ],
+          Divider(),
+          SignOutButton(),
+          Divider(),
+          DeleteAccount(),
+        ],
       ),
     );
   }

@@ -23,11 +23,10 @@ class _NameChangeFormState extends State<NameChangeForm> {
   NameData _data = NameData();
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     final user = Provider.of<FirebaseUser>(context);
-    _controller = TextEditingController(text: user.displayName);
-
-    super.initState();
+    _controller = TextEditingController(text: user?.displayName ?? '');
   }
 
   _submit() async {
@@ -38,7 +37,7 @@ class _NameChangeFormState extends State<NameChangeForm> {
 
       _formKey.currentState.save();
 
-      final user = Provider.of<FirebaseUser>(context);
+      final user = Provider.of<FirebaseUser>(context, listen: false);
       final userUpdateInfo = UserUpdateInfo();
       userUpdateInfo.displayName = _data.name;
       user.updateProfile(userUpdateInfo);

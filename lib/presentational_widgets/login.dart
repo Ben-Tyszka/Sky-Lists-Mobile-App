@@ -69,9 +69,11 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 autocorrect: false,
-                keyboardType: TextInputType.text,
                 obscureText: !showPassword,
                 maxLength: 50,
+                keyboardType: showPassword
+                    ? TextInputType.visiblePassword
+                    : TextInputType.text,
                 validator: validatePassword,
                 enabled: !isLoading,
                 onSaved: onPasswordSaved,
@@ -89,7 +91,7 @@ class Login extends StatelessWidget {
                 height: 6.0,
               ),
               !isLoading
-                  ? FlatButton.icon(
+                  ? OutlineButton.icon(
                       icon: Icon(
                         Icons.arrow_forward,
                       ),
@@ -107,10 +109,12 @@ class Login extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.pushNamed(
-                              context, SendPasswordResetPage.routeName);
-                        },
+                        ..onTap = isLoading
+                            ? null
+                            : () {
+                                Navigator.pushNamed(
+                                    context, SendPasswordResetPage.routeName);
+                              },
                       text: 'Reset it here',
                       style: Theme.of(context).textTheme.caption.copyWith(
                             decoration: TextDecoration.underline,

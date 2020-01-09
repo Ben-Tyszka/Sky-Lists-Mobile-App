@@ -45,7 +45,7 @@ class NameChange extends StatelessWidget {
               height: 20.0,
             ),
             !isLoading
-                ? FlatButton.icon(
+                ? OutlineButton.icon(
                     label: Text('Change Name'),
                     icon: Icon(Icons.update),
                     onPressed: submit,

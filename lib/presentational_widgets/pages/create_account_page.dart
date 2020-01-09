@@ -22,8 +22,13 @@ class CreateAccountPage extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Center(
-          child: CreateAccountForm(),
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 40.0,
+            ),
+            CreateAccountForm(),
+          ],
         ),
       ),
     );

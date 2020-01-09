@@ -11,38 +11,53 @@ class NotLoggedInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Sky Lists',
-            ),
-            Text(
-              'simple, connected lists',
-            ),
-            LoginForm(),
-            SignInButtonBuilder(
-              backgroundColor: Theme.of(context).buttonColor,
-              icon: Icons.email,
-              text: 'Sign up with Email',
-              onPressed: () {
-                Navigator.pushNamed(context, CreateAccountPage.routeName);
-              },
-            ),
-            Divider(),
-            SignInButton(
-              Buttons.Google,
-              text: "Login with Google",
-              onPressed: loginToGoogle,
-            ),
-            SignInButton(
-              Buttons.Facebook,
-              text: "Login with Facebook",
-              onPressed: loginToFacebook,
-            ),
-          ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Sky Lists',
+                style: Theme.of(context).textTheme.display2.copyWith(
+                      fontWeight: FontWeight.w200,
+                    ),
+              ),
+              Text(
+                'simple and connected',
+                style: Theme.of(context).textTheme.title.copyWith(
+                      fontWeight: FontWeight.w200,
+                    ),
+              ),
+              SizedBox(height: 10.0),
+              LoginForm(),
+              SizedBox(height: 10.0),
+              RaisedButton.icon(
+                icon: Icon(Icons.email),
+                label: Text('Sign up with Email'),
+                onPressed: () {
+                  Navigator.pushNamed(context, CreateAccountPage.routeName);
+                },
+              ),
+              Divider(),
+              SignInButton(
+                Theme.of(context).brightness == Brightness.light
+                    ? Buttons.Google
+                    : Buttons.GoogleDark,
+                text: "Login with Google",
+                onPressed: () {
+                  loginToGoogle(key);
+                },
+              ),
+              SignInButton(
+                Buttons.Facebook,
+                text: "Login with Facebook",
+                onPressed: () {
+                  loginToFacebook(key);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

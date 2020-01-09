@@ -28,15 +28,17 @@ class DatabaseService {
           descending: true,
         );
     return afterLastModified == null
-        ? baseQuery.snapshots().map((query) =>
-            query.documents.map((doc) => SkyListMeta.fromFirestore(doc)))
+        ? baseQuery.snapshots().map((query) => query.documents
+            .map((doc) => SkyListMeta.fromFirestore(doc))
+            .toList())
         : baseQuery
             .startAfter([
               afterLastModified,
             ])
             .snapshots()
-            .map((query) =>
-                query.documents.map((doc) => SkyListMeta.fromFirestore(doc)));
+            .map((query) => query.documents
+                .map((doc) => SkyListMeta.fromFirestore(doc))
+                .toList());
   }
 
   /// Get a stream of the metadata for one skylist
@@ -126,15 +128,17 @@ class DatabaseService {
           descending: true,
         );
     return afterAddedAt == null
-        ? baseQuery.snapshots().map((query) =>
-            query.documents.map((doc) => SkyListItem.fromFirestore(doc)))
+        ? baseQuery.snapshots().map((query) => query.documents
+            .map((doc) => SkyListItem.fromFirestore(doc))
+            .toList())
         : baseQuery
             .startAfter([
               afterAddedAt,
             ])
             .snapshots()
-            .map((query) =>
-                query.documents.map((doc) => SkyListItem.fromFirestore(doc)));
+            .map((query) => query.documents
+                .map((doc) => SkyListItem.fromFirestore(doc))
+                .toList());
   }
 
   /// Changes a list items hidden state
@@ -251,14 +255,16 @@ class DatabaseService {
         );
     return afterSharedAt == null
         ? baseQuery.snapshots().map((query) => query.documents
-            .map((doc) => SkyListSharePageMeta.fromFirestore(doc)))
+            .map((doc) => SkyListSharePageMeta.fromFirestore(doc))
+            .toList())
         : baseQuery
             .startAfter([
               afterSharedAt,
             ])
             .snapshots()
             .map((query) => query.documents
-                .map((doc) => SkyListSharePageMeta.fromFirestore(doc)));
+                .map((doc) => SkyListSharePageMeta.fromFirestore(doc))
+                .toList());
   }
 
   Future<SkyListProfile> getUsersProfile({@required String userId}) async {
@@ -289,8 +295,9 @@ class DatabaseService {
         .orderBy('count', descending: true)
         .limit(4)
         .snapshots()
-        .map((query) =>
-            query.documents.map((doc) => SkyListProfile.fromFirestore(doc)));
+        .map((query) => query.documents
+            .map((doc) => SkyListProfile.fromFirestore(doc))
+            .toList());
   }
 
   /// Get a stream of a dart list objects that contain the metadata for each SkyList
@@ -310,15 +317,17 @@ class DatabaseService {
         );
 
     return afterSharedAt == null
-        ? baseQuery.snapshots().map((query) =>
-            query.documents.map((doc) => SkyListSharedMeta.fromFirestore(doc)))
+        ? baseQuery.snapshots().map((query) => query.documents
+            .map((doc) => SkyListSharedMeta.fromFirestore(doc))
+            .toList())
         : baseQuery
             .startAfter([
               afterSharedAt,
             ])
             .snapshots()
             .map((query) => query.documents
-                .map((doc) => SkyListSharedMeta.fromFirestore(doc)));
+                .map((doc) => SkyListSharedMeta.fromFirestore(doc))
+                .toList());
   }
 
   ///Sets a users profile data

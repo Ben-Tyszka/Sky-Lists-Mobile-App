@@ -23,7 +23,9 @@ class _SharedSkyListsPaginationState extends State<SharedSkyListsPagination> {
   final _db = DatabaseService();
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     _controller = ScrollController()
       ..addListener(() {
         final maxScroll = _controller.position.maxScrollExtent;
@@ -35,16 +37,15 @@ class _SharedSkyListsPaginationState extends State<SharedSkyListsPagination> {
           _loadMoreLists();
         }
       });
-    getLists();
-    super.initState();
-  }
 
-  getLists() {
     setState(() {
       _isLoading = true;
     });
-    final user = Provider.of<FirebaseUser>(context);
-    _db.streamListsSharedWithMe(userId: user.uid).listen((snapshots) {
+
+    final _user = Provider.of<FirebaseUser>(context);
+    if (_user == null) return;
+
+    _db.streamListsSharedWithMe(userId: _user.uid).listen((snapshots) {
       if (snapshots.isNotEmpty) {
         _lastSharedListInData = snapshots.last;
       }
@@ -58,14 +59,17 @@ class _SharedSkyListsPaginationState extends State<SharedSkyListsPagination> {
   _loadMoreLists() async {
     if (!_moreListsAvailable) return;
     if (_gettingMoreLists) return;
+
+    final _user = Provider.of<FirebaseUser>(context);
+    assert(_user != null);
+
     setState(() {
       _gettingMoreLists = true;
     });
 
-    final user = Provider.of<FirebaseUser>(context);
     _db
         .streamListsSharedWithMe(
-            userId: user.uid, afterSharedAt: _lastSharedListInData.sharedAt)
+            userId: _user.uid, afterSharedAt: _lastSharedListInData.sharedAt)
         .listen((snapshots) {
       if (snapshots.length < 10) {
         _moreListsAvailable = false;

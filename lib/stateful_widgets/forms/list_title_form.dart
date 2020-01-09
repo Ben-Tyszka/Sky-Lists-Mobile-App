@@ -16,11 +16,10 @@ class _ListTitleFormState extends State<ListTitleForm> {
   final _db = DatabaseService();
 
   @override
-  void initState() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     list = Provider.of<SkyListMeta>(context);
     _nameController = TextEditingController(text: list.name);
-
-    super.initState();
   }
 
   @override

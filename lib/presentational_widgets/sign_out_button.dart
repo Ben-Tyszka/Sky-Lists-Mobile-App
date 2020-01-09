@@ -8,19 +8,19 @@ import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 class SignOutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return RaisedButton.icon(
+    return OutlineButton.icon(
       icon: Icon(Icons.exit_to_app),
       label: Text('Sign out'),
-      onPressed: () async {
-        try {
-          await GoogleSignIn().signOut();
-          await FacebookLogin().logOut();
-        } catch (e) {}
-        FirebaseAuth.instance.signOut();
+      onPressed: () {
         Navigator.of(context).pushNamedAndRemoveUntil(
           NotLoggedInPage.routeName,
           (Route<dynamic> route) => false,
         );
+        FirebaseAuth.instance.signOut();
+        try {
+          GoogleSignIn().signOut();
+          FacebookLogin().logOut();
+        } catch (e) {}
       },
     );
   }

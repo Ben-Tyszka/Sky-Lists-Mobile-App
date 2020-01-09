@@ -77,11 +77,12 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
         }).toList(),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           showDialog(context: context, builder: (context) => NewListForm());
         },
-        child: Icon(Icons.add),
+        icon: Icon(Icons.add),
+        label: Text('Add List'),
       ),
       bottomNavigationBar: BottomNavBarLoggedInPage(
         controller: _controller,

@@ -72,7 +72,7 @@ class SkyListPage extends StatelessWidget {
               Navigator.popAndPushNamed(context, LoggedInHomePage.routeName);
             },
           ),
-          title: ListTitleForm(),
+          title: Text('Testing'),
         ),
         body: SkyListPagination(),
       ),
