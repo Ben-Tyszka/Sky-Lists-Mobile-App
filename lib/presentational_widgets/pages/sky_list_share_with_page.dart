@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +31,8 @@ class SkyListShareWithPage extends StatelessWidget {
             IconButton(
               icon: Icon(CustomIcons.qrcode),
               onPressed: () {
+                Provider.of<FirebaseAnalytics>(context)
+                    .logEvent(name: 'open_qr_code_dialog');
                 showDialog(
                   context: context,
                   builder: (context) => QrCodeAlertDialog(),

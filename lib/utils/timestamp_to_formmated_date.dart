@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:intl/intl.dart';
 
-/// Returns a nicely formatted Date/Time string
+/// Returns a nicely formatted Date/Time string from a [timestamp]
 String timestampToFormmatedDate(Timestamp timestamp) {
   if (timestamp == null) return '';
 

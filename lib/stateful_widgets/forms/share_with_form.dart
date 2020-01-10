@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -66,6 +67,8 @@ class _ShareWithFormState extends State<ShareWithForm> {
       setState(() {
         _message = 'Email not found';
       });
+      Provider.of<FirebaseAnalytics>(context).logEvent(
+          name: 'share_with_not_found', parameters: {'method': _currentMethod});
     } else {
       final list = Provider.of<SkyListMeta>(context);
 
@@ -73,6 +76,9 @@ class _ShareWithFormState extends State<ShareWithForm> {
         list: list,
         shareWithId: toShareWithId,
       );
+
+      Provider.of<FirebaseAnalytics>(context)
+          .logEvent(name: 'share_with_list_shared');
       setState(() {
         _message = '';
       });

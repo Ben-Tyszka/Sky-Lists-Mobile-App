@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,6 +25,8 @@ class CommonSharedWith extends StatelessWidget {
           itemBuilder: (context, index) {
             return ActionChip(
               onPressed: () {
+                Provider.of<FirebaseAnalytics>(context)
+                    .logEvent(name: 'share_with_list_shared_common');
                 _db.shareList(
                   list: Provider.of<SkyListMeta>(context),
                   shareWithId: snapshot.data[index].docRef.documentID,

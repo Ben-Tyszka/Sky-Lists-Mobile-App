@@ -2,6 +2,8 @@ import 'package:flutter/services.dart';
 
 /// Format incoming numeric text to fit the format of (###) ###-#### ##...
 class UsNumberTextInputFormatter extends TextInputFormatter {
+  /// Takes the [oldValue] of the field and a [newValue] that the user is attempting to type,
+  /// formats it into a phone number and returns a [TextEditingValue]
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {

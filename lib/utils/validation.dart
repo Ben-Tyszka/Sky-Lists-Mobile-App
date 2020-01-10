@@ -1,5 +1,7 @@
 import "package:validators/validators.dart";
 
+/// Ensures consistant validation standards across app, takes in a [value] to validate
+/// and returns a error [String]
 String validateEmail(String value) {
   if (value.isEmpty) {
     return "Email is required";
@@ -12,6 +14,8 @@ String validateEmail(String value) {
   return null;
 }
 
+/// Ensures consistant validation standards across app, takes in a [value] to validate
+/// and returns a error [String]
 String validatePhone(String value) {
   if (value.isEmpty) {
     return "Phone number is required";
@@ -20,6 +24,8 @@ String validatePhone(String value) {
   return null;
 }
 
+/// Ensures consistant validation standards across app, takes in a [value] to validate
+/// and returns a error [String]
 String validatePassword(String value) {
   if (value.isEmpty) {
     return "Password is required";
@@ -31,6 +37,8 @@ String validatePassword(String value) {
   return null;
 }
 
+/// Ensures consistant validation standards across app, takes in a [value] to validate
+/// and returns a error [String]
 String validateFullName(String value) {
   if (value.isEmpty) {
     return "Name is required";

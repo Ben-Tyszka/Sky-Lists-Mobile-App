@@ -9,15 +9,20 @@ import 'package:sky_lists/models/sky_list_profile.dart';
 import 'package:sky_lists/models/sky_list_share_page_meta.dart';
 import 'package:sky_lists/models/sky_list_shared_meta.dart';
 
+/// The database abstraction used throughout the app
 class DatabaseService {
+  // Firestore instance
   final Firestore _db = Firestore.instance;
 
-  /// Get a stream of a dart list objects that contain the metadata for each SkyList
+  /// Streams the metadata, Stream<List<SkyListMeta>>, for the lists belonging to [userId]
+  ///
+  /// Optional [limit] sets how many documents to stream, and [afterLastModified] determines at which point in the collection do we start streaming documents
   Stream<List<SkyListMeta>> streamLists({
     @required String userId,
     int limit = 10,
     Timestamp afterLastModified,
   }) {
+    // Grabs the collection, limits and orders it
     final baseQuery = _db
         .collection('shopping lists')
         .document(userId)
@@ -27,31 +32,35 @@ class DatabaseService {
           "lastModified",
           descending: true,
         );
-    return afterLastModified == null
-        ? baseQuery.snapshots().map((query) => query.documents
-            .map((doc) => SkyListMeta.fromFirestore(doc))
-            .toList())
-        : baseQuery
-            .startAfter([
-              afterLastModified,
-            ])
-            .snapshots()
-            .map((query) => query.documents
-                .map((doc) => SkyListMeta.fromFirestore(doc))
-                .toList());
+    // If afterLastModified is null, just grab the first 10 snapshots
+    final snapshots = afterLastModified == null
+        ? baseQuery.snapshots()
+        : baseQuery.startAfter([
+            afterLastModified,
+          ]).snapshots();
+
+    // Turn snapshot into a list of parsed SkyListMeta objects
+    return snapshots.map((query) =>
+        query.documents.map((doc) => SkyListMeta.fromFirestore(doc)).toList());
   }
 
-  /// Get a stream of the metadata for one skylist
+  /// Streams the metadata for a [list]
+  ///
+  /// Returns Stream<SkyListMeta>
   Stream<SkyListMeta> streamListMeta({
     @required SkyListMeta list,
   }) {
+    // Selects the list doc reference and maps data to SkyListMeta
     return list.docRef.snapshots().map((doc) => SkyListMeta.fromFirestore(doc));
   }
 
-  /// Get a stream of the metadata for one skylist
+  /// Streams the metadata for a list given [list], the metadata of a list that is shared with the user
+  ///
+  /// Returns Stream<SkyListMeta>
   Stream<SkyListMeta> streamListMetaFromSharedMeta({
     @required SkyListSharedMeta list,
   }) {
+    // Selects list from shared list meta's owner and lsitId, maps to regular list meta
     return _db
         .collection('shopping lists')
         .document(list.owner)
@@ -61,9 +70,12 @@ class DatabaseService {
         .map((doc) => SkyListMeta.fromFirestore(doc));
   }
 
-  /// Create a list
+  /// Creates a list, given a [name] and the [userId] that created it
+  ///
+  /// Returns Future<DocumentReference> pointing to the list
   Future<DocumentReference> createList(
       {@required String name, @required String userId}) {
+    // Selects collection, adds list and enumerates fields
     return _db
         .collection('shopping lists')
         .document(userId)
@@ -78,10 +90,12 @@ class DatabaseService {
     );
   }
 
-  /// Delete a list
+  /// Deletes a [list]
   void deleteList({@required SkyListMeta list}) async {
+    // Gets each person the lsit is shared with
     final querySnapshot =
         await list.docRef.collection("sharedwith").getDocuments();
+    // Goes into each shared with users sharedwithme collection and removes the reference to this list
     querySnapshot.documents.forEach((doc) async {
       _db
           .collection("users")
@@ -90,6 +104,7 @@ class DatabaseService {
           .document(list.id)
           .delete();
     });
+    // Finally, deletes the actual list
     list.docRef.delete();
   }
 
