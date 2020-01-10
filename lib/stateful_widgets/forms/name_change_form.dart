@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,8 @@ class _NameChangeFormState extends State<NameChangeForm> {
       user.updateProfile(userUpdateInfo);
 
       _db.updateDisplayName(userId: user.uid, newName: _data.name);
+
+      Provider.of<FirebaseAnalytics>(context).logEvent(name: 'name_change');
 
       _formKey.currentState.reset();
     }

@@ -1,5 +1,7 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 
@@ -15,6 +17,8 @@ class _StartupPageState extends State<StartupPage> {
   @override
   void initState() {
     super.initState();
+    // Tell analytics that the app is open
+    Provider.of<FirebaseAnalytics>(context).logAppOpen();
     switcher();
   }
 
@@ -22,7 +26,6 @@ class _StartupPageState extends State<StartupPage> {
   switcher() async {
     // Future is needed here as value from provider may be null due to the stream still loading, not because user is logged out
     final user = await FirebaseAuth.instance.currentUser();
-
     if (user == null) {
       Navigator.popAndPushNamed(context, NotLoggedInPage.routeName);
     } else {

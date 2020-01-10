@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/presentational_widgets/login.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
@@ -37,12 +39,16 @@ class _LoginFormState extends State<LoginForm> {
       _formKey.currentState.save();
 
       try {
-        Timeline.startSync('Email and Password Login');
+        Timeline.startSync('email_and_password_login');
         final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: _data.email, password: _data.password);
         Timeline.finishSync();
 
         if (user != null) {
+          Provider.of<FirebaseAnalytics>(context).logLogin(
+            loginMethod: 'email_and_password',
+          );
+
           Navigator.of(context).pushNamedAndRemoveUntil(
               LoggedInHomePage.routeName, (Route<dynamic> route) => false);
         }
@@ -60,6 +66,15 @@ class _LoginFormState extends State<LoginForm> {
             'Something went wrong while trying to log the user in',
             name: 'Login Error',
             error: jsonEncode(error),
+          );
+
+          Provider.of<FirebaseAnalytics>(context).logEvent(
+            name: 'login_with_email_and_password_failed',
+            parameters: {
+              'code': error.code,
+              'message': error.message,
+              'details': error.details,
+            },
           );
         }
 

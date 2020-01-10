@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/presentational_widgets/create_account.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
@@ -17,8 +22,7 @@ class CreateAccountData {
   String name = '';
   String password = '';
   String confirmPassword = '';
-  bool confirmTOS = false;
-  bool confirmPP = false;
+  bool agreements = false;
 }
 
 class _CreateAccountFormState extends State<CreateAccountForm> {
@@ -41,11 +45,13 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
       });
 
       try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _data.email, password: _data.password);
+        Timeline.startSync('create_account_with_email_and_password');
+        final authResult = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _data.email, password: _data.password);
 
-        final user = await FirebaseAuth.instance.currentUser();
-        assert(user != null);
+        Timeline.finishSync();
+        final user = authResult.user;
 
         user.sendEmailVerification();
 
@@ -60,6 +66,11 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           name: _data.name,
         );
 
+        Provider.of<FirebaseAnalytics>(context)
+            .logSignUp(signUpMethod: 'email_and_password');
+        Provider.of<FirebaseAnalytics>(context)
+            .logLogin(loginMethod: 'email_and_password_first_time');
+
         Navigator.of(context).pushNamedAndRemoveUntil(
             LoggedInHomePage.routeName, (Route<dynamic> route) => false);
       } catch (error) {
@@ -72,6 +83,21 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           message = 'Password is too weak';
         } else {
           message = 'Something went wrong';
+
+          log(
+            'Something went wrong while trying to create a user with email and password',
+            name: 'Create Account Error',
+            error: jsonEncode(error),
+          );
+
+          Provider.of<FirebaseAnalytics>(context).logEvent(
+            name: 'create_account_with_email_and_password_failed',
+            parameters: {
+              'code': error.code,
+              'message': error.message,
+              'details': error.details,
+            },
+          );
         }
 
         _formKey.currentState.reset();
@@ -125,12 +151,8 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     return null;
   }
 
-  _tosSaved(bool value) {
-    _data.confirmTOS = value;
-  }
-
-  _ppSaved(bool value) {
-    _data.confirmPP = value;
+  _agreementsSaved(bool value) {
+    _data.agreements = value;
   }
 
   _seePrivacy(BuildContext context) {
@@ -155,7 +177,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
       formKey: _formKey,
       isLoading: _isLoading,
       onTogglePasswordHide: _onTogglePasswordHide,
-      ppSaved: _ppSaved,
+      aggrementsSaved: _agreementsSaved,
       saveConfirmPassword: _saveConfirmPassword,
       saveEmail: _saveEmail,
       saveName: _saveName,
@@ -164,7 +186,6 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
       seeTOS: _seeTOS,
       showPassword: _showPassword,
       submit: _submit,
-      tosSaved: _tosSaved,
     );
   }
 }

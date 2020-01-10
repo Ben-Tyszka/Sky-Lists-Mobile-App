@@ -1,4 +1,6 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
@@ -52,6 +54,8 @@ class SkyListsBuilder extends StatelessWidget {
                       .closed
                       .then((reason) {
                     if (reason != SnackBarClosedReason.action) {
+                      Provider.of<FirebaseAnalytics>(context)
+                          .logEvent(name: 'list_delete');
                       _db.deleteList(list: skyList);
                     }
                   });

@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 
 /// Overlay that darkens screen and inserts CircularProgressIndicator while 3rd party login flows occur
@@ -70,6 +72,10 @@ _signInWithCredential(AuthCredential credential, GlobalKey _key) async {
     // Signs user into firebase auth system
     await FirebaseAuth.instance.signInWithCredential(credential);
 
+    // Tell analytics Log that the user has logged in with 3rd party service
+    Provider.of<FirebaseAnalytics>(_key.currentContext)
+        .logLogin(loginMethod: credential.providerId);
+
     // Navigates to LoggedInHomePage
     Navigator.of(_key.currentContext).pushNamedAndRemoveUntil(
         LoggedInHomePage.routeName, (Route<dynamic> route) => false);
@@ -100,20 +106,26 @@ _signInWithCredential(AuthCredential credential, GlobalKey _key) async {
       },
     );
 
+    // Setup debug logging and analytics for failure to login
     log(
-      'Something went wrong when trying to link 3rd party service to firebase auth system',
+      'Something went wrong when trying to link ${credential.providerId} login to firebase auth system',
       name: 'authentication_service _signInWithCredential',
       error: jsonEncode(error),
     );
 
-// Logout user from service and remove overlay
+    Provider.of<FirebaseAnalytics>(_key.currentContext).logEvent(
+      name: 'login_with_${credential.providerId}_failed',
+      parameters: {
+        'code': error.code,
+        'message': error.message,
+        'details': error.details,
+      },
+    );
 
+    // Logout user from service and remove overlay
     try {
-      if (credential.providerId.toLowerCase().contains('google')) {
-        GoogleSignIn().signOut();
-      } else {
-        FacebookLogin().logOut();
-      }
+      GoogleSignIn().signOut();
+      FacebookLogin().logOut();
     } catch (e) {}
   } finally {
     _providerOverlay.remove();

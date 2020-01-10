@@ -1,4 +1,6 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/presentational_widgets/bottom_nav_bar_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/account_page.dart';
@@ -79,6 +81,9 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+          Provider.of<FirebaseAnalytics>(context)
+              .logEvent(name: 'list_create_start');
+
           showDialog(context: context, builder: (context) => NewListForm());
         },
         icon: Icon(Icons.add),

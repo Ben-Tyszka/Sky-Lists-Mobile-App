@@ -16,8 +16,7 @@ class CreateAccount extends StatelessWidget {
     @required this.onTogglePasswordHide,
     @required this.confirmPasswordValidation,
     @required this.checkboxValidator,
-    @required this.tosSaved,
-    @required this.ppSaved,
+    @required this.aggrementsSaved,
     @required this.seePrivacy,
     @required this.seeTOS,
     @required this.formFieldStateChange,
@@ -37,8 +36,7 @@ class CreateAccount extends StatelessWidget {
   final Function onTogglePasswordHide;
   final String Function(String) confirmPasswordValidation;
   final String Function(bool) checkboxValidator;
-  final Function(bool) tosSaved;
-  final Function(bool) ppSaved;
+  final Function(bool) aggrementsSaved;
   final Function(BuildContext) seePrivacy;
   final Function(BuildContext) seeTOS;
   final Function(bool, FormFieldState<bool>) formFieldStateChange;
@@ -139,7 +137,7 @@ class CreateAccount extends StatelessWidget {
               ),
               FormField(
                 initialValue: false,
-                onSaved: tosSaved,
+                onSaved: aggrementsSaved,
                 validator: checkboxValidator,
                 builder: (FormFieldState<bool> formFieldState) {
                   return Row(
@@ -166,31 +164,10 @@ class CreateAccount extends StatelessWidget {
                                     color: Colors.blue,
                                   ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-              FormField(
-                initialValue: false,
-                onSaved: ppSaved,
-                validator: checkboxValidator,
-                builder: (formFieldState) {
-                  return Row(
-                    children: <Widget>[
-                      Checkbox(
-                        value: formFieldState.value,
-                        onChanged: (value) {
-                          formFieldStateChange(value, formFieldState);
-                        },
-                      ),
-                      Text.rich(
-                        TextSpan(
-                          text: 'I accept the ',
-                          style: Theme.of(context).textTheme.body1,
-                          children: <TextSpan>[
+                            TextSpan(
+                              text: ' and the ',
+                              style: Theme.of(context).textTheme.body1,
+                            ),
                             TextSpan(
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {

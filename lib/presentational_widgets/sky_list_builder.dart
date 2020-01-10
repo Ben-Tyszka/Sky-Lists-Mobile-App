@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
@@ -46,11 +47,18 @@ class SkyListBuilder extends StatelessWidget {
               .then((reason) {
             if (reason != SnackBarClosedReason.action) {
               _db.deleteItem(item: item);
+              Provider.of<FirebaseAnalytics>(context)
+                  .logEvent(name: 'item_delete');
             }
           });
         },
         child: ListTile(
           onLongPress: () {
+            Provider.of<FirebaseAnalytics>(context)
+                .logEvent(name: 'item_quantity_change', parameters: {
+              'descriptor': item.descriptor,
+              'quantity': item.quantity,
+            });
             showDialog(
               context: context,
               builder: (context) => QuantityDialogForm(
@@ -63,6 +71,8 @@ class SkyListBuilder extends StatelessWidget {
             value: item.checked,
             onChanged: (val) {
               Vibration.vibrate();
+              Provider.of<FirebaseAnalytics>(context)
+                  .logEvent(name: 'item_check');
               _db.setItemChecked(item: item, status: val);
             },
           ),
@@ -80,6 +90,7 @@ class SkyListBuilder extends StatelessWidget {
       ),
       title: Text('Add Item'),
       onTap: () {
+        Provider.of<FirebaseAnalytics>(context).logEvent(name: 'item_add');
         _db.addListItem(list: list);
       },
     );

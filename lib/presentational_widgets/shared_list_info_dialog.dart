@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +53,10 @@ class SharedListInfoDialog extends StatelessWidget {
             onLongPress: () {
               Scaffold.of(context).hideCurrentSnackBar();
               Vibration.vibrate();
+
+              Provider.of<FirebaseAnalytics>(context)
+                  .logEvent(name: 'list_unshare_with_me');
+
               _db.removeFromSharedList(
                 list: list,
                 ownerId: sharedList.owner,

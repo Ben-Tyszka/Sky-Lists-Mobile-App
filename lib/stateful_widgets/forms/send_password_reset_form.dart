@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/utils/validation.dart';
 
@@ -30,7 +35,9 @@ class _SendPasswordResetFormState extends State<SendPasswordResetForm> {
       _formKey.currentState.save();
 
       try {
+        Timeline.startSync('send_password_reset_email');
         await FirebaseAuth.instance.sendPasswordResetEmail(email: _data.email);
+        Timeline.finishSync();
       } catch (error) {
         var message = '';
 
@@ -40,6 +47,21 @@ class _SendPasswordResetFormState extends State<SendPasswordResetForm> {
           message = 'This account is either disabled or does not exist';
         } else {
           message = 'Something went wrong';
+
+          log(
+            'Something went wrong while trying to reset the password',
+            name: 'Password Reset Error',
+            error: jsonEncode(error),
+          );
+
+          Provider.of<FirebaseAnalytics>(context).logEvent(
+            name: 'send_password_reset_failed',
+            parameters: {
+              'code': error.code,
+              'message': error.message,
+              'details': error.details,
+            },
+          );
         }
 
         _formKey.currentState.reset();

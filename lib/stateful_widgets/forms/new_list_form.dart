@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -40,11 +43,16 @@ class _NewListFormState extends State<NewListForm> {
     setState(() {
       loading = true;
     });
+
+    Timeline.startSync('list_create');
     final doc = await _db.createList(
       name: _controller.value.text,
       userId: Provider.of<FirebaseUser>(context).uid,
     );
     final snapshot = await doc.get();
+    Timeline.finishSync();
+
+    Provider.of<FirebaseAnalytics>(context).logEvent(name: 'list_create');
 
     Navigator.pushNamed(
       context,

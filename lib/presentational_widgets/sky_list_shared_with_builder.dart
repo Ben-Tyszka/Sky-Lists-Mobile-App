@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,9 +33,9 @@ class SkyListSharedWithBuilder extends StatelessWidget {
             controller: controller,
             itemCount: data.length,
             itemBuilder: (context, index) {
-              return FutureBuilder(
+              return FutureBuilder<SkyListProfile>(
                 future: _db.getUsersProfile(userId: data[index].sharedWithId),
-                builder: (context, AsyncSnapshot<SkyListProfile> snapshot) {
+                builder: (context, snapshot) {
                   if (!snapshot.hasData) return CircularProgressIndicator();
                   return ListTile(
                     title: Text(snapshot.data.name),
@@ -42,6 +43,9 @@ class SkyListSharedWithBuilder extends StatelessWidget {
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
+                        Provider.of<FirebaseAnalytics>(context)
+                            .logEvent(name: 'list_unshare');
+
                         _db.removeFromSharedList(
                           list: Provider.of<SkyListMeta>(context),
                           ownerId: Provider.of<FirebaseUser>(context).uid,
