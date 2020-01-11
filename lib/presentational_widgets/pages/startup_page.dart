@@ -17,9 +17,14 @@ class _StartupPageState extends State<StartupPage> {
   @override
   void initState() {
     super.initState();
+    switcher();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     // Tell analytics that the app is open
     Provider.of<FirebaseAnalytics>(context).logAppOpen();
-    switcher();
   }
 
   ///  Determines if user is logged in or not, and then sends user to appropriate screen

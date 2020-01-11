@@ -165,7 +165,7 @@ class CreateAccount extends StatelessWidget {
                                   ),
                             ),
                             TextSpan(
-                              text: ' and the ',
+                              text: ' and\nthe ',
                               style: Theme.of(context).textTheme.body1,
                             ),
                             TextSpan(
@@ -181,6 +181,7 @@ class CreateAccount extends StatelessWidget {
                             ),
                           ],
                         ),
+                        softWrap: true,
                       ),
                     ],
                   );

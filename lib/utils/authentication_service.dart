@@ -36,7 +36,12 @@ loginToFacebook(GlobalKey _key) async {
       final credential = FacebookAuthProvider.getCredential(
         accessToken: result.accessToken.token,
       );
-      _signInWithCredential(credential, _key);
+      final authResult =
+          await _signInWithCredential(credential: credential, key: _key);
+      if (authResult == null) return;
+      // Navigates to LoggedInHomePage
+      Navigator.of(_key.currentContext).pushNamedAndRemoveUntil(
+          LoggedInHomePage.routeName, (Route<dynamic> route) => false);
       _providerOverlay.remove();
       break;
     case FacebookLoginStatus.error:
@@ -66,19 +71,21 @@ loginToFacebook(GlobalKey _key) async {
   }
 }
 
-/// Logs user into firebase auth system with [credential], [_key] is needed to push home route
-_signInWithCredential(AuthCredential credential, GlobalKey _key) async {
+/// Logs user into firebase auth system with [credential], [key] is needed to push home route
+Future<AuthResult> _signInWithCredential({
+  @required AuthCredential credential,
+  @required GlobalKey key,
+}) async {
   try {
     // Signs user into firebase auth system
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    final authResult =
+        await FirebaseAuth.instance.signInWithCredential(credential);
 
     // Tell analytics Log that the user has logged in with 3rd party service
-    Provider.of<FirebaseAnalytics>(_key.currentContext)
+    Provider.of<FirebaseAnalytics>(key.currentContext)
         .logLogin(loginMethod: credential.providerId);
 
-    // Navigates to LoggedInHomePage
-    Navigator.of(_key.currentContext).pushNamedAndRemoveUntil(
-        LoggedInHomePage.routeName, (Route<dynamic> route) => false);
+    return authResult;
   } on PlatformException catch (error) {
     String message = '';
     // If something went wrong, notify user
@@ -89,7 +96,7 @@ _signInWithCredential(AuthCredential credential, GlobalKey _key) async {
       message = 'Something went wrong, please try again.';
     }
     showDialog(
-      context: _key.currentContext,
+      context: key.currentContext,
       builder: (context) {
         return AlertDialog(
           title: Text('Login Error'),
@@ -113,7 +120,7 @@ _signInWithCredential(AuthCredential credential, GlobalKey _key) async {
       error: jsonEncode(error),
     );
 
-    Provider.of<FirebaseAnalytics>(_key.currentContext).logEvent(
+    Provider.of<FirebaseAnalytics>(key.currentContext).logEvent(
       name: 'login_with_${credential.providerId}_failed',
       parameters: {
         'code': error.code,
@@ -130,6 +137,8 @@ _signInWithCredential(AuthCredential credential, GlobalKey _key) async {
   } finally {
     _providerOverlay.remove();
   }
+
+  return null;
 }
 
 /// Logs user into Google, [_key] is needed to insert overlay
@@ -151,5 +160,69 @@ loginToGoogle(GlobalKey _key) async {
   );
 
   // Link with firebase
-  _signInWithCredential(credential, _key);
+  final result = await _signInWithCredential(credential: credential, key: _key);
+
+  if (result == null) return;
+
+  // Navigates to LoggedInHomePage
+  Navigator.of(_key.currentContext).pushNamedAndRemoveUntil(
+      LoggedInHomePage.routeName, (Route<dynamic> route) => false);
+}
+
+/// Logs user into Google
+///
+/// Returns Future<AuthCredential> that can be used to reauthenticate the user
+Future<AuthCredential> loginToGoogleAuthCredential() async {
+  // Trys to log into google account
+  final googleAccount = await GoogleSignIn().signIn();
+  // Return if user exits or is unsuccessful
+  if (googleAccount == null) return null;
+
+  final googleAuth = await googleAccount.authentication;
+
+  // Grab credential
+  return GoogleAuthProvider.getCredential(
+    accessToken: googleAuth.accessToken,
+    idToken: googleAuth.idToken,
+  );
+}
+
+/// Logs user into Facebbok
+///
+/// Returns Future<AuthCredential> that can be used to reauthenticate the user
+Future<AuthCredential> loginToFacebookAuthCredential(
+    BuildContext context) async {
+  final facebookLogin = FacebookLogin();
+  // Attemps to log user in
+  final result = await facebookLogin.logIn(['email']);
+
+  AuthCredential credential = null;
+
+  switch (result.status) {
+    case FacebookLoginStatus.loggedIn:
+      // If logged in, grab credential
+      credential = FacebookAuthProvider.getCredential(
+        accessToken: result.accessToken.token,
+      );
+      break;
+    case FacebookLoginStatus.error:
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'There was an error logging you into Facebook',
+          ),
+        ),
+      );
+      // Log for deubging
+      log(
+        'Facebook login error',
+        name: 'authentication_service loginToFacebook',
+        error: jsonEncode(result),
+      );
+      break;
+    default:
+      break;
+  }
+
+  return credential;
 }

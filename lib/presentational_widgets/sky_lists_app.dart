@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sky_lists/presentational_widgets/pages/change_password_page.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/create_account_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
@@ -42,6 +43,7 @@ class SkyListsApp extends StatelessWidget {
         SendPasswordResetPage.routeName: (context) => SendPasswordResetPage(),
         QRScannerPage.routeName: (context) => QRScannerPage(),
         AccountPage.routeName: (context) => AccountPage(),
+        ChangePasswordPage.routeName: (context) => ChangePasswordPage(),
       },
       // Track route transitions
       navigatorObservers: [
