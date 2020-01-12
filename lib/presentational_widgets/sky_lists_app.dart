@@ -26,7 +26,6 @@ class SkyListsApp extends StatelessWidget {
 
       // Theme is set, for both light and dark modes, auto switches depending on user system settings
       theme: brightTheme,
-      darkTheme: darkTheme,
 
       // Inital route is set to StartupPage for determination if user is logged in or not
       initialRoute: StartupPage.routeName,

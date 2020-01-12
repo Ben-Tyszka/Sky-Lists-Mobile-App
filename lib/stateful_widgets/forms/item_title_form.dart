@@ -43,6 +43,7 @@ class _ItemTitleFormState extends State<ItemTitleForm> {
       controller: _nameController,
       onChanged: onChange,
       onSubmit: onSubmit,
+      checked: widget.item.checked,
     );
   }
 }

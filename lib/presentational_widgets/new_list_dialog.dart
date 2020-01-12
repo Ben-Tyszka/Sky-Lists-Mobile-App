@@ -16,13 +16,15 @@ class NewListDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final actions = <Widget>[
-      FlatButton(
-        child: Text('Cancel'),
+      FlatButton.icon(
+        icon: Icon(Icons.cancel),
+        label: Text('Cancel'),
         onPressed: onCancel,
       ),
-      MaterialButton(
+      FlatButton.icon(
         onPressed: onPressed,
-        child: Text('Create'),
+        label: Text('Create'),
+        icon: Icon(Icons.create),
       ),
     ];
     final loadingActions = <Widget>[
@@ -30,7 +32,11 @@ class NewListDialog extends StatelessWidget {
     ];
 
     return AlertDialog(
-      title: Text('New List'),
+      title: Text(
+        'New List',
+        style: Theme.of(context).primaryTextTheme.title,
+        textAlign: TextAlign.center,
+      ),
       content: TextField(
         controller: controller,
       ),

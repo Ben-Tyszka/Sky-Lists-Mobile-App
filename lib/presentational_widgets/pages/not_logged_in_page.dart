@@ -16,25 +16,25 @@ class NotLoggedInPage extends StatelessWidget {
       body: Center(
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 'Sky Lists',
-                style: Theme.of(context).textTheme.display2.copyWith(
-                      fontWeight: FontWeight.w200,
-                    ),
+                style: Theme.of(context).primaryTextTheme.display1,
+              ),
+              SizedBox(
+                height: 4.0,
               ),
               Text(
                 'simple and connected',
-                style: Theme.of(context).textTheme.title.copyWith(
-                      fontWeight: FontWeight.w200,
-                    ),
+                style: Theme.of(context).primaryTextTheme.title,
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 15.0),
               LoginForm(),
-              SizedBox(height: 10.0),
-              RaisedButton.icon(
+              SizedBox(height: 15.0),
+              OutlineButton.icon(
                 icon: Icon(Icons.email),
                 label: Text('Sign up with Email'),
                 onPressed: () {
@@ -42,8 +42,8 @@ class NotLoggedInPage extends StatelessWidget {
                   Navigator.pushNamed(context, CreateAccountPage.routeName);
                 },
               ),
-              Divider(),
               GoogleSignInButton(
+                borderRadius: 18,
                 onPressed: () {
                   // Starts google login flow
                   loginToGoogle(key);
@@ -52,6 +52,7 @@ class NotLoggedInPage extends StatelessWidget {
                 darkMode: Theme.of(context).brightness == Brightness.dark,
               ),
               FacebookSignInButton(
+                borderRadius: 18,
                 onPressed: () {
                   // Starts facebook login flow
                   loginToFacebook(key);

@@ -49,9 +49,13 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Sky Lists'),
+        title: Text(
+          'Sky Lists',
+        ),
         leading: IconButton(
-          icon: Icon(Icons.camera),
+          icon: Icon(
+            Icons.camera,
+          ),
           onPressed: () {
             Navigator.pushNamed(context, QRScannerPage.routeName);
           },
@@ -80,8 +84,9 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).accentColor,
         onPressed: () {
-          Provider.of<FirebaseAnalytics>(context)
+          Provider.of<FirebaseAnalytics>(context, listen: false)
               .logEvent(name: 'list_create_start');
 
           showDialog(context: context, builder: (context) => NewListForm());

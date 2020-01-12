@@ -39,6 +39,7 @@ loginToFacebook(GlobalKey _key) async {
       final authResult =
           await _signInWithCredential(credential: credential, key: _key);
       if (authResult == null) return;
+
       // Navigates to LoggedInHomePage
       Navigator.of(_key.currentContext).pushNamedAndRemoveUntil(
           LoggedInHomePage.routeName, (Route<dynamic> route) => false);
@@ -84,6 +85,9 @@ Future<AuthResult> _signInWithCredential({
     // Tell analytics Log that the user has logged in with 3rd party service
     Provider.of<FirebaseAnalytics>(key.currentContext)
         .logLogin(loginMethod: credential.providerId);
+
+    log('3rd party login | Provider: ${credential.providerId} | isNewUser: ${authResult.additionalUserInfo.isNewUser}',
+        name: 'authenticationService _signInWithCredential');
 
     return authResult;
   } on PlatformException catch (error) {
@@ -196,7 +200,7 @@ Future<AuthCredential> loginToFacebookAuthCredential(
   // Attemps to log user in
   final result = await facebookLogin.logIn(['email']);
 
-  AuthCredential credential = null;
+  AuthCredential credential;
 
   switch (result.status) {
     case FacebookLoginStatus.loggedIn:

@@ -50,3 +50,13 @@ String validateFullName(String value) {
 
   return null;
 }
+
+/// Ensures consistant validation standards across app, takes in a [value] to validate
+/// and returns a error [String]
+String validateAgreements(bool value) {
+  if (!value) {
+    return "Please agree to terms and privacy policy";
+  }
+
+  return null;
+}

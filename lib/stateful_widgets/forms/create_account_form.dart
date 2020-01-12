@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:sky_lists/presentational_widgets/create_account.dart';
@@ -66,14 +67,20 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           name: _data.name,
         );
 
-        Provider.of<FirebaseAnalytics>(context)
-            .logSignUp(signUpMethod: 'email_and_password');
-        Provider.of<FirebaseAnalytics>(context)
-            .logLogin(loginMethod: 'email_and_password_first_time');
+        Provider.of<FirebaseAnalytics>(
+          context,
+          listen: false,
+        ).logSignUp(signUpMethod: 'email_and_password');
+        Provider.of<FirebaseAnalytics>(
+          context,
+          listen: false,
+        ).logLogin(loginMethod: 'email_and_password_first_time');
 
+        log('A new user was created with ${authResult.additionalUserInfo.providerId}',
+            name: 'CreateAccountForm submit');
         Navigator.of(context).pushNamedAndRemoveUntil(
             LoggedInHomePage.routeName, (Route<dynamic> route) => false);
-      } catch (error) {
+      } on PlatformException catch (error) {
         var message = '';
 
         if (error.code == 'ERROR_INVALID_EMAIL' ||

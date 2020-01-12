@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:sky_lists/models/sky_list_shared_meta.dart';
@@ -25,8 +24,8 @@ class _SharedSkyListsPaginationState extends State<SharedSkyListsPagination> {
   final _db = DatabaseService();
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
 
     _controller = ScrollController()
       ..addListener(() {
@@ -44,11 +43,14 @@ class _SharedSkyListsPaginationState extends State<SharedSkyListsPagination> {
     setState(() {
       _isLoading = true;
     });
+    _getLists();
+  }
 
-    final _user = Provider.of<FirebaseUser>(context);
-    if (_user == null) return;
+  _getLists() async {
+    final user = await FirebaseAuth.instance.currentUser();
+    if (user == null) return;
 
-    _db.streamListsSharedWithMe(userId: _user.uid).listen((snapshots) {
+    _db.streamListsSharedWithMe(userId: user.uid).listen((snapshots) {
       if (snapshots.isNotEmpty) {
         _lastSharedListInData = snapshots.last;
       }
@@ -64,8 +66,8 @@ class _SharedSkyListsPaginationState extends State<SharedSkyListsPagination> {
     if (!_moreListsAvailable) return;
     if (_gettingMoreLists) return;
 
-    final _user = Provider.of<FirebaseUser>(context);
-    assert(_user != null);
+    final user = await FirebaseAuth.instance.currentUser();
+    if (user == null) return;
 
     setState(() {
       _gettingMoreLists = true;
@@ -73,7 +75,7 @@ class _SharedSkyListsPaginationState extends State<SharedSkyListsPagination> {
 
     _db
         .streamListsSharedWithMe(
-            userId: _user.uid, afterSharedAt: _lastSharedListInData.sharedAt)
+            userId: user.uid, afterSharedAt: _lastSharedListInData.sharedAt)
         .listen((snapshots) {
       if (snapshots.length < 10) {
         _moreListsAvailable = false;

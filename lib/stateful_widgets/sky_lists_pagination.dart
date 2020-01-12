@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:sky_lists/models/sky_list_meta.dart';
@@ -20,13 +19,12 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
   bool _moreListsAvailable = true;
   bool _gettingMoreLists = false;
   SkyListMeta _lastListInData;
-  FirebaseUser _user;
 
   final _db = DatabaseService();
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     _controller = ScrollController()
       ..addListener(() {
         final maxScroll = _controller.position.maxScrollExtent;
@@ -39,19 +37,18 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
           _loadMoreLists();
         }
       });
-
-    _user = Provider.of<FirebaseUser>(context);
     _getLists();
   }
 
-  _getLists() {
-    if (_user == null) return;
+  _getLists() async {
+    final user = await FirebaseAuth.instance.currentUser();
+    if (user == null) return;
 
     setState(() {
       _isLoading = true;
     });
 
-    _db.streamLists(userId: _user.uid).listen((snapshots) {
+    _db.streamLists(userId: user.uid).listen((snapshots) {
       if (snapshots.isNotEmpty) {
         _lastListInData = snapshots.last;
       }
@@ -63,10 +60,11 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
     });
   }
 
-  _loadMoreLists() {
+  _loadMoreLists() async {
     if (!_moreListsAvailable) return;
     if (_gettingMoreLists) return;
-    assert(_user == null);
+    final user = await FirebaseAuth.instance.currentUser();
+    if (user == null) return;
 
     setState(() {
       _gettingMoreLists = true;
@@ -74,7 +72,7 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
 
     _db
         .streamLists(
-            userId: _user.uid, afterLastModified: _lastListInData.lastModified)
+            userId: user.uid, afterLastModified: _lastListInData.lastModified)
         .listen((snapshots) {
       if (snapshots.length < 10) {
         _moreListsAvailable = false;

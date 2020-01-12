@@ -23,35 +23,44 @@ class AboutAppDialog extends StatelessWidget {
         ),
         Text(
           'Sky Lists is still under development. Bug reports, suggestions and/or feedback would be greatly appreciated.',
+          style: Theme.of(context).primaryTextTheme.body1,
+          textAlign: TextAlign.center,
         ),
         Divider(
           height: 10.0,
         ),
-        RaisedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, PrivacyPolicyPage.routeName);
-          },
-          child: Text(
-            'Privacy Policy',
-          ),
-        ),
-        RaisedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, TermsOfServicePage.routeName);
-          },
-          child: Text(
-            'Terms of Service',
-          ),
+        Column(
+          children: <Widget>[
+            OutlineButton(
+              onPressed: () {
+                Navigator.pushNamed(context, PrivacyPolicyPage.routeName);
+              },
+              child: Text(
+                'Privacy Policy',
+              ),
+            ),
+            OutlineButton(
+              onPressed: () {
+                Navigator.pushNamed(context, TermsOfServicePage.routeName);
+              },
+              child: Text(
+                'Terms of Service',
+              ),
+            ),
+          ],
         ),
         Divider(
           height: 10.0,
         ),
         Text(
           'Contact',
+          style: Theme.of(context).primaryTextTheme.subtitle,
+          textAlign: TextAlign.center,
         ),
         Text.rich(
           TextSpan(
             text: 'Website: ',
+            style: Theme.of(context).primaryTextTheme.body1,
             children: <TextSpan>[
               TextSpan(
                 recognizer: TapGestureRecognizer()
@@ -62,7 +71,7 @@ class AboutAppDialog extends StatelessWidget {
                     }
                   },
                 text: 'skylists.app',
-                style: Theme.of(context).textTheme.body1.copyWith(
+                style: Theme.of(context).primaryTextTheme.body1.copyWith(
                       decoration: TextDecoration.underline,
                       color: Colors.blue,
                     ),
@@ -73,6 +82,7 @@ class AboutAppDialog extends StatelessWidget {
         Text.rich(
           TextSpan(
             text: 'General: ',
+            style: Theme.of(context).primaryTextTheme.body1,
             children: <TextSpan>[
               TextSpan(
                 recognizer: TapGestureRecognizer()
@@ -83,7 +93,7 @@ class AboutAppDialog extends StatelessWidget {
                     }
                   },
                 text: 'contact@skylists.app',
-                style: Theme.of(context).textTheme.body1.copyWith(
+                style: Theme.of(context).primaryTextTheme.body1.copyWith(
                       decoration: TextDecoration.underline,
                       color: Colors.blue,
                     ),
@@ -94,6 +104,7 @@ class AboutAppDialog extends StatelessWidget {
         Text.rich(
           TextSpan(
             text: 'Business Inquiries: ',
+            style: Theme.of(context).primaryTextTheme.body1,
             children: <TextSpan>[
               TextSpan(
                 recognizer: TapGestureRecognizer()
@@ -104,7 +115,7 @@ class AboutAppDialog extends StatelessWidget {
                     }
                   },
                 text: 'biz@skylists.app',
-                style: Theme.of(context).textTheme.body1.copyWith(
+                style: Theme.of(context).primaryTextTheme.body1.copyWith(
                       decoration: TextDecoration.underline,
                       color: Colors.blue,
                     ),
@@ -115,6 +126,7 @@ class AboutAppDialog extends StatelessWidget {
         Text.rich(
           TextSpan(
             text: 'Legal: ',
+            style: Theme.of(context).primaryTextTheme.body1,
             children: <TextSpan>[
               TextSpan(
                 recognizer: TapGestureRecognizer()

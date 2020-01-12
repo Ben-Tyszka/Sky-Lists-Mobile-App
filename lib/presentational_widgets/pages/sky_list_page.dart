@@ -18,63 +18,64 @@ class SkyListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SkyListPageArguments args = ModalRoute.of(context).settings.arguments;
-
-    return StreamProvider<SkyListMeta>(
-      create: (_) => _db.streamListMeta(
-        list: args.list,
-      ),
-      child: Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.share,
-              ),
-              onPressed: () {
-                final isEmailVerified =
-                    Provider.of<FirebaseUser>(context).isEmailVerified;
-                if (isEmailVerified) {
-                  Navigator.pushNamed(context, SkyListShareWithPage.routeName,
-                      arguments: args);
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Please Verify Email'),
-                      content: Text(
-                          'You must verify your email before you can share a list.'),
-                      actions: <Widget>[
-                        FlatButton(
-                          onPressed: () {
-                            Provider.of<FirebaseUser>(context)
-                                .sendEmailVerification();
-                          },
-                          child: Text('Resend Email'),
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text('Close'),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-            )
-          ],
-          leading: IconButton(
+    return Scaffold(
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
             icon: Icon(
-              Icons.arrow_back,
+              Icons.share,
             ),
             onPressed: () {
-              Navigator.popAndPushNamed(context, LoggedInHomePage.routeName);
+              final isEmailVerified =
+                  Provider.of<FirebaseUser>(context).isEmailVerified;
+              if (isEmailVerified) {
+                Navigator.pushNamed(context, SkyListShareWithPage.routeName,
+                    arguments: args);
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Please Verify Email'),
+                    content: Text(
+                        'You must verify your email before you can share a list.'),
+                    actions: <Widget>[
+                      FlatButton(
+                        onPressed: () {
+                          Provider.of<FirebaseUser>(context)
+                              .sendEmailVerification();
+                        },
+                        child: Text('Resend Email'),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Close'),
+                      ),
+                    ],
+                  ),
+                );
+              }
             },
+          )
+        ],
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
           ),
-          title: Text('Testing'),
+          onPressed: () {
+            Navigator.popAndPushNamed(context, LoggedInHomePage.routeName);
+          },
         ),
-        body: SkyListPagination(),
+        title: StreamProvider<SkyListMeta>(
+          create: (_) => _db.streamListMeta(
+            list: args.list,
+          ),
+          child: ListTitleForm(),
+        ),
+      ),
+      body: SkyListPagination(
+        list: args.list,
       ),
     );
   }

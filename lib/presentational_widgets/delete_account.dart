@@ -13,26 +13,35 @@ class DeleteAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RaisedButton.icon(
-      color: Colors.red,
+      color: Theme.of(context).errorColor,
       icon: Icon(Icons.delete_forever),
-      label: Text('Delete Account'),
+      label: Text('Hold to Delete Account'),
       onPressed: () {},
       onLongPress: () async {
         switch (await showDialog(
           context: context,
           builder: (context) => SimpleDialog(
-            title: Text('Confirm Delete Account'),
+            title: Text(
+              'Confirm Delete Account',
+              textAlign: TextAlign.center,
+            ),
             children: <Widget>[
               Text(
-                'Deleting your account is permanent, all your data will be lost.',
+                'Caution: All data will be lost.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: Theme.of(context).primaryTextTheme.body2,
+              ),
+              SizedBox(
+                height: 20.0,
               ),
               SimpleDialogOption(
                 child: Text('Yes, delete my account'),
                 onPressed: () {
                   Navigator.pop(context, ConfirmDelete.YES);
                 },
+              ),
+              SizedBox(
+                height: 20.0,
               ),
               SimpleDialogOption(
                 child: Text('No, do not delete my account'),
@@ -44,7 +53,10 @@ class DeleteAccount extends StatelessWidget {
           ),
         )) {
           case ConfirmDelete.YES:
-            final user = Provider.of<FirebaseUser>(context);
+            final user = Provider.of<FirebaseUser>(
+              context,
+              listen: false,
+            );
             await _db.deleteUser(userId: user.uid);
             await user.delete();
             Navigator.of(context).pushNamedAndRemoveUntil(

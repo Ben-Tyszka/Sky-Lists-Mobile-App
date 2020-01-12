@@ -45,8 +45,16 @@ class _LoginFormState extends State<LoginForm> {
         Timeline.finishSync();
 
         if (user != null) {
-          Provider.of<FirebaseAnalytics>(context).logLogin(
+          Provider.of<FirebaseAnalytics>(
+            context,
+            listen: false,
+          ).logLogin(
             loginMethod: 'email_and_password',
+          );
+
+          log(
+            'A new user was logged in with ${user.additionalUserInfo.providerId} | isNewUser: ${user.additionalUserInfo.isNewUser}',
+            name: 'LoginForm submit',
           );
 
           Navigator.of(context).pushNamedAndRemoveUntil(

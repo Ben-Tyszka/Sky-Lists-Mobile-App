@@ -38,6 +38,11 @@ class _SendPasswordResetFormState extends State<SendPasswordResetForm> {
         Timeline.startSync('send_password_reset_email');
         await FirebaseAuth.instance.sendPasswordResetEmail(email: _data.email);
         Timeline.finishSync();
+
+        log(
+          'Password reset email was sent',
+          name: 'SendPasswordResetForm',
+        );
       } catch (error) {
         var message = '';
 
@@ -50,7 +55,7 @@ class _SendPasswordResetFormState extends State<SendPasswordResetForm> {
 
           log(
             'Something went wrong while trying to reset the password',
-            name: 'Password Reset Error',
+            name: 'SendPasswordResetForm _submit',
             error: jsonEncode(error),
           );
 

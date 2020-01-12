@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -11,7 +11,6 @@ import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/new_list_dialog.dart';
 import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
 import 'package:sky_lists/utils/sky_list_page_arguments.dart';
-import 'package:sky_lists/utils/timestamp_to_formmated_date.dart';
 
 class NewListForm extends StatefulWidget {
   @override
@@ -25,7 +24,7 @@ class _NewListFormState extends State<NewListForm> {
   @override
   void initState() {
     _controller = TextEditingController(
-      text: 'List - ${timestampToFormmatedDate(Timestamp.now())}',
+      text: 'List - ${DateFormat.yMMMd().add_jm().format(DateTime.now())}',
     );
     loading = false;
 
@@ -47,12 +46,13 @@ class _NewListFormState extends State<NewListForm> {
     Timeline.startSync('list_create');
     final doc = await _db.createList(
       name: _controller.value.text,
-      userId: Provider.of<FirebaseUser>(context).uid,
+      userId: Provider.of<FirebaseUser>(context, listen: false).uid,
     );
     final snapshot = await doc.get();
     Timeline.finishSync();
 
-    Provider.of<FirebaseAnalytics>(context).logEvent(name: 'list_create');
+    Provider.of<FirebaseAnalytics>(context, listen: false)
+        .logEvent(name: 'list_create');
 
     Navigator.pushNamed(
       context,

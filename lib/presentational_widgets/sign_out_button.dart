@@ -12,9 +12,12 @@ class SignOutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlineButton.icon(
       icon: Icon(Icons.exit_to_app),
-      label: Text('Sign out'),
+      label: Text('Sign Out'),
       onPressed: () {
-        Provider.of<FirebaseAnalytics>(context).logEvent(name: 'sign_out');
+        Provider.of<FirebaseAnalytics>(
+          context,
+          listen: false,
+        ).logEvent(name: 'sign_out');
         Navigator.of(context).pushNamedAndRemoveUntil(
           NotLoggedInPage.routeName,
           (Route<dynamic> route) => false,

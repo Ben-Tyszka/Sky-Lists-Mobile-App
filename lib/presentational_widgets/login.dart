@@ -29,19 +29,19 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(
-        horizontal: 10.0,
-      ),
+      elevation: 4.0,
       child: Form(
         key: formKey,
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 15.0,
+            vertical: 10.0,
           ),
           child: Column(
             children: <Widget>[
               TextFormField(
                 decoration: InputDecoration(
+                  filled: true,
                   labelText: 'Email',
                   counterText: "",
                   hintText: 'you@example.com',
@@ -54,8 +54,12 @@ class Login extends StatelessWidget {
                 enabled: !isLoading,
                 onSaved: onEmailSaved,
               ),
+              SizedBox(
+                height: 16.0,
+              ),
               TextFormField(
                 decoration: InputDecoration(
+                  filled: true,
                   labelText: 'Password',
                   counterText: "",
                   icon: Icon(
@@ -78,17 +82,20 @@ class Login extends StatelessWidget {
                 enabled: !isLoading,
                 onSaved: onPasswordSaved,
               ),
-              SizedBox(
-                height: 6.0,
-              ),
-              Text(
-                errorMessage,
-                style: TextStyle(
-                  color: Colors.red,
+              if (errorMessage != null && errorMessage != '') ...[
+                SizedBox(
+                  height: 8.0,
                 ),
-              ),
+                Text(
+                  errorMessage,
+                  style: Theme.of(context)
+                      .primaryTextTheme
+                      .body1
+                      .copyWith(color: Theme.of(context).errorColor),
+                ),
+              ],
               SizedBox(
-                height: 6.0,
+                height: 8.0,
               ),
               !isLoading
                   ? OutlineButton.icon(
@@ -100,12 +107,12 @@ class Login extends StatelessWidget {
                     )
                   : CircularProgressIndicator(),
               SizedBox(
-                height: 10.0,
+                height: 8.0,
               ),
               Text.rich(
                 TextSpan(
                   text: 'Forgot your password? ',
-                  style: Theme.of(context).textTheme.button,
+                  style: Theme.of(context).primaryTextTheme.body1,
                   children: <TextSpan>[
                     TextSpan(
                       recognizer: TapGestureRecognizer()
@@ -116,15 +123,13 @@ class Login extends StatelessWidget {
                                     context, SendPasswordResetPage.routeName);
                               },
                       text: 'Reset it here',
-                      style: Theme.of(context).textTheme.caption.copyWith(
-                            decoration: TextDecoration.underline,
-                          ),
+                      style:
+                          Theme.of(context).primaryTextTheme.caption.copyWith(
+                                decoration: TextDecoration.underline,
+                              ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 10.0,
               ),
             ],
           ),

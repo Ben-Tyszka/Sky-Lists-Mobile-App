@@ -11,7 +11,7 @@ class ListTitleForm extends StatefulWidget {
 }
 
 class _ListTitleFormState extends State<ListTitleForm> {
-  TextEditingController _nameController;
+  TextEditingController _nameController = TextEditingController();
   SkyListMeta list;
   final _db = DatabaseService();
 
@@ -19,6 +19,7 @@ class _ListTitleFormState extends State<ListTitleForm> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     list = Provider.of<SkyListMeta>(context);
+    if (list == null) return;
     _nameController = TextEditingController(text: list.name);
   }
 

@@ -8,7 +8,7 @@ class ListTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
         hintText: 'List Name',
         counterText: '',

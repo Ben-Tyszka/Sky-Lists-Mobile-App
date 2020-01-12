@@ -124,7 +124,7 @@ class DatabaseService {
 
   /// Changes a lists title
   void setListTitle({@required SkyListMeta list, @required String name}) {
-    list.docRef.setData(
+    list.docRef.updateData(
       {
         'name': name,
         'lastModified': FieldValue.serverTimestamp(),
@@ -161,7 +161,7 @@ class DatabaseService {
     item.docRef.setData({
       'hidden': status,
     });
-    item.docRef.parent().parent().setData({
+    item.docRef.parent().parent().updateData({
       'lastModified': FieldValue.serverTimestamp(),
     });
   }
@@ -171,7 +171,7 @@ class DatabaseService {
     item.docRef.setData({
       'checked': status,
     });
-    item.docRef.parent().parent().setData({
+    item.docRef.parent().parent().updateData({
       'lastModified': FieldValue.serverTimestamp(),
     });
   }
@@ -181,7 +181,7 @@ class DatabaseService {
     item.docRef.setData({
       'name': title,
     });
-    item.docRef.parent().parent().setData({
+    item.docRef.parent().parent().updateData({
       'lastModified': FieldValue.serverTimestamp(),
     });
   }
@@ -189,7 +189,7 @@ class DatabaseService {
   /// Deletes a list item
   void deleteItem({@required SkyListItem item}) {
     item.docRef.delete();
-    item.docRef.parent().parent().setData({
+    item.docRef.parent().parent().updateData({
       'lastModified': FieldValue.serverTimestamp(),
     });
   }
@@ -206,7 +206,7 @@ class DatabaseService {
       'descriptor': '',
       'quantity': 0,
     });
-    list.docRef.setData({
+    list.docRef.updateData({
       'lastModified': FieldValue.serverTimestamp(),
     });
   }
@@ -217,7 +217,7 @@ class DatabaseService {
     item.docRef.setData({
       'descriptor': descriptor,
     });
-    item.docRef.parent().parent().setData({
+    item.docRef.parent().parent().updateData({
       'lastModified': FieldValue.serverTimestamp(),
     });
   }
@@ -227,7 +227,7 @@ class DatabaseService {
     item.docRef.setData({
       'quantity': quantity,
     });
-    item.docRef.parent().parent().setData({
+    item.docRef.parent().parent().updateData({
       'lastModified': FieldValue.serverTimestamp(),
     });
   }

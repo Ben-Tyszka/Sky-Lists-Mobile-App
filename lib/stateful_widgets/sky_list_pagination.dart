@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/models/sky_list_item.dart';
@@ -9,6 +8,9 @@ import 'package:sky_lists/presentational_widgets/sky_list_builder.dart';
 import 'package:sky_lists/database_service.dart';
 
 class SkyListPagination extends StatefulWidget {
+  SkyListPagination({@required this.list});
+
+  final SkyListMeta list;
   @override
   _SkyListPaginationState createState() => _SkyListPaginationState();
 }
@@ -24,8 +26,8 @@ class _SkyListPaginationState extends State<SkyListPagination> {
   final _db = DatabaseService();
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
 
     _controller = ScrollController()
       ..addListener(() {
@@ -40,16 +42,16 @@ class _SkyListPaginationState extends State<SkyListPagination> {
         }
       });
 
-    final list = Provider.of<SkyListMeta>(context);
-    assert(list != null);
-
     setState(() {
       _isLoading = true;
     });
+    _getItems();
+  }
 
+  _getItems() {
     _db
         .streamListItems(
-      list: list,
+      list: widget.list,
     )
         .listen((snapshots) {
       if (snapshots.isNotEmpty) {
@@ -64,7 +66,7 @@ class _SkyListPaginationState extends State<SkyListPagination> {
     });
   }
 
-  _loadMoreItems() async {
+  _loadMoreItems() {
     if (!_moreListsAvailable) return;
     if (_gettingMoreLists) return;
 
@@ -74,7 +76,7 @@ class _SkyListPaginationState extends State<SkyListPagination> {
 
     _db
         .streamListItems(
-      list: Provider.of<SkyListMeta>(context),
+      list: widget.list,
       afterAddedAt: _lastItem.addedAt,
     )
         .listen((snapshots) {

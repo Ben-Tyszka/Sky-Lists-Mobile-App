@@ -33,6 +33,9 @@ class AccountPage extends StatelessWidget {
             )
           : Column(
               children: <Widget>[
+                SizedBox(
+                  height: 20,
+                ),
                 if (user.isEmailVerified) ...[
                   NameChangeForm(),
                   FlatButton.icon(
@@ -44,13 +47,33 @@ class AccountPage extends StatelessWidget {
                     },
                   ),
                 ] else ...[
-                  Text(
-                      'Your email address is not verified. Check your inbox and follow the instructions to verify your account.'),
-                  FlatButton(
-                    child: Text('Resend email'),
-                    onPressed: () {
-                      user.sendEmailVerification();
-                    },
+                  Card(
+                    elevation: 2,
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                'Your email is not verified, some account features have been restricted',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).primaryTextTheme.title,
+                              ),
+                            ],
+                          ),
+                        ),
+                        OutlineButton.icon(
+                          label: Text('Resend Email'),
+                          icon: Icon(
+                            Icons.send,
+                          ),
+                          onPressed: () {
+                            user.sendEmailVerification();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
                 Divider(),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,14 +49,14 @@ class SkyListBuilder extends StatelessWidget {
               .then((reason) {
             if (reason != SnackBarClosedReason.action) {
               _db.deleteItem(item: item);
-              Provider.of<FirebaseAnalytics>(context)
+              Provider.of<FirebaseAnalytics>(context, listen: false)
                   .logEvent(name: 'item_delete');
             }
           });
         },
         child: ListTile(
           onLongPress: () {
-            Provider.of<FirebaseAnalytics>(context)
+            Provider.of<FirebaseAnalytics>(context, listen: false)
                 .logEvent(name: 'item_quantity_change', parameters: {
               'descriptor': item.descriptor,
               'quantity': item.quantity,
@@ -71,7 +73,7 @@ class SkyListBuilder extends StatelessWidget {
             value: item.checked,
             onChanged: (val) {
               Vibration.vibrate();
-              Provider.of<FirebaseAnalytics>(context)
+              Provider.of<FirebaseAnalytics>(context, listen: false)
                   .logEvent(name: 'item_check');
               _db.setItemChecked(item: item, status: val);
             },
@@ -90,7 +92,9 @@ class SkyListBuilder extends StatelessWidget {
       ),
       title: Text('Add Item'),
       onTap: () {
-        Provider.of<FirebaseAnalytics>(context).logEvent(name: 'item_add');
+        Provider.of<FirebaseAnalytics>(context, listen: false)
+            .logEvent(name: 'item_add');
+        log('Item added', name: 'SkyListBuilder addItemTile');
         _db.addListItem(list: list);
       },
     );
@@ -103,6 +107,7 @@ class SkyListBuilder extends StatelessWidget {
             child: CircularProgressIndicator(),
           )
         : ListView.builder(
+            shrinkWrap: true,
             controller: controller,
             itemCount: data.length + 1,
             itemBuilder: (context, index) {
