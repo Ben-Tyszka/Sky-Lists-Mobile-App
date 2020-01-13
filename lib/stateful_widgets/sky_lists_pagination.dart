@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/sky_lists_builder.dart';
 import 'package:sky_lists/database_service.dart';
-import 'package:sky_lists/utils/timestamp_to_formmated_date.dart';
 
 class SkyListsPagination extends StatefulWidget {
   @override

@@ -6,7 +6,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sky_lists/blocs/login_bloc/bloc.dart';
 import 'package:sky_lists/repositories/user_repository.dart';
 import 'package:sky_lists/utils/validation.dart';
-import 'package:validators/validators.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   UserRepository _userRepository;

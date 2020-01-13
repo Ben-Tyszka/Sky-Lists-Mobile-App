@@ -126,7 +126,12 @@ class _SendPasswordResetFormState extends State<SendPasswordResetForm> {
                 autocorrect: false,
                 keyboardType: TextInputType.emailAddress,
                 maxLength: 50,
-                validator: validateEmail,
+                validator: (val) {
+                  if (!validateEmail(val)) {
+                    return 'Invalid Email';
+                  }
+                  return null;
+                },
                 enabled: !_isLoading,
                 onSaved: (String value) {
                   _data.email = value;

@@ -1,20 +1,10 @@
-import 'dart:convert';
-import 'dart:developer';
-
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
+
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/register_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/create_account.dart';
-import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
-import 'package:sky_lists/presentational_widgets/pages/privacy_policy_page.dart';
-import 'package:sky_lists/presentational_widgets/pages/terms_of_service_page.dart';
-import 'package:sky_lists/database_service.dart';
 
 class CreateAccountForm extends StatefulWidget {
   @override

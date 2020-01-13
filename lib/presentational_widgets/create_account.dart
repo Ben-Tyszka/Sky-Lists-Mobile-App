@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/privacy_policy_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/terms_of_service_page.dart';
-import 'package:sky_lists/utils/validation.dart';
 
 class CreateAccount extends StatelessWidget {
   CreateAccount({

@@ -37,7 +37,12 @@ class NameChange extends StatelessWidget {
               autocorrect: false,
               maxLength: 50,
               controller: controller,
-              validator: validateFullName,
+              validator: (val) {
+                if (!validateName(val)) {
+                  return 'Invalid name';
+                }
+                return null;
+              },
               enabled: !isLoading,
               onSaved: onSaved,
             ),

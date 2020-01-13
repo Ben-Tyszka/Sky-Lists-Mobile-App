@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/utils/us_number_text_input_formatter.dart';
-import 'package:sky_lists/utils/validation.dart';
 import 'package:sky_lists/database_service.dart';
 
 enum ShareMethod {
@@ -131,9 +130,9 @@ class _ShareWithFormState extends State<ShareWithForm> {
             ),
             autocorrect: false,
             maxLength: 60,
-            validator: _currentMethod == ShareMethod.EMAIL
-                ? validateEmail
-                : validatePhone,
+            // validator: _currentMethod == ShareMethod.EMAIL
+            //     ? validateEmail
+            //     : validatePhone,
             enabled: !_isLoading,
             inputFormatters: _currentMethod == ShareMethod.EMAIL
                 ? <TextInputFormatter>[]
