@@ -22,14 +22,14 @@ class NotLoggedInPage extends StatelessWidget {
               ),
               Text(
                 'Sky Lists',
-                style: Theme.of(context).primaryTextTheme.display1,
+                style: Theme.of(context).primaryTextTheme.display2,
               ),
               SizedBox(
                 height: 4.0,
               ),
               Text(
                 'simple and connected',
-                style: Theme.of(context).primaryTextTheme.title,
+                style: Theme.of(context).primaryTextTheme.display1,
               ),
               SizedBox(height: 15.0),
               LoginForm(),
@@ -46,7 +46,7 @@ class NotLoggedInPage extends StatelessWidget {
                 borderRadius: 18,
                 onPressed: () {
                   // Starts google login flow
-                  loginToGoogle(key);
+                  loginToGoogle(context);
                 },
                 // Sets dark mode
                 darkMode: Theme.of(context).brightness == Brightness.dark,
@@ -55,7 +55,7 @@ class NotLoggedInPage extends StatelessWidget {
                 borderRadius: 18,
                 onPressed: () {
                   // Starts facebook login flow
-                  loginToFacebook(key);
+                  loginToFacebook(context);
                 },
               ),
             ],

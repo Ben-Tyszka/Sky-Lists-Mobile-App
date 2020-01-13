@@ -22,13 +22,13 @@ final _providerOverlay = OverlayEntry(
 );
 
 /// Logs user into Facebbok, [_key] is needed to insert overlay
-loginToFacebook(GlobalKey _key) async {
+loginToFacebook(BuildContext context) async {
   final facebookLogin = FacebookLogin();
   // Attemps to log user in
   final result = await facebookLogin.logIn(['email']);
 
   // Adds overlay
-  Overlay.of(_key.currentContext).insert(_providerOverlay);
+  Overlay.of(context).insert(_providerOverlay);
 
   switch (result.status) {
     case FacebookLoginStatus.loggedIn:
@@ -37,18 +37,18 @@ loginToFacebook(GlobalKey _key) async {
         accessToken: result.accessToken.token,
       );
       final authResult =
-          await _signInWithCredential(credential: credential, key: _key);
+          await _signInWithCredential(credential: credential, context: context);
       if (authResult == null) return;
 
       // Navigates to LoggedInHomePage
-      Navigator.of(_key.currentContext).pushNamedAndRemoveUntil(
+      Navigator.of(context).pushNamedAndRemoveUntil(
           LoggedInHomePage.routeName, (Route<dynamic> route) => false);
       _providerOverlay.remove();
       break;
     case FacebookLoginStatus.error:
       // If something went wrong remove overlay and notify user
       _providerOverlay.remove();
-      Scaffold.of(_key.currentContext).showSnackBar(
+      Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text(
             'There was an error logging you into Facebook',
@@ -75,7 +75,7 @@ loginToFacebook(GlobalKey _key) async {
 /// Logs user into firebase auth system with [credential], [key] is needed to push home route
 Future<AuthResult> _signInWithCredential({
   @required AuthCredential credential,
-  @required GlobalKey key,
+  @required BuildContext context,
 }) async {
   try {
     // Signs user into firebase auth system
@@ -83,8 +83,10 @@ Future<AuthResult> _signInWithCredential({
         await FirebaseAuth.instance.signInWithCredential(credential);
 
     // Tell analytics Log that the user has logged in with 3rd party service
-    Provider.of<FirebaseAnalytics>(key.currentContext)
-        .logLogin(loginMethod: credential.providerId);
+    Provider.of<FirebaseAnalytics>(
+      context,
+      listen: false,
+    ).logLogin(loginMethod: credential.providerId);
 
     log('3rd party login | Provider: ${credential.providerId} | isNewUser: ${authResult.additionalUserInfo.isNewUser}',
         name: 'authenticationService _signInWithCredential');
@@ -100,7 +102,7 @@ Future<AuthResult> _signInWithCredential({
       message = 'Something went wrong, please try again.';
     }
     showDialog(
-      context: key.currentContext,
+      context: context,
       builder: (context) {
         return AlertDialog(
           title: Text('Login Error'),
@@ -124,7 +126,10 @@ Future<AuthResult> _signInWithCredential({
       error: jsonEncode(error),
     );
 
-    Provider.of<FirebaseAnalytics>(key.currentContext).logEvent(
+    Provider.of<FirebaseAnalytics>(
+      context,
+      listen: false,
+    ).logEvent(
       name: 'login_with_${credential.providerId}_failed',
       parameters: {
         'code': error.code,
@@ -146,7 +151,7 @@ Future<AuthResult> _signInWithCredential({
 }
 
 /// Logs user into Google, [_key] is needed to insert overlay
-loginToGoogle(GlobalKey _key) async {
+loginToGoogle(BuildContext context) async {
   // Trys to log into google account
   final googleAccount = await GoogleSignIn().signIn();
   // Return if user exits or is unsuccessful
@@ -155,7 +160,7 @@ loginToGoogle(GlobalKey _key) async {
   final googleAuth = await googleAccount.authentication;
 
   // Add overlay
-  Overlay.of(_key.currentContext).insert(_providerOverlay);
+  Overlay.of(context).insert(_providerOverlay);
 
   // Grab credential
   final credential = GoogleAuthProvider.getCredential(
@@ -164,12 +169,15 @@ loginToGoogle(GlobalKey _key) async {
   );
 
   // Link with firebase
-  final result = await _signInWithCredential(credential: credential, key: _key);
+  final result = await _signInWithCredential(
+    credential: credential,
+    context: context,
+  );
 
   if (result == null) return;
 
   // Navigates to LoggedInHomePage
-  Navigator.of(_key.currentContext).pushNamedAndRemoveUntil(
+  Navigator.of(context).pushNamedAndRemoveUntil(
       LoggedInHomePage.routeName, (Route<dynamic> route) => false);
 }
 

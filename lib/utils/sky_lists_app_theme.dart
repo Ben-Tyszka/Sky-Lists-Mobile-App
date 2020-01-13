@@ -67,6 +67,9 @@ TextTheme _buildAppTextTheme(TextTheme base) {
         display1: base.display1.copyWith(
           fontWeight: FontWeight.w200,
         ),
+        display2: base.display2.copyWith(
+          fontWeight: FontWeight.w200,
+        ),
         headline: base.headline.copyWith(
           fontWeight: FontWeight.w500,
         ),

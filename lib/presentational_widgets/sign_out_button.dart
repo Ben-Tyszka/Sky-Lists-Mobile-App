@@ -23,6 +23,7 @@ class SignOutButton extends StatelessWidget {
           (Route<dynamic> route) => false,
         );
         FirebaseAuth.instance.signOut();
+
         try {
           GoogleSignIn().signOut();
           FacebookLogin().logOut();
