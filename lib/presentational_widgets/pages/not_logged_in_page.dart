@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
+import 'package:sky_lists/blocs/login_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/pages/create_account_page.dart';
+import 'package:sky_lists/repositories/user_repository.dart';
 import 'package:sky_lists/stateful_widgets/forms/login_form.dart';
 import 'package:sky_lists/utils/authentication_service.dart';
 
@@ -32,7 +36,12 @@ class NotLoggedInPage extends StatelessWidget {
                 style: Theme.of(context).primaryTextTheme.display1,
               ),
               SizedBox(height: 15.0),
-              LoginForm(),
+              BlocProvider<LoginBloc>(
+                create: (context) => LoginBloc(
+                  userRepository: Provider.of<UserRepository>(context),
+                ),
+                child: LoginForm(),
+              ),
               SizedBox(height: 15.0),
               OutlineButton.icon(
                 icon: Icon(Icons.email),
@@ -45,8 +54,9 @@ class NotLoggedInPage extends StatelessWidget {
               GoogleSignInButton(
                 borderRadius: 18,
                 onPressed: () {
-                  // Starts google login flow
-                  loginToGoogle(context);
+                  BlocProvider.of<LoginBloc>(context).add(
+                    LoginWithGooglePressed(),
+                  );
                 },
                 // Sets dark mode
                 darkMode: Theme.of(context).brightness == Brightness.dark,

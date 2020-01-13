@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:sky_lists/blocs/register_bloc/bloc.dart';
+import 'package:sky_lists/database_service.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
+import 'package:sky_lists/repositories/user_repository.dart';
 import 'package:sky_lists/stateful_widgets/forms/create_account_form.dart';
 
 class CreateAccountPage extends StatelessWidget {
@@ -27,7 +32,13 @@ class CreateAccountPage extends StatelessWidget {
             SizedBox(
               height: 40.0,
             ),
-            CreateAccountForm(),
+            BlocProvider<RegisterBloc>(
+              create: (context) => RegisterBloc(
+                userRepository: Provider.of<UserRepository>(context),
+                db: Provider.of<DatabaseService>(context),
+              ),
+              child: CreateAccountForm(),
+            ),
           ],
         ),
       ),

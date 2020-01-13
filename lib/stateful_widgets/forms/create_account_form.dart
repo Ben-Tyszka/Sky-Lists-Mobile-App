@@ -5,7 +5,10 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
+import 'package:sky_lists/blocs/register_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/create_account.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
@@ -18,116 +21,75 @@ class CreateAccountForm extends StatefulWidget {
   _CreateAccountFormState createState() => _CreateAccountFormState();
 }
 
-class CreateAccountData {
-  String email = '';
-  String name = '';
-  String password = '';
-  String confirmPassword = '';
-  bool agreements = false;
-}
-
 class _CreateAccountFormState extends State<CreateAccountForm> {
-  final _db = DatabaseService();
-  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
-  bool _isLoading = false;
-  String _errorMessage = '';
   bool _showPassword = false;
 
-  final _data = CreateAccountData();
+  RegisterBloc _registerBloc;
 
-  _submit() async {
-    _formKey.currentState.save();
+  bool get isPopulated =>
+      _emailController.text.isNotEmpty &&
+      _passwordController.text.isNotEmpty &&
+      _nameController.text.isNotEmpty;
 
-    if (_formKey.currentState.validate()) {
-      setState(() {
-        _isLoading = true;
-        _errorMessage = '';
-      });
-
-      try {
-        Timeline.startSync('create_account_with_email_and_password');
-        final authResult = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: _data.email, password: _data.password);
-
-        Timeline.finishSync();
-        final user = authResult.user;
-
-        user.sendEmailVerification();
-
-        final info = UserUpdateInfo();
-        info.displayName = _data.name;
-
-        user.updateProfile(info);
-
-        _db.updateUserProfile(
-          userId: user.uid,
-          email: _data.email,
-          name: _data.name,
-        );
-
-        Provider.of<FirebaseAnalytics>(
-          context,
-          listen: false,
-        ).logSignUp(signUpMethod: 'email_and_password');
-        Provider.of<FirebaseAnalytics>(
-          context,
-          listen: false,
-        ).logLogin(loginMethod: 'email_and_password_first_time');
-
-        log('A new user was created with ${authResult.additionalUserInfo.providerId}',
-            name: 'CreateAccountForm submit');
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            LoggedInHomePage.routeName, (Route<dynamic> route) => false);
-      } on PlatformException catch (error) {
-        var message = '';
-
-        if (error.code == 'ERROR_INVALID_EMAIL' ||
-            error.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-          message = 'Account already exists';
-        } else if (error.code == 'ERROR_WEAK_PASSWORD') {
-          message = 'Password is too weak';
-        } else {
-          message = 'Something went wrong';
-
-          log(
-            'Something went wrong while trying to create a user with email and password',
-            name: 'Create Account Error',
-            error: jsonEncode(error),
-          );
-
-          Provider.of<FirebaseAnalytics>(context).logEvent(
-            name: 'create_account_with_email_and_password_failed',
-            parameters: {
-              'code': error.code,
-              'message': error.message,
-              'details': error.details,
-            },
-          );
-        }
-
-        _formKey.currentState.reset();
-
-        setState(() {
-          _isLoading = false;
-          _errorMessage = message;
-        });
-      }
-    } else {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = '';
-      });
-    }
+  bool isRegisterButtonEnabled(RegisterState state) {
+    return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
-  _saveEmail(String value) {
-    _data.email = value;
+  @override
+  void initState() {
+    super.initState();
+    _registerBloc = BlocProvider.of<RegisterBloc>(context);
+
+    _emailController.addListener(_onEmailChanged);
+    _passwordController.addListener(_onPasswordChanged);
+    _nameController.addListener(_onNameChanged);
   }
 
-  _saveName(String value) {
-    _data.name = value;
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  void _onEmailChanged() {
+    _registerBloc.add(
+      EmailChanged(email: _emailController.text),
+    );
+  }
+
+  void _onPasswordChanged() {
+    _registerBloc.add(
+      PasswordChanged(password: _passwordController.text),
+    );
+  }
+
+  void _onNameChanged() {
+    _registerBloc.add(
+      NameChanged(name: _nameController.text),
+    );
+  }
+
+  void _onAgreementsChanged(bool agree) {
+    _registerBloc.add(
+      AgreementsChanged(agreements: agree),
+    );
+  }
+
+  void _onFormSubmitted() {
+    _registerBloc.add(
+      Submitted(
+        email: _emailController.text,
+        password: _passwordController.text,
+        agreements: null,
+        name: _nameController.text,
+      ),
+    );
   }
 
   _onTogglePasswordHide() {
@@ -136,63 +98,35 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     });
   }
 
-  _savePassword(String value) {
-    _data.password = value;
-  }
-
-  _saveConfirmPassword(String value) {
-    _data.confirmPassword = value;
-  }
-
-  String _confirmPasswordValidation(String val) {
-    if (val != _data.password) {
-      return 'Passwords must match';
-    }
-    return null;
-  }
-
-  String _checkboxValidator(bool value) {
-    if (!value) {
-      return 'Please accept';
-    }
-    return null;
-  }
-
-  _agreementsSaved(bool value) {
-    _data.agreements = value;
-  }
-
-  _seePrivacy(BuildContext context) {
-    Navigator.pushNamed(context, PrivacyPolicyPage.routeName);
-  }
-
-  _seeTOS(BuildContext context) {
-    Navigator.pushNamed(context, TermsOfServicePage.routeName);
-  }
-
-  _formFieldStateChange(bool value, FormFieldState<bool> formFieldState) {
-    formFieldState.didChange(value);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return CreateAccount(
-      checkboxValidator: _checkboxValidator,
-      confirmPasswordValidation: _confirmPasswordValidation,
-      errorMessage: _errorMessage,
-      formFieldStateChange: _formFieldStateChange,
-      formKey: _formKey,
-      isLoading: _isLoading,
-      onTogglePasswordHide: _onTogglePasswordHide,
-      aggrementsSaved: _agreementsSaved,
-      saveConfirmPassword: _saveConfirmPassword,
-      saveEmail: _saveEmail,
-      saveName: _saveName,
-      savePassword: _savePassword,
-      seePrivacy: _seePrivacy,
-      seeTOS: _seeTOS,
-      showPassword: _showPassword,
-      submit: _submit,
+    return BlocListener<RegisterBloc, RegisterState>(
+      listener: (context, state) {
+        if (state.isSuccess) {
+          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+          Navigator.of(context).pop();
+        }
+      },
+      child: BlocBuilder<RegisterBloc, RegisterState>(
+        builder: (context, state) {
+          return CreateAccount(
+            emailController: _emailController,
+            isEmailValid: state.isEmailValid,
+            isLoading: state.isSubmitting,
+            isNameValid: state.isNameValid,
+            isPasswordValid: state.isPasswordValid,
+            isRegisterButtonEnabled: isRegisterButtonEnabled(state),
+            loginFailed: state.isFailure,
+            nameController: _nameController,
+            passwordController: _passwordController,
+            showPassword: _showPassword,
+            submit: _onFormSubmitted,
+            togglePasswordHide: _onTogglePasswordHide,
+            agreementsValue: state.isAgreementsValid,
+            onAgreementsChange: _onAgreementsChanged,
+          );
+        },
+      ),
     );
   }
 }

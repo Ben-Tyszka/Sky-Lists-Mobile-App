@@ -1,54 +1,37 @@
 import "package:validators/validators.dart";
 
-/// Ensures consistant validation standards across app, takes in a [value] to validate
-/// and returns a error [String]
-String validateEmail(String value) {
-  if (value.isEmpty) {
-    return "Email is required";
-  }
-
-  if (!isEmail(value)) {
-    return "Invalid email";
-  }
-
-  return null;
+bool validateEmail(String value) {
+  return isEmail(value);
 }
 
 /// Ensures consistant validation standards across app, takes in a [value] to validate
 /// and returns a error [String]
-String validatePhone(String value) {
+bool validatePhone(String value) {
   if (value.isEmpty) {
-    return "Phone number is required";
+    return false;
   }
 
-  return null;
+  return true;
 }
 
 /// Ensures consistant validation standards across app, takes in a [value] to validate
 /// and returns a error [String]
-String validatePassword(String value) {
-  if (value.isEmpty) {
-    return "Password is required";
+bool validatePassword(String value) {
+  if (value.isEmpty || value.length < 6) {
+    return false;
   }
 
-  if (value.length < 6) {
-    return "Password must be at least 7 characters";
-  }
-  return null;
+  return true;
 }
 
 /// Ensures consistant validation standards across app, takes in a [value] to validate
 /// and returns a error [String]
-String validateFullName(String value) {
-  if (value.isEmpty) {
-    return "Name is required";
+bool validateName(String value) {
+  if (value.isEmpty || value.length > 50) {
+    return false;
   }
 
-  if (value.length > 50) {
-    return "This name is too long";
-  }
-
-  return null;
+  return true;
 }
 
 /// Ensures consistant validation standards across app, takes in a [value] to validate

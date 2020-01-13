@@ -2,28 +2,29 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sky_lists/presentational_widgets/pages/send_password_reset_page.dart';
 
-import 'package:sky_lists/utils/validation.dart';
-
 class Login extends StatelessWidget {
   Login({
-    @required this.formKey,
     @required this.isLoading,
-    @required this.errorMessage,
     @required this.showPassword,
-    @required this.onEmailSaved,
-    @required this.onHide,
-    @required this.onPasswordSaved,
     @required this.submit,
+    @required this.emailController,
+    @required this.passwordController,
+    @required this.isEmailValid,
+    @required this.isPasswordValid,
+    @required this.togglePasswordHide,
+    @required this.loginFailed,
   });
 
-  final GlobalKey<FormState> formKey;
-  final bool isLoading;
-  final String errorMessage;
-  final bool showPassword;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
 
-  final Function onEmailSaved;
-  final Function onPasswordSaved;
-  final Function onHide;
+  final bool isLoading;
+  final bool isEmailValid;
+  final bool isPasswordValid;
+  final bool showPassword;
+  final bool loginFailed;
+
+  final Function togglePasswordHide;
   final Function submit;
 
   @override
@@ -31,7 +32,6 @@ class Login extends StatelessWidget {
     return Card(
       elevation: 4.0,
       child: Form(
-        key: formKey,
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 15.0,
@@ -40,6 +40,7 @@ class Login extends StatelessWidget {
           child: Column(
             children: <Widget>[
               TextFormField(
+                controller: emailController,
                 decoration: InputDecoration(
                   filled: true,
                   labelText: 'Email',
@@ -48,16 +49,19 @@ class Login extends StatelessWidget {
                   icon: Icon(Icons.email),
                 ),
                 autocorrect: false,
+                autovalidate: true,
+                enabled: !isLoading,
                 keyboardType: TextInputType.emailAddress,
                 maxLength: 100,
-                validator: validateEmail,
-                enabled: !isLoading,
-                onSaved: onEmailSaved,
+                validator: (_) {
+                  return !isEmailValid ? 'Invalid Email' : null;
+                },
               ),
               SizedBox(
                 height: 16.0,
               ),
               TextFormField(
+                controller: passwordController,
                 decoration: InputDecoration(
                   filled: true,
                   labelText: 'Password',
@@ -69,31 +73,21 @@ class Login extends StatelessWidget {
                     icon: Icon(
                       Icons.remove_red_eye,
                     ),
-                    onPressed: onHide,
+                    onPressed: togglePasswordHide,
                   ),
                 ),
                 autocorrect: false,
                 obscureText: !showPassword,
+                autovalidate: true,
                 maxLength: 50,
+                enabled: !isLoading,
                 keyboardType: showPassword
                     ? TextInputType.visiblePassword
                     : TextInputType.text,
-                validator: validatePassword,
-                enabled: !isLoading,
-                onSaved: onPasswordSaved,
+                validator: (_) {
+                  return !isPasswordValid ? 'Invalid Password' : null;
+                },
               ),
-              if (errorMessage != null && errorMessage != '') ...[
-                SizedBox(
-                  height: 8.0,
-                ),
-                Text(
-                  errorMessage,
-                  style: Theme.of(context)
-                      .primaryTextTheme
-                      .body1
-                      .copyWith(color: Theme.of(context).errorColor),
-                ),
-              ],
               SizedBox(
                 height: 8.0,
               ),
@@ -109,6 +103,17 @@ class Login extends StatelessWidget {
               SizedBox(
                 height: 8.0,
               ),
+              if (loginFailed) ...[
+                Text(
+                  'Could not login',
+                  style: Theme.of(context).primaryTextTheme.body1.copyWith(
+                        color: Theme.of(context).errorColor,
+                      ),
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+              ],
               Text.rich(
                 TextSpan(
                   text: 'Forgot your password? ',

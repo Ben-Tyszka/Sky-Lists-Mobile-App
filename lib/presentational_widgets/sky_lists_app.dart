@@ -1,7 +1,9 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/pages/change_password_page.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/create_account_page.dart';
@@ -23,12 +25,8 @@ class SkyListsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Sky Lists',
-
       // Theme is set, for both light and dark modes, auto switches depending on user system settings
       theme: brightTheme,
-
-      // Inital route is set to StartupPage for determination if user is logged in or not
-      initialRoute: StartupPage.routeName,
       routes: {
         // All pages are registered
         StartupPage.routeName: (context) => StartupPage(),
@@ -44,6 +42,18 @@ class SkyListsApp extends StatelessWidget {
         AccountPage.routeName: (context) => AccountPage(),
         ChangePasswordPage.routeName: (context) => ChangePasswordPage(),
       },
+      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          if (state is Uninitialized) {
+            return StartupPage();
+          } else if (state is Authenticated) {
+            return LoggedInHomePage();
+          } else if (state is Unauthenticated) {
+            return NotLoggedInPage();
+          }
+          return Container();
+        },
+      ),
       // Track route transitions
       navigatorObservers: [
         FirebaseAnalyticsObserver(

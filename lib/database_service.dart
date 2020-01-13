@@ -435,8 +435,9 @@ class DatabaseService {
     await _db.collection('users').document(userId).delete();
   }
 
-  void updateDisplayName({@required String userId, @required String newName}) {
-    _db.collection('users').document(userId).updateData({
+  Future<void> updateDisplayName(
+      {@required String userId, @required String newName}) async {
+    await _db.collection('users').document(userId).updateData({
       'name': newName,
     });
   }
