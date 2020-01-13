@@ -34,9 +34,6 @@ class Quantity extends StatelessWidget {
     'Scoop',
     'Tblsp',
     'Tsp',
-    'Small',
-    'Medium',
-    'Large',
   ];
 
   final void Function(String) onDescriptorChange;
@@ -47,33 +44,39 @@ class Quantity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Select Quantity'),
+      title: Text(
+        'Select Quantity',
+        style: Theme.of(context).primaryTextTheme.title,
+        textAlign: TextAlign.center,
+      ),
       content: Form(
         child: Row(
           children: <Widget>[
-            TextFormField(
-              controller: this.quantityController,
-              decoration: InputDecoration(
-                labelText: 'Quantity',
-                counterText: "",
-                hintText: '',
-                icon: Icon(Icons.shopping_cart),
-              ),
-              autocorrect: false,
-              keyboardType: TextInputType.number,
-              maxLength: 10000,
-              onChanged: onQuantityChange,
-            ),
-            DropdownButton<String>(
-              items: [
-                for (final quantity in _foodQuantityDescriptors)
-                  DropdownMenuItem(
-                    child: Text(quantity),
-                    value: quantity,
+            Flexible(
+              child: TextFormField(
+                controller: this.quantityController,
+                decoration: InputDecoration(
+                  counterText: '',
+                  hintText: 'Quantity',
+                  isDense: true,
+                  suffix: DropdownButton<String>(
+                    items: [
+                      for (final quantity in _foodQuantityDescriptors)
+                        DropdownMenuItem(
+                          child: Text(quantity),
+                          value: quantity,
+                        ),
+                    ],
+                    onChanged: onDescriptorChange,
+                    value: descriptor,
                   ),
-              ],
-              onChanged: onDescriptorChange,
-              value: descriptor,
+                ),
+                textAlign: TextAlign.center,
+                autocorrect: false,
+                keyboardType: TextInputType.number,
+                maxLength: 1000,
+                onChanged: onQuantityChange,
+              ),
             ),
           ],
         ),

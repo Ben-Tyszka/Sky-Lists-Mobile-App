@@ -64,7 +64,10 @@ class SkyListPage extends StatelessWidget {
             Icons.arrow_back,
           ),
           onPressed: () {
-            Navigator.popAndPushNamed(context, LoggedInHomePage.routeName);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              LoggedInHomePage.routeName,
+              (Route<dynamic> route) => false,
+            );
           },
         ),
         title: StreamProvider<SkyListMeta>(

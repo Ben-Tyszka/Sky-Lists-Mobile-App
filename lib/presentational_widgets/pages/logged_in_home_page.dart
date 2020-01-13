@@ -84,6 +84,7 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton.extended(
+        elevation: 10,
         backgroundColor: Theme.of(context).accentColor,
         onPressed: () {
           Provider.of<FirebaseAnalytics>(context, listen: false)

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
 import 'package:sky_lists/utils/sky_list_page_arguments.dart';
+import 'package:sky_lists/utils/sky_lists_app_theme.dart';
 import 'package:sky_lists/utils/timestamp_to_formmated_date.dart';
 import 'package:sky_lists/database_service.dart';
 
@@ -75,7 +78,9 @@ class SkyListsBuilder extends StatelessWidget {
                   ),
                   subtitle: Text(
                     timestampToFormmatedDate(skyList.lastModified),
-                    style: Theme.of(context).primaryTextTheme.subtitle,
+                    style: Theme.of(context).primaryTextTheme.subtitle.copyWith(
+                          color: secondaryTextColor,
+                        ),
                   ),
                 ),
               );

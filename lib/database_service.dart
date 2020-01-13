@@ -158,7 +158,7 @@ class DatabaseService {
 
   /// Changes a list items hidden state
   void setItemHidden({@required SkyListItem item, @required bool status}) {
-    item.docRef.setData({
+    item.docRef.updateData({
       'hidden': status,
     });
     item.docRef.parent().parent().updateData({
@@ -168,7 +168,7 @@ class DatabaseService {
 
   /// Changes a list items checked state
   void setItemChecked({@required SkyListItem item, @required bool status}) {
-    item.docRef.setData({
+    item.docRef.updateData({
       'checked': status,
     });
     item.docRef.parent().parent().updateData({
@@ -178,7 +178,7 @@ class DatabaseService {
 
   /// Changes a list items checked state
   void setItemTitle({@required SkyListItem item, @required String title}) {
-    item.docRef.setData({
+    item.docRef.updateData({
       'name': title,
     });
     item.docRef.parent().parent().updateData({
@@ -214,7 +214,7 @@ class DatabaseService {
   /// Sets a list items quantity descriptor
   void setItemDescriptor(
       {@required SkyListItem item, @required String descriptor}) {
-    item.docRef.setData({
+    item.docRef.updateData({
       'descriptor': descriptor,
     });
     item.docRef.parent().parent().updateData({
@@ -224,7 +224,7 @@ class DatabaseService {
 
   /// Sets a list items quantity descriptor
   void setItemQuantity({@required SkyListItem item, @required int quantity}) {
-    item.docRef.setData({
+    item.docRef.updateData({
       'quantity': quantity,
     });
     item.docRef.parent().parent().updateData({

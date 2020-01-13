@@ -58,7 +58,7 @@ class _SkyListPaginationState extends State<SkyListPagination> {
         _lastItem = snapshots.last;
       }
       _items = snapshots;
-
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -87,6 +87,7 @@ class _SkyListPaginationState extends State<SkyListPagination> {
       _lastItem = snapshots.last;
 
       _items.addAll(snapshots);
+      if (!mounted) return;
       setState(() {
         _gettingMoreLists = false;
       });
@@ -108,6 +109,7 @@ class _SkyListPaginationState extends State<SkyListPagination> {
       data: _items,
       isLoading: _isLoading,
       isGettingMoreLists: _gettingMoreLists,
+      list: widget.list,
     );
   }
 }

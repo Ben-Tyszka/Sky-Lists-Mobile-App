@@ -51,6 +51,13 @@ ThemeData _buildLightTheme() {
         borderRadius: BorderRadius.circular(20.0),
       ),
     ),
+    dialogTheme: base.dialogTheme.copyWith(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20.0),
+        ),
+      ),
+    ),
   );
 }
 

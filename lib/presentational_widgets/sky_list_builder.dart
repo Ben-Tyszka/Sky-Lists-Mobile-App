@@ -17,12 +17,14 @@ class SkyListBuilder extends StatelessWidget {
     @required this.data,
     @required this.isLoading,
     @required this.isGettingMoreLists,
+    @required this.list,
   });
 
   final ScrollController controller;
   final List<SkyListItem> data;
   final bool isLoading;
   final bool isGettingMoreLists;
+  final SkyListMeta list;
 
   final _db = DatabaseService();
 
@@ -72,7 +74,11 @@ class SkyListBuilder extends StatelessWidget {
           leading: Checkbox(
             value: item.checked,
             onChanged: (val) {
-              Vibration.vibrate();
+              if (val == true) {
+                Vibration.vibrate(
+                  duration: 50,
+                );
+              }
               Provider.of<FirebaseAnalytics>(context, listen: false)
                   .logEvent(name: 'item_check');
               _db.setItemChecked(item: item, status: val);
@@ -85,7 +91,6 @@ class SkyListBuilder extends StatelessWidget {
       );
 
   Widget addItemTile(BuildContext context) {
-    final list = Provider.of<SkyListMeta>(context);
     return ListTile(
       leading: Icon(
         Icons.add,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -53,6 +54,7 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
         _lastListInData = snapshots.last;
       }
       _listOfSkyLists = snapshots;
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -81,6 +83,7 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
       _lastListInData = snapshots.last;
 
       _listOfSkyLists.addAll(snapshots);
+      if (!mounted) return;
       setState(() {
         _gettingMoreLists = false;
       });

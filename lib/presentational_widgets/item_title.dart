@@ -17,7 +17,7 @@ class ItemTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        hintText: 'Item',
+        hintText: 'Empty Item',
         counterText: '',
         border: InputBorder.none,
       ),
