@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/register_bloc/bloc.dart';
-
 import 'package:sky_lists/presentational_widgets/create_account.dart';
+import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 
 class CreateAccountForm extends StatefulWidget {
   @override
@@ -15,8 +15,6 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-
-  bool _showPassword = false;
 
   RegisterBloc _registerBloc;
 
@@ -82,10 +80,10 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     );
   }
 
-  _onTogglePasswordHide() {
-    setState(() {
-      _showPassword = !_showPassword;
-    });
+  void togglePasswordHide() {
+    _registerBloc.add(
+      HidePasswordChanged(),
+    );
   }
 
   @override
@@ -94,26 +92,27 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
       listener: (context, state) {
         if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-          Navigator.of(context).pop();
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            LoggedInHomePage.routeName,
+            (Route<dynamic> route) => false,
+          );
         }
       },
       child: BlocBuilder<RegisterBloc, RegisterState>(
         builder: (context, state) {
           return CreateAccount(
             emailController: _emailController,
-            isEmailValid: state.isEmailValid,
-            isLoading: state.isSubmitting,
-            isNameValid: state.isNameValid,
-            isPasswordValid: state.isPasswordValid,
+            isSubmitting: state.isSubmitting,
             isRegisterButtonEnabled: isRegisterButtonEnabled(state),
-            loginFailed: state.isFailure,
+            isFailure: state.isFailure,
             nameController: _nameController,
             passwordController: _passwordController,
-            showPassword: _showPassword,
-            submit: _onFormSubmitted,
-            togglePasswordHide: _onTogglePasswordHide,
+            hidePassword: state.hidePassword,
+            onFormSubmitted: _onFormSubmitted,
+            togglePasswordHide: togglePasswordHide,
             agreementsValue: state.isAgreementsValid,
             onAgreementsChange: _onAgreementsChanged,
+            failureMessage: state.failureMessage,
           );
         },
       ),

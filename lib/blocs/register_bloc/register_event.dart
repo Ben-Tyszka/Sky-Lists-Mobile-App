@@ -56,6 +56,16 @@ class AgreementsChanged extends RegisterEvent {
   String toString() => 'AgreementsChanged { agreements: $agreements }';
 }
 
+class HidePasswordChanged extends RegisterEvent {
+  HidePasswordChanged();
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => 'HidePasswordChanged toggled';
+}
+
 class Submitted extends RegisterEvent {
   final String email;
   final String password;

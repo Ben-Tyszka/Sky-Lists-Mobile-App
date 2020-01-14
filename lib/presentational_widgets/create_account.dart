@@ -3,40 +3,38 @@ import 'package:flutter/material.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/privacy_policy_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/terms_of_service_page.dart';
+import 'package:sky_lists/utils/validation.dart';
 
 class CreateAccount extends StatelessWidget {
   CreateAccount({
-    @required this.isLoading,
-    @required this.showPassword,
-    @required this.submit,
+    @required this.isSubmitting,
+    @required this.hidePassword,
+    @required this.onFormSubmitted,
     @required this.emailController,
     @required this.passwordController,
-    @required this.isEmailValid,
-    @required this.isPasswordValid,
     @required this.togglePasswordHide,
-    @required this.loginFailed,
+    @required this.isFailure,
     @required this.nameController,
-    @required this.isNameValid,
     @required this.isRegisterButtonEnabled,
     @required this.agreementsValue,
     @required this.onAgreementsChange,
+    @required this.failureMessage,
   });
 
   final TextEditingController emailController;
   final TextEditingController nameController;
   final TextEditingController passwordController;
-  final bool agreementsValue;
 
-  final bool isLoading;
-  final bool isEmailValid;
-  final bool isPasswordValid;
-  final bool showPassword;
-  final bool loginFailed;
-  final bool isNameValid;
+  final bool agreementsValue;
+  final bool isSubmitting;
+  final bool hidePassword;
+  final bool isFailure;
   final bool isRegisterButtonEnabled;
 
+  final String failureMessage;
+
   final Function togglePasswordHide;
-  final Function submit;
+  final Function onFormSubmitted;
   final Function(bool) onAgreementsChange;
 
   @override
@@ -62,12 +60,10 @@ class CreateAccount extends StatelessWidget {
               ),
               autocorrect: false,
               autovalidate: true,
-              enabled: !isLoading,
+              enabled: !isSubmitting,
               keyboardType: TextInputType.emailAddress,
               maxLength: 100,
-              validator: (_) {
-                return !isEmailValid ? 'Invalid Email' : null;
-              },
+              validator: validateEmail,
             ),
             SizedBox(
               height: 16.0,
@@ -82,11 +78,9 @@ class CreateAccount extends StatelessWidget {
               ),
               autocorrect: false,
               autovalidate: true,
-              enabled: !isLoading,
+              enabled: !isSubmitting,
               maxLength: 100,
-              validator: (_) {
-                return !isNameValid ? 'Invalid Name' : null;
-              },
+              validator: validateFullName,
             ),
             SizedBox(
               height: 16.0,
@@ -108,16 +102,12 @@ class CreateAccount extends StatelessWidget {
                 ),
               ),
               autocorrect: false,
-              obscureText: !showPassword,
+              obscureText: hidePassword,
               autovalidate: true,
               maxLength: 50,
-              enabled: !isLoading,
-              keyboardType: showPassword
-                  ? TextInputType.visiblePassword
-                  : TextInputType.text,
-              validator: (_) {
-                return !isPasswordValid ? 'Invalid Password' : null;
-              },
+              enabled: !isSubmitting,
+              keyboardType: TextInputType.visiblePassword,
+              validator: validatePassword,
             ),
             SizedBox(
               height: 16.0,
@@ -175,9 +165,9 @@ class CreateAccount extends StatelessWidget {
             SizedBox(
               height: 8.0,
             ),
-            if (loginFailed) ...[
+            if (isFailure) ...[
               Text(
-                'Could not create account',
+                failureMessage,
                 style: Theme.of(context).primaryTextTheme.body1.copyWith(
                       color: Theme.of(context).errorColor,
                     ),
@@ -186,9 +176,9 @@ class CreateAccount extends StatelessWidget {
                 height: 8.0,
               ),
             ],
-            !isLoading
+            !isSubmitting
                 ? OutlineButton(
-                    onPressed: isRegisterButtonEnabled ? submit : null,
+                    onPressed: isRegisterButtonEnabled ? onFormSubmitted : null,
                     child: Text('Create Account'),
                   )
                 : CircularProgressIndicator(),

@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -52,7 +56,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } else if (event is NameChanged) {
       yield* _mapNameChangedToState(event.name);
     } else if (event is Submitted) {
-      yield* _mapFormSubmittedToState(
+      yield* _mapRegisterFormSubmittedToState(
         event.email,
         event.password,
         event.name,
@@ -60,24 +64,26 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       );
     } else if (event is AgreementsChanged) {
       yield* _mapAgreementsChangedToState(event.agreements);
+    } else if (event is HidePasswordChanged) {
+      yield* _mapHidePasswordChangedToState();
     }
   }
 
   Stream<RegisterState> _mapEmailChangedToState(String email) async* {
     yield state.update(
-      isEmailValid: validateEmail(email),
+      isEmailValid: validateEmail(email) == null,
     );
   }
 
   Stream<RegisterState> _mapPasswordChangedToState(String password) async* {
     yield state.update(
-      isPasswordValid: validatePassword(password),
+      isPasswordValid: validatePassword(password) == null,
     );
   }
 
   Stream<RegisterState> _mapNameChangedToState(String password) async* {
     yield state.update(
-      isNameValid: validateName(password),
+      isNameValid: validateFullName(password) == null,
     );
   }
 
@@ -87,7 +93,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     );
   }
 
-  Stream<RegisterState> _mapFormSubmittedToState(
+  Stream<RegisterState> _mapHidePasswordChangedToState() async* {
+    yield state.update(
+      hidePassword: !state.hidePassword,
+    );
+  }
+
+  Stream<RegisterState> _mapRegisterFormSubmittedToState(
     String email,
     String password,
     String name,
@@ -95,7 +107,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   ) async* {
     yield RegisterState.loading();
     try {
-      if (!agreements) yield RegisterState.failure();
+      if (!agreements)
+        yield RegisterState.failure(
+            'Please accept Terms of Service and Privacy Policy');
 
       await _userRepository.signUpWithEmailAndPassword(
         email: email,
@@ -104,8 +118,23 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       );
 
       yield RegisterState.success();
-    } catch (_) {
-      yield RegisterState.failure();
+    } on PlatformException catch (error) {
+      if (error.code.contains('ERROR_WEAK_PASSWORD')) {
+        yield RegisterState.failure(
+            'Your password is too weak, please change it and try again');
+      } else if (error.code.contains('ERROR_EMAIL_ALREADY_IN_USE')) {
+        yield RegisterState.failure(
+            'That email is already registered to an account');
+      } else if (error.code.contains('ERROR_INVALID_EMAIL')) {
+        yield RegisterState.failure('Invalid email');
+      } else {
+        log(
+          'Register error',
+          name: 'Register _mapRegisterFormSubmittedToState',
+          error: jsonEncode(error),
+        );
+        yield RegisterState.failure('Internal error, try again later');
+      }
     }
   }
 }

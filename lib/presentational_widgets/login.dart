@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
 import 'package:sky_lists/presentational_widgets/pages/send_password_reset_page.dart';
+import 'package:sky_lists/utils/validation.dart';
 
 class Login extends StatelessWidget {
   Login({
@@ -9,8 +11,6 @@ class Login extends StatelessWidget {
     @required this.onFormSubmitted,
     @required this.emailController,
     @required this.passwordController,
-    @required this.isEmailValid,
-    @required this.isPasswordValid,
     @required this.togglePasswordHide,
     @required this.isFailure,
     @required this.isLoginButtonEnabled,
@@ -21,8 +21,6 @@ class Login extends StatelessWidget {
   final TextEditingController passwordController;
 
   final bool isSubmitting;
-  final bool isEmailValid;
-  final bool isPasswordValid;
   final bool hidePassword;
   final bool isFailure;
   final bool isLoginButtonEnabled;
@@ -58,9 +56,7 @@ class Login extends StatelessWidget {
                 enabled: !isSubmitting,
                 keyboardType: TextInputType.emailAddress,
                 maxLength: 100,
-                validator: (_) {
-                  return !isEmailValid ? 'Invalid Email' : null;
-                },
+                validator: validateEmail,
               ),
               SizedBox(
                 height: 16.0,
@@ -87,9 +83,7 @@ class Login extends StatelessWidget {
                 maxLength: 50,
                 enabled: !isSubmitting,
                 keyboardType: TextInputType.visiblePassword,
-                validator: (_) {
-                  return !isPasswordValid ? 'Invalid Password' : null;
-                },
+                validator: validatePassword,
               ),
               SizedBox(
                 height: 8.0,

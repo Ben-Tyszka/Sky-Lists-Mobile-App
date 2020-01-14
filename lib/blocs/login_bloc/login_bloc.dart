@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
@@ -58,13 +59,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   Stream<LoginState> _mapEmailChangedToState(String email) async* {
     yield state.update(
-      isEmailValid: validateEmail(email),
+      isEmailValid: validateEmail(email) == null,
     );
   }
 
   Stream<LoginState> _mapPasswordChangedToState(String password) async* {
     yield state.update(
-      isPasswordValid: validatePassword(password),
+      isPasswordValid: validatePassword(password) == null,
     );
   }
 

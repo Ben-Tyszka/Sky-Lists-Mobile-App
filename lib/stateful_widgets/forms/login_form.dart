@@ -78,9 +78,7 @@ class _LoginFormState extends State<LoginForm> {
         builder: (context, state) {
           return Login(
             emailController: _emailController,
-            isEmailValid: state.isEmailValid,
             isSubmitting: state.isSubmitting,
-            isPasswordValid: state.isPasswordValid,
             passwordController: _passwordController,
             onFormSubmitted: _onFormSubmitted,
             togglePasswordHide: togglePasswordHide,
