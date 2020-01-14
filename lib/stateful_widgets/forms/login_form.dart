@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/login_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/login.dart';
+import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -87,6 +88,10 @@ class _LoginFormState extends State<LoginForm> {
       listener: (context, state) {
         if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            LoggedInHomePage.routeName,
+            (Route<dynamic> route) => false,
+          );
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
