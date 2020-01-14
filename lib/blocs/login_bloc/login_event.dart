@@ -32,6 +32,16 @@ class PasswordChanged extends LoginEvent {
   String toString() => 'PasswordChanged password: $password';
 }
 
+class HidePasswordChanged extends LoginEvent {
+  HidePasswordChanged();
+
+  @override
+  List<Object> get props => [];
+
+  @override
+  String toString() => 'HidePasswordChanged toggled';
+}
+
 class Submitted extends LoginEvent {
   final String email;
   final String password;

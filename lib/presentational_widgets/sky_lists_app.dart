@@ -3,9 +3,9 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/pages/change_password_page.dart';
-
 import 'package:sky_lists/presentational_widgets/pages/create_account_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
@@ -29,7 +29,11 @@ class SkyListsApp extends StatelessWidget {
       theme: brightTheme,
       routes: {
         // All pages are registered
-        StartupPage.routeName: (context) => StartupPage(),
+        StartupPage.routeName: (context) =>
+            BlocProvider<AuthenticationBloc>.value(
+              value: BlocProvider.of<AuthenticationBloc>(context),
+              child: StartupPage(),
+            ),
         NotLoggedInPage.routeName: (context) => NotLoggedInPage(),
         LoggedInHomePage.routeName: (context) => LoggedInHomePage(),
         SkyListPage.routeName: (context) => SkyListPage(),
@@ -42,19 +46,8 @@ class SkyListsApp extends StatelessWidget {
         AccountPage.routeName: (context) => AccountPage(),
         ChangePasswordPage.routeName: (context) => ChangePasswordPage(),
       },
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          if (state is Uninitialized) {
-            return StartupPage();
-          } else if (state is Authenticated) {
-            return LoggedInHomePage();
-          } else if (state is Unauthenticated) {
-            return NotLoggedInPage();
-          }
-          return Container();
-        },
-      ),
-      // Track route transitions
+      initialRoute: StartupPage.routeName,
+      //Track route transitions
       navigatorObservers: [
         FirebaseAnalyticsObserver(
           analytics: Provider.of<FirebaseAnalytics>(context),

@@ -24,25 +24,19 @@ class _LoginFormState extends State<LoginForm> {
     return state.isFormValid && isPopulated && !state.isSubmitting;
   }
 
-  bool showPassword;
-
   @override
   void initState() {
     super.initState();
-
     _loginBloc = BlocProvider.of<LoginBloc>(context);
-
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
-
-    showPassword = false;
   }
 
   @override
   void dispose() {
+    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    super.dispose();
   }
 
   void _onEmailChanged() {
@@ -67,9 +61,9 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void togglePasswordHide() {
-    setState(() {
-      showPassword = !showPassword;
-    });
+    _loginBloc.add(
+      HidePasswordChanged(),
+    );
   }
 
   @override
@@ -85,13 +79,15 @@ class _LoginFormState extends State<LoginForm> {
           return Login(
             emailController: _emailController,
             isEmailValid: state.isEmailValid,
-            isLoading: state.isSubmitting,
+            isSubmitting: state.isSubmitting,
             isPasswordValid: state.isPasswordValid,
             passwordController: _passwordController,
-            showPassword: showPassword,
-            submit: _onFormSubmitted,
+            onFormSubmitted: _onFormSubmitted,
             togglePasswordHide: togglePasswordHide,
-            loginFailed: state.isFailure,
+            isFailure: state.isFailure,
+            isLoginButtonEnabled: isLoginButtonEnabled(state),
+            failureMessage: state.failureMessage,
+            hidePassword: state.hidePassword,
           );
         },
       ),

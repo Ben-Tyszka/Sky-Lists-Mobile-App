@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -48,6 +51,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         email: event.email,
         password: event.password,
       );
+    } else if (event is HidePasswordChanged) {
+      yield* _mapHidePasswordChangedToState();
     }
   }
 
@@ -63,12 +68,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
   }
 
+  Stream<LoginState> _mapHidePasswordChangedToState() async* {
+    yield state.update(
+      hidePassword: !state.hidePassword,
+    );
+  }
+
   Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
     try {
       await _userRepository.signInWithGoogle();
       yield LoginState.success();
     } catch (_) {
-      yield LoginState.failure();
+      yield LoginState.failure('');
     }
   }
 
@@ -80,8 +91,23 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       await _userRepository.signInWithEmailAndPassword(email, password);
       yield LoginState.success();
-    } catch (_) {
-      yield LoginState.failure();
+    } on PlatformException catch (error) {
+      if (error.code.contains('ERROR_INVALID_EMAIL') ||
+          error.code.contains('ERROR_WRONG_PASSWORD')) {
+        yield LoginState.failure('Wrong Email/Password');
+      } else if (error.code.contains('ERROR_USER_NOT_FOUND') ||
+          error.code.contains('ERROR_USER_DISABLED')) {
+        yield LoginState.failure('User does not exist');
+      } else if (error.code.contains('ERROR_TOO_MANY_REQUESTS')) {
+        yield LoginState.failure('Too many login requests');
+      } else {
+        log(
+          'Login error',
+          name: 'LoginBloc _mapLoginWithEmailAndPasswordPressedToState',
+          error: jsonEncode(error),
+        );
+        yield LoginState.failure('Internal error, try again later');
+      }
     }
   }
 }

@@ -37,7 +37,7 @@ class NotLoggedInPage extends StatelessWidget {
               ),
               SizedBox(height: 15.0),
               BlocProvider<LoginBloc>(
-                create: (context) => LoginBloc(
+                create: (_) => LoginBloc(
                   userRepository: Provider.of<UserRepository>(context),
                 ),
                 child: LoginForm(),
@@ -54,9 +54,9 @@ class NotLoggedInPage extends StatelessWidget {
               GoogleSignInButton(
                 borderRadius: 18,
                 onPressed: () {
-                  BlocProvider.of<LoginBloc>(context).add(
-                    LoginWithGooglePressed(),
-                  );
+                  // BlocProvider.of<LoginBloc>(context).add(
+                  //   LoginWithGooglePressed(),
+                  // );
                 },
                 // Sets dark mode
                 darkMode: Theme.of(context).brightness == Brightness.dark,

@@ -4,28 +4,33 @@ import 'package:sky_lists/presentational_widgets/pages/send_password_reset_page.
 
 class Login extends StatelessWidget {
   Login({
-    @required this.isLoading,
-    @required this.showPassword,
-    @required this.submit,
+    @required this.isSubmitting,
+    @required this.hidePassword,
+    @required this.onFormSubmitted,
     @required this.emailController,
     @required this.passwordController,
     @required this.isEmailValid,
     @required this.isPasswordValid,
     @required this.togglePasswordHide,
-    @required this.loginFailed,
+    @required this.isFailure,
+    @required this.isLoginButtonEnabled,
+    @required this.failureMessage,
   });
 
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
-  final bool isLoading;
+  final bool isSubmitting;
   final bool isEmailValid;
   final bool isPasswordValid;
-  final bool showPassword;
-  final bool loginFailed;
+  final bool hidePassword;
+  final bool isFailure;
+  final bool isLoginButtonEnabled;
 
   final Function togglePasswordHide;
-  final Function submit;
+  final Function onFormSubmitted;
+
+  final String failureMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +55,7 @@ class Login extends StatelessWidget {
                 ),
                 autocorrect: false,
                 autovalidate: true,
-                enabled: !isLoading,
+                enabled: !isSubmitting,
                 keyboardType: TextInputType.emailAddress,
                 maxLength: 100,
                 validator: (_) {
@@ -77,13 +82,11 @@ class Login extends StatelessWidget {
                   ),
                 ),
                 autocorrect: false,
-                obscureText: !showPassword,
+                obscureText: hidePassword,
                 autovalidate: true,
                 maxLength: 50,
-                enabled: !isLoading,
-                keyboardType: showPassword
-                    ? TextInputType.visiblePassword
-                    : TextInputType.text,
+                enabled: !isSubmitting,
+                keyboardType: TextInputType.visiblePassword,
                 validator: (_) {
                   return !isPasswordValid ? 'Invalid Password' : null;
                 },
@@ -91,21 +94,21 @@ class Login extends StatelessWidget {
               SizedBox(
                 height: 8.0,
               ),
-              !isLoading
+              !isSubmitting
                   ? OutlineButton.icon(
                       icon: Icon(
                         Icons.arrow_forward,
                       ),
                       label: Text('Login'),
-                      onPressed: submit,
+                      onPressed: isLoginButtonEnabled ? onFormSubmitted : null,
                     )
                   : CircularProgressIndicator(),
               SizedBox(
                 height: 8.0,
               ),
-              if (loginFailed) ...[
+              if (isFailure) ...[
                 Text(
-                  'Could not login',
+                  failureMessage,
                   style: Theme.of(context).primaryTextTheme.body1.copyWith(
                         color: Theme.of(context).errorColor,
                       ),
@@ -121,7 +124,7 @@ class Login extends StatelessWidget {
                   children: <TextSpan>[
                     TextSpan(
                       recognizer: TapGestureRecognizer()
-                        ..onTap = isLoading
+                        ..onTap = isSubmitting
                             ? null
                             : () {
                                 Navigator.pushNamed(

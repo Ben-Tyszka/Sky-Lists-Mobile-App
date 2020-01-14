@@ -7,6 +7,8 @@ class LoginState {
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
+  final bool hidePassword;
+  final String failureMessage;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -16,6 +18,8 @@ class LoginState {
     @required this.isSubmitting,
     @required this.isSuccess,
     @required this.isFailure,
+    @required this.failureMessage,
+    @required this.hidePassword,
   });
 
   factory LoginState.empty() {
@@ -25,6 +29,8 @@ class LoginState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      hidePassword: true,
+      failureMessage: '',
     );
   }
 
@@ -35,16 +41,20 @@ class LoginState {
       isSubmitting: true,
       isSuccess: false,
       isFailure: false,
+      hidePassword: true,
+      failureMessage: '',
     );
   }
 
-  factory LoginState.failure() {
+  factory LoginState.failure(String message) {
     return LoginState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
+      hidePassword: true,
+      failureMessage: message,
     );
   }
 
@@ -55,12 +65,15 @@ class LoginState {
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
+      hidePassword: true,
+      failureMessage: '',
     );
   }
 
   LoginState update({
     bool isEmailValid,
     bool isPasswordValid,
+    bool hidePassword,
   }) {
     return copyWith(
       isEmailValid: isEmailValid,
@@ -68,6 +81,8 @@ class LoginState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      hidePassword: hidePassword,
+      failureMessage: '',
     );
   }
 
@@ -78,6 +93,8 @@ class LoginState {
     bool isSubmitting,
     bool isSuccess,
     bool isFailure,
+    bool hidePassword,
+    String failureMessage,
   }) {
     return LoginState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
@@ -85,6 +102,8 @@ class LoginState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
+      hidePassword: hidePassword ?? this.hidePassword,
+      failureMessage: failureMessage ?? this.failureMessage,
     );
   }
 
@@ -96,6 +115,8 @@ class LoginState {
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,
+      hidePassword: $hidePassword,
+      failureMessage: $failureMessage,
     }''';
   }
 }
