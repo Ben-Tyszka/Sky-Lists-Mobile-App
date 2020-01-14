@@ -30,15 +30,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged &&
           event is! PasswordChanged &&
-          event is! NameChanged &&
-          event is! AgreementsChanged);
+          event is! NameChanged);
     });
     final debounceStream = events.where((event) {
       return (event is EmailChanged ||
           event is PasswordChanged ||
-          event is NameChanged ||
-          event is AgreementsChanged);
-    }).debounceTime(Duration(milliseconds: 300));
+          event is NameChanged);
+    }).debounceTime(Duration(milliseconds: 200));
     return super.transformEvents(
       nonDebounceStream.mergeWith([debounceStream]),
       next,
@@ -60,7 +58,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         event.email,
         event.password,
         event.name,
-        event.agreements,
       );
     } else if (event is AgreementsChanged) {
       yield* _mapAgreementsChangedToState(event.agreements);
@@ -103,20 +100,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     String email,
     String password,
     String name,
-    bool agreements,
   ) async* {
     yield RegisterState.loading();
     try {
-      if (!agreements)
-        yield RegisterState.failure(
-            'Please accept Terms of Service and Privacy Policy');
-
       await _userRepository.signUpWithEmailAndPassword(
         email: email,
         password: password,
         name: name,
       );
-
       yield RegisterState.success();
     } on PlatformException catch (error) {
       if (error.code.contains('ERROR_WEAK_PASSWORD')) {

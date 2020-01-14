@@ -38,7 +38,11 @@ class SkyListsApp extends StatelessWidget {
         LoggedInHomePage.routeName: (context) => LoggedInHomePage(),
         SkyListPage.routeName: (context) => SkyListPage(),
         SkyListShareWithPage.routeName: (context) => SkyListShareWithPage(),
-        CreateAccountPage.routeName: (context) => CreateAccountPage(),
+        CreateAccountPage.routeName: (context) =>
+            BlocProvider<AuthenticationBloc>.value(
+              value: BlocProvider.of<AuthenticationBloc>(context),
+              child: CreateAccountPage(),
+            ),
         TermsOfServicePage.routeName: (context) => TermsOfServicePage(),
         PrivacyPolicyPage.routeName: (context) => PrivacyPolicyPage(),
         SendPasswordResetPage.routeName: (context) => SendPasswordResetPage(),

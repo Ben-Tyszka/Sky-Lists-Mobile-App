@@ -14,8 +14,12 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   LoginBloc _loginBloc;
+
+  String emailVal;
+  String passwordVal;
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
@@ -40,12 +44,23 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _onEmailChanged() {
+    if (emailVal == _emailController.text) return;
+
+    setState(() {
+      emailVal = _emailController.text;
+    });
     _loginBloc.add(
       EmailChanged(email: _emailController.text),
     );
   }
 
   void _onPasswordChanged() {
+    if (passwordVal == _passwordController.text) return;
+
+    setState(() {
+      passwordVal = _passwordController.text;
+    });
+
     _loginBloc.add(
       PasswordChanged(password: _passwordController.text),
     );
@@ -77,6 +92,7 @@ class _LoginFormState extends State<LoginForm> {
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           return Login(
+            formKey: _formKey,
             emailController: _emailController,
             isSubmitting: state.isSubmitting,
             passwordController: _passwordController,

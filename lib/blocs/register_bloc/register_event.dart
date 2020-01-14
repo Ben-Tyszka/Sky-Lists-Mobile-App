@@ -17,7 +17,7 @@ class EmailChanged extends RegisterEvent {
   List<Object> get props => [email];
 
   @override
-  String toString() => 'EmailChanged { email :$email }';
+  String toString() => 'EmailChanged | email :$email';
 }
 
 class PasswordChanged extends RegisterEvent {
@@ -29,7 +29,7 @@ class PasswordChanged extends RegisterEvent {
   List<Object> get props => [password];
 
   @override
-  String toString() => 'PasswordChanged { password: $password }';
+  String toString() => 'PasswordChanged | password: $password';
 }
 
 class NameChanged extends RegisterEvent {
@@ -41,7 +41,7 @@ class NameChanged extends RegisterEvent {
   List<Object> get props => [name];
 
   @override
-  String toString() => 'NameChanged { name: $name }';
+  String toString() => 'NameChanged | name: $name';
 }
 
 class AgreementsChanged extends RegisterEvent {
@@ -53,7 +53,7 @@ class AgreementsChanged extends RegisterEvent {
   List<Object> get props => [agreements];
 
   @override
-  String toString() => 'AgreementsChanged { agreements: $agreements }';
+  String toString() => 'AgreementsChanged | agreements: $agreements';
 }
 
 class HidePasswordChanged extends RegisterEvent {
@@ -70,20 +70,18 @@ class Submitted extends RegisterEvent {
   final String email;
   final String password;
   final String name;
-  final bool agreements;
 
   const Submitted({
     @required this.email,
     @required this.password,
     @required this.name,
-    @required this.agreements,
   });
 
   @override
-  List<Object> get props => [email, password, name, agreements];
+  List<Object> get props => [email, password, name];
 
   @override
   String toString() {
-    return 'Submitted { email: $email, password: $password, name: $name, agreements: $agreements }';
+    return 'Submitted | email: $email, password: $password, name: $name ';
   }
 }

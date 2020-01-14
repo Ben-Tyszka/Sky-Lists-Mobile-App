@@ -32,7 +32,7 @@ class CreateAccountPage extends StatelessWidget {
               height: 40.0,
             ),
             BlocProvider<RegisterBloc>(
-              create: (context) => RegisterBloc(
+              create: (_) => RegisterBloc(
                 userRepository: Provider.of<UserRepository>(context),
               ),
               child: CreateAccountForm(),

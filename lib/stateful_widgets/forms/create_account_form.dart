@@ -18,6 +18,10 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
 
   RegisterBloc _registerBloc;
 
+  String emailVal;
+  String nameVal;
+  String passwordVal;
+
   bool get isPopulated =>
       _emailController.text.isNotEmpty &&
       _passwordController.text.isNotEmpty &&
@@ -46,18 +50,36 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
   }
 
   void _onEmailChanged() {
+    if (emailVal == _emailController.text) return;
+
+    setState(() {
+      emailVal = _emailController.text;
+    });
+
     _registerBloc.add(
       EmailChanged(email: _emailController.text),
     );
   }
 
   void _onPasswordChanged() {
+    if (passwordVal == _passwordController.text) return;
+
+    setState(() {
+      passwordVal = _passwordController.text;
+    });
+
     _registerBloc.add(
       PasswordChanged(password: _passwordController.text),
     );
   }
 
   void _onNameChanged() {
+    if (nameVal == _nameController.text) return;
+
+    setState(() {
+      nameVal = _nameController.text;
+    });
+
     _registerBloc.add(
       NameChanged(name: _nameController.text),
     );
@@ -74,7 +96,6 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
       Submitted(
         email: _emailController.text,
         password: _passwordController.text,
-        agreements: null,
         name: _nameController.text,
       ),
     );

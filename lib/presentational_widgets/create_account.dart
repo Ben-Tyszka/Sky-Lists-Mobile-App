@@ -63,7 +63,7 @@ class CreateAccount extends StatelessWidget {
               enabled: !isSubmitting,
               keyboardType: TextInputType.emailAddress,
               maxLength: 100,
-              validator: validateEmail,
+              validator: (val) => val.isEmpty ? null : validateEmail(val),
             ),
             SizedBox(
               height: 16.0,
@@ -80,7 +80,7 @@ class CreateAccount extends StatelessWidget {
               autovalidate: true,
               enabled: !isSubmitting,
               maxLength: 100,
-              validator: validateFullName,
+              validator: (val) => val.isEmpty ? null : validateFullName(val),
             ),
             SizedBox(
               height: 16.0,
@@ -107,7 +107,7 @@ class CreateAccount extends StatelessWidget {
               maxLength: 50,
               enabled: !isSubmitting,
               keyboardType: TextInputType.visiblePassword,
-              validator: validatePassword,
+              validator: (val) => val.isEmpty ? null : validatePassword(val),
             ),
             SizedBox(
               height: 16.0,
@@ -139,7 +139,7 @@ class CreateAccount extends StatelessWidget {
                                 ),
                           ),
                           TextSpan(
-                            text: ' and\nthe ',
+                            text: ' and\n',
                             style: Theme.of(context).textTheme.body1,
                           ),
                           TextSpan(
