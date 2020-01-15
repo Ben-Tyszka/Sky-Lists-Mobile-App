@@ -15,9 +15,7 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   final CollectionReference _collection;
 
   @override
-  Future<void> addNewList(String name) {
-    final list = ListMetadata(name);
-
+  Future<void> addNewList(ListMetadata list) {
     return _collection.add(
       list.toEntity().toDocument(),
     );

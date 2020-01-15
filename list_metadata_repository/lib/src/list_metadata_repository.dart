@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:list_metadata_repository/list_meta_data_repository.dart';
 
 abstract class ListMetadataRepository {
-  Future<void> addNewList(String name);
+  Future<void> addNewList(ListMetadata list);
 
   Future<void> deleteList(ListMetadata list);
 
