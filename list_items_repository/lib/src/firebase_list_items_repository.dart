@@ -32,15 +32,15 @@ class FirebaseListItemsRepository implements ListItemsRepository {
 
   @override
   Stream<List<ListItem>> streamItemsFromList({
-    Timestamp startAfterTimestamp,
+    Timestamp addedAtTimestamp,
     int limit = 10,
   }) {
     final baseQuery = _collection.limit(limit).orderBy(
           "addedAt",
           descending: true,
         );
-    final startAfterQuery = baseQuery.startAfter([startAfterTimestamp]);
-    final query = startAfterTimestamp == null ? baseQuery : startAfterQuery;
+    final startAfterQuery = baseQuery.startAfter([addedAtTimestamp]);
+    final query = addedAtTimestamp == null ? baseQuery : startAfterQuery;
 
     return query.snapshots().map(
       (snapshot) {

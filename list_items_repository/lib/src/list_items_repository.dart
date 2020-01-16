@@ -10,7 +10,7 @@ abstract class ListItemsRepository {
   Future<void> deleteItem(ListItem item);
 
   Stream<List<ListItem>> streamItemsFromList({
-    Timestamp startAfterTimestamp,
+    Timestamp addedAtTimestamp,
     int limit = 10,
   });
 
