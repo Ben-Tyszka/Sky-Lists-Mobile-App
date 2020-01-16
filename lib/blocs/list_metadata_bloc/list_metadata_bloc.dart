@@ -9,6 +9,7 @@ import 'package:list_metadata_repository/list_metadata_repository.dart';
 class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
   final ListMetadataRepository _listsRepository;
   StreamSubscription _listsSubscription;
+  StreamSubscription _listTitleSubscription;
 
   ListMetadataBloc({@required ListMetadataRepository listsRepository})
       : assert(listsRepository != null),
@@ -24,6 +25,8 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
     final currentState = state;
     if (event is LoadListsMetadata && !_hasReachedMax(currentState)) {
       try {
+        _listsSubscription?.cancel();
+
         if (currentState is ListMetadataLoading) {
           _listsSubscription = _listsRepository.streamLists().listen(
                 (lists) => add(ListsUpdated(lists, false)),
@@ -59,6 +62,13 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
       yield* _mapDeleteListToState(event);
     } else if (event is ListsUpdated) {
       yield* _mapListsUpdateToState(event);
+    } else if (event is LoadListMetadata) {
+      yield* _mapLoadListToState(event);
+    } else if (event is ListUpdated) {
+      yield* _mapListUpdateToState(event);
+    } else if (event is EndStreams) {
+      _listsSubscription?.cancel();
+      _listTitleSubscription?.cancel();
     }
   }
 
@@ -86,22 +96,25 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
     );
   }
 
-  @override
-  Future<void> close() {
-    _listsSubscription?.cancel();
-    return super.close();
+  //For list title
+
+  Stream<ListMetadataState> _mapLoadListToState(LoadListMetadata event) async* {
+    _listTitleSubscription =
+        _listsRepository.streamListTitle(event.list).listen(
+              (newList) => add(ListUpdated(newList)),
+            );
+  }
+
+  Stream<ListMetadataState> _mapListUpdateToState(ListUpdated event) async* {
+    yield ListTitleLoaded(
+      event.list,
+    );
   }
 
   @override
-  Stream<ListMetadataState> transformEvents(
-    Stream<ListMetadataEvent> events,
-    Stream<ListMetadataState> Function(ListMetadataEvent event) next,
-  ) {
-    return super.transformEvents(
-      events.debounceTime(
-        Duration(milliseconds: 500),
-      ),
-      next,
-    );
+  Future<void> close() {
+    _listsSubscription?.cancel();
+    _listTitleSubscription?.cancel();
+    return super.close();
   }
 }

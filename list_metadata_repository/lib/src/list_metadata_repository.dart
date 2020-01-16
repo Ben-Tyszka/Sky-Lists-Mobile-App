@@ -14,4 +14,6 @@ abstract class ListMetadataRepository {
   });
 
   Future<void> updateList(ListMetadata list);
+
+  Stream<ListMetadata> streamListTitle(ListMetadata list);
 }

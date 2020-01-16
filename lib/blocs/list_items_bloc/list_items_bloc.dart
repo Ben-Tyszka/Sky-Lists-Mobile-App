@@ -93,17 +93,4 @@ class ListItemsBloc extends Bloc<ListItemsEvent, ListItemsState> {
     _listItemsSubscription?.cancel();
     return super.close();
   }
-
-  @override
-  Stream<ListItemsState> transformEvents(
-    Stream<ListItemsEvent> events,
-    Stream<ListItemsState> Function(ListItemsEvent event) next,
-  ) {
-    return super.transformEvents(
-      events.debounceTime(
-        Duration(milliseconds: 500),
-      ),
-      next,
-    );
-  }
 }

@@ -53,8 +53,16 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
 
   @override
   Future<void> updateList(ListMetadata update) {
-    return _collection.document(update.id).updateData(
-          update.toEntity().toDocument(),
-        );
+    return Firestore().runTransaction(
+      (Transaction transaction) => _collection.document(update.id).updateData(
+            update.toEntity().toDocument(),
+          ),
+    );
+  }
+
+  @override
+  Stream<ListMetadata> streamListTitle(ListMetadata list) {
+    return list.docRef.snapshots().map((snapshot) =>
+        ListMetadata.fromEntity(ListMetadataEntity.fromSnapshot(snapshot)));
   }
 }

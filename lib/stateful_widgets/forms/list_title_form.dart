@@ -19,21 +19,34 @@ class ListTitleForm extends StatefulWidget {
 
 class _ListTitleFormState extends State<ListTitleForm> {
   TextEditingController _titleController;
+  String previousValue = '';
 
   @override
   void initState() {
     _titleController = TextEditingController(text: widget.list.name);
+
+    _titleController.addListener(onChange);
+    BlocProvider.of<ListMetadataBloc>(context).listen((state) {
+      if (state is ListTitleLoaded) {
+        setState(() {
+          previousValue = state.list.name;
+          _titleController.value =
+              _titleController.value.copyWith(text: state.list.name);
+        });
+      }
+    });
     super.initState();
   }
 
   @override
   void dispose() {
-    _titleController.dispose();
+    _titleController?.dispose();
     super.dispose();
   }
 
-  void onChange(String value, BuildContext blocContext) {
-    BlocProvider.of<ListMetadataBloc>(blocContext).add(
+  void onChange() {
+    if (previousValue == _titleController.text) return;
+    BlocProvider.of<ListMetadataBloc>(context).add(
       UpdateListMetadata(
         widget.list.copyWith(
           name: _titleController.text,
@@ -46,12 +59,9 @@ class _ListTitleFormState extends State<ListTitleForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<ListMetadataBloc, ListMetadataState>(
       builder: (_, state) {
-        if (state is ListMetadatasLoaded) {
+        if (state is ListTitleLoaded) {
           return ListTitle(
             controller: _titleController,
-            onChanged: (String val) {
-              onChange(val, _);
-            },
           );
         } else {
           return Center(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ListTitle extends StatelessWidget {
-  ListTitle({@required this.onChanged, @required this.controller});
-
-  final void Function(String) onChanged;
+  ListTitle({
+    @required this.controller,
+  });
   final TextEditingController controller;
 
   @override
@@ -17,7 +17,6 @@ class ListTitle extends StatelessWidget {
       ),
       textAlign: TextAlign.center,
       maxLength: 100,
-      onChanged: onChanged,
       controller: controller,
     );
   }

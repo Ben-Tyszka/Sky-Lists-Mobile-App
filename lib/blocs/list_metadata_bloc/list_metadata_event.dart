@@ -56,3 +56,24 @@ class ListsUpdated extends ListMetadataEvent {
   @override
   List<Object> get props => [lists, hasReachedMax];
 }
+
+// Title related
+class LoadListMetadata extends ListMetadataEvent {
+  final ListMetadata list;
+
+  LoadListMetadata(this.list);
+
+  @override
+  List<Object> get props => [list];
+}
+
+class ListUpdated extends ListMetadataEvent {
+  final ListMetadata list;
+
+  ListUpdated(this.list);
+
+  @override
+  List<Object> get props => [list];
+}
+
+class EndStreams extends ListMetadataEvent {}

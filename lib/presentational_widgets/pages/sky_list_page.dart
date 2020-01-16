@@ -9,8 +9,8 @@ import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/share_list_button.dart';
-
 import 'package:sky_lists/stateful_widgets/forms/list_title_form.dart';
+
 import 'package:sky_lists/stateful_widgets/sky_list_pagination.dart';
 
 import 'package:sky_lists/utils/sky_list_page_arguments.dart';
@@ -55,8 +55,10 @@ class SkyListPage extends StatelessWidget {
                   create: (_) => ListMetadataBloc(
                     listsRepository:
                         FirebaseListMetadataRepository(state.user.uid),
+                  )..add(LoadListMetadata(args.list)),
+                  child: ListTitleForm(
+                    list: args.list,
                   ),
-                  child: ListTitleForm(list: args.list),
                 ),
               ),
               body: SkyListPagination(),
