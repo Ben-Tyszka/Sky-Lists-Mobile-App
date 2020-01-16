@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 import './bloc.dart';
-import 'package:list_metadata_repository/list_meta_data_repository.dart';
+import 'package:list_metadata_repository/list_metadata_repository.dart';
 
 class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
   final ListMetadataRepository _listsRepository;

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:list_metadata_repository/list_meta_data_repository.dart';
+import 'package:list_metadata_repository/list_metadata_repository.dart';
 
 abstract class ListMetadataEvent extends Equatable {
   ListMetadataEvent();
