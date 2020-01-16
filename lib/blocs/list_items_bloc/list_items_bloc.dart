@@ -11,7 +11,7 @@ class ListItemsBloc extends Bloc<ListItemsEvent, ListItemsState> {
   StreamSubscription _listItemsSubscription;
 
   ListItemsBloc({@required ListItemsRepository itemsRepository})
-      : assert(_itemsRepository != null),
+      : assert(itemsRepository != null),
         _itemsRepository = itemsRepository;
 
   @override
@@ -23,7 +23,35 @@ class ListItemsBloc extends Bloc<ListItemsEvent, ListItemsState> {
   ) async* {
     final currentState = state;
     if (event is LoadListItems && !_hasReachedMax(currentState)) {
-      _mapLoadListItemsToState(currentState);
+      try {
+        if (currentState is ListItemsLoading) {
+          _listItemsSubscription =
+              _itemsRepository.streamItemsFromList().listen(
+                    (items) => add(ListItemsUpdated(items, false)),
+                  );
+        }
+        if (currentState is ListItemsLoaded) {
+          _listItemsSubscription = _itemsRepository
+              .streamItemsFromList(
+            addedAtTimestamp: currentState.items.last.addedAt,
+          )
+              .listen(
+            (items) {
+              if (items.isEmpty) {
+                add(ListItemsUpdated(currentState.items, true));
+              } else if (items.length < currentState.items.length + 10) {
+                add(
+                  ListItemsUpdated(currentState.items + items, true),
+                );
+              } else {
+                add(ListItemsUpdated(currentState.items + items, false));
+              }
+            },
+          );
+        }
+      } catch (_) {
+        yield ListItemsNotLoaded();
+      }
     } else if (event is AddListItem) {
       yield* _mapAddListItemsToState(event);
     } else if (event is UpdateListItem) {
@@ -37,38 +65,6 @@ class ListItemsBloc extends Bloc<ListItemsEvent, ListItemsState> {
 
   bool _hasReachedMax(ListItemsState state) =>
       state is ListItemsLoaded && state.hasReachedMax;
-
-  Stream<ListItemsState> _mapLoadListItemsToState(ListItemsState state) async* {
-    //_listsSubscription?.cancel();
-    try {
-      if (state is ListItemsLoading) {
-        _listItemsSubscription = _itemsRepository.streamItemsFromList().listen(
-              (items) => add(ListItemsUpdated(items, false)),
-            );
-      }
-      if (state is ListItemsLoaded) {
-        _listItemsSubscription = _itemsRepository
-            .streamItemsFromList(
-          addedAtTimestamp: state.items.last.addedAt,
-        )
-            .listen(
-          (items) {
-            if (items.isEmpty) {
-              add(ListItemsUpdated(state.items, true));
-            } else if (items.length < state.items.length + 10) {
-              add(
-                ListItemsUpdated(state.items + items, true),
-              );
-            } else {
-              add(ListItemsUpdated(state.items + items, false));
-            }
-          },
-        );
-      }
-    } catch (_) {
-      yield ListItemsNotLoaded();
-    }
-  }
 
   Stream<ListItemsState> _mapAddListItemsToState(AddListItem event) async* {
     _itemsRepository.addNewItem(event.item);

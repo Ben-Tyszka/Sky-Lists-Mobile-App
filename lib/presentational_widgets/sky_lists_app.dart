@@ -39,8 +39,16 @@ class SkyListsApp extends StatelessWidget {
               value: BlocProvider.of<AuthenticationBloc>(context),
               child: NotLoggedInPage(),
             ),
-        LoggedInHomePage.routeName: (context) => LoggedInHomePage(),
-        SkyListPage.routeName: (context) => SkyListPage(),
+        LoggedInHomePage.routeName: (context) =>
+            BlocProvider<AuthenticationBloc>.value(
+              value: BlocProvider.of<AuthenticationBloc>(context),
+              child: LoggedInHomePage(),
+            ),
+        SkyListPage.routeName: (context) =>
+            BlocProvider<AuthenticationBloc>.value(
+              value: BlocProvider.of<AuthenticationBloc>(context),
+              child: SkyListPage(),
+            ),
         SkyListShareWithPage.routeName: (context) => SkyListShareWithPage(),
         CreateAccountPage.routeName: (context) =>
             BlocProvider<AuthenticationBloc>.value(

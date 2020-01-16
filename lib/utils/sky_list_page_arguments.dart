@@ -1,7 +1,7 @@
-import 'package:sky_lists/models/sky_list_meta.dart';
+import 'package:list_metadata_repository/list_metadata_repository.dart';
 
 class SkyListPageArguments {
-  final SkyListMeta list;
+  final ListMetadata list;
 
   SkyListPageArguments(this.list);
 }

@@ -23,7 +23,34 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
   ) async* {
     final currentState = state;
     if (event is LoadListsMetadata && !_hasReachedMax(currentState)) {
-      _mapLoadListsToState(currentState);
+      try {
+        if (currentState is ListMetadataLoading) {
+          _listsSubscription = _listsRepository.streamLists().listen(
+                (lists) => add(ListsUpdated(lists, false)),
+              );
+        }
+        if (currentState is ListMetadatasLoaded) {
+          _listsSubscription = _listsRepository
+              .streamLists(
+            startAfterTimestamp: currentState.lists.last.lastModified,
+          )
+              .listen(
+            (lists) {
+              if (lists.isEmpty) {
+                add(ListsUpdated(currentState.lists, true));
+              } else if (lists.length < currentState.lists.length + 10) {
+                add(
+                  ListsUpdated(currentState.lists + lists, true),
+                );
+              } else {
+                add(ListsUpdated(currentState.lists + lists, false));
+              }
+            },
+          );
+        }
+      } catch (_) {
+        yield ListMetadataNotLoaded();
+      }
     } else if (event is AddList) {
       yield* _mapAddListToState(event);
     } else if (event is UpdateListMetadata) {
@@ -37,39 +64,6 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
 
   bool _hasReachedMax(ListMetadataState state) =>
       state is ListMetadatasLoaded && state.hasReachedMax;
-
-  Stream<ListMetadataState> _mapLoadListsToState(
-      ListMetadataState state) async* {
-    //_listsSubscription?.cancel();
-    try {
-      if (state is ListMetadataLoading) {
-        _listsSubscription = _listsRepository.streamLists().listen(
-              (lists) => add(ListsUpdated(lists, false)),
-            );
-      }
-      if (state is ListMetadatasLoaded) {
-        _listsSubscription = _listsRepository
-            .streamLists(
-          startAfterTimestamp: state.lists.last.lastModified,
-        )
-            .listen(
-          (lists) {
-            if (lists.isEmpty) {
-              add(ListsUpdated(state.lists, true));
-            } else if (lists.length < state.lists.length + 10) {
-              add(
-                ListsUpdated(state.lists + lists, true),
-              );
-            } else {
-              add(ListsUpdated(state.lists + lists, false));
-            }
-          },
-        );
-      }
-    } catch (_) {
-      yield ListMetadataNotLoaded();
-    }
-  }
 
   Stream<ListMetadataState> _mapAddListToState(AddList event) async* {
     _listsRepository.addNewList(event.list);

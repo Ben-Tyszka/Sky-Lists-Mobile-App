@@ -4,12 +4,10 @@ class ItemTitle extends StatelessWidget {
   ItemTitle({
     @required this.onChanged,
     @required this.controller,
-    @required this.onSubmit,
     @required this.checked,
   });
 
   final void Function(String) onChanged;
-  final void Function(String) onSubmit;
   final TextEditingController controller;
   final bool checked;
 
@@ -31,7 +29,6 @@ class ItemTitle extends StatelessWidget {
       maxLength: 100,
       onChanged: onChanged,
       controller: controller,
-      onSubmitted: onSubmit,
     );
   }
 }

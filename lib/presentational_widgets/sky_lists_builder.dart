@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'package:sky_lists/presentational_widgets/sky_list_tile.dart';
+
 import 'package:list_metadata_repository/list_metadata_repository.dart';
-import 'package:sky_lists/utils/timestamp_to_formmated_date.dart';
 
 class SkyListsBuilder extends StatelessWidget {
   SkyListsBuilder({
@@ -30,11 +30,8 @@ class SkyListsBuilder extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 ),
               )
-            : ListTile(
-                title: Text(lists[index].name),
-                subtitle: Text(
-                  timestampToFormmatedDate(lists[index].lastModified),
-                ),
+            : SkyListTile(
+                list: lists[index],
               );
       },
     );

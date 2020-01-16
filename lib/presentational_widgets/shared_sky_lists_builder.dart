@@ -42,7 +42,7 @@ class SharedSkyListsBuilder extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   SkyListPage.routeName,
-                  arguments: SkyListPageArguments(snapshot.data),
+                  arguments: null, //SkyListPageArguments(snapshot.data),
                 );
               },
               onLongPress: () {

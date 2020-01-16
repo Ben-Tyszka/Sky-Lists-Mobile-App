@@ -21,7 +21,7 @@ class SkyListShareWithPage extends StatelessWidget {
 
     return StreamProvider<SkyListMeta>(
       create: (_) => _db.streamListMeta(
-        list: args.list,
+        list: null, //args.list,
       ),
       child: Scaffold(
         appBar: AppBar(
