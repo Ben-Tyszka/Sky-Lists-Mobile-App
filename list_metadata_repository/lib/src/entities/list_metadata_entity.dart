@@ -12,7 +12,7 @@ class ListMetadataEntity extends Equatable {
   final bool hidden;
 
   /// List last modified time, used for ordering
-  final Timestamp lastModified;
+  final dynamic lastModified;
 
   /// The doc reference for the firestore document this class represents
   final DocumentReference docRef;
@@ -51,7 +51,7 @@ class ListMetadataEntity extends Equatable {
 
   @override
   String toString() {
-    return 'ListMetadataEntity | name: $name, id: $id, archived: $archived, modified: ${lastModified.toDate().toLocal()}, hidden: $hidden';
+    return 'ListMetadataEntity | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden';
   }
 
   static ListMetadataEntity fromSnapshot(DocumentSnapshot snapshot) {

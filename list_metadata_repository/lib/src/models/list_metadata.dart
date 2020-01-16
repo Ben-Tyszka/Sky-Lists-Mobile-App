@@ -39,7 +39,7 @@ class ListMetadata {
     String id,
     bool archived,
     bool hidden,
-    Timestamp lastModified,
+    dynamic lastModified,
     DocumentReference docRef,
     String name,
   }) {
@@ -76,7 +76,7 @@ class ListMetadata {
 
   @override
   String toString() {
-    return 'ListMetadata | name: $name, id: $id, archived: $archived, modified: ${lastModified.toDate().toLocal()}, hidden: $hidden';
+    return 'ListMetadata | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden';
   }
 
   ListMetadataEntity toEntity() {

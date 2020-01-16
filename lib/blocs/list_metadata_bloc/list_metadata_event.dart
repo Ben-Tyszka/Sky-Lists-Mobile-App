@@ -49,9 +49,10 @@ class DeleteListMetadata extends ListMetadataEvent {
 
 class ListsUpdated extends ListMetadataEvent {
   final List<ListMetadata> lists;
+  final bool hasReachedMax;
 
-  ListsUpdated(this.lists);
+  ListsUpdated(this.lists, this.hasReachedMax);
 
   @override
-  List<Object> get props => [lists];
+  List<Object> get props => [lists, hasReachedMax];
 }

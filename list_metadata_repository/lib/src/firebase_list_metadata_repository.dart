@@ -27,8 +27,18 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   }
 
   @override
-  Stream<List<ListMetadata>> streamLists() {
-    return _collection.snapshots().map(
+  Stream<List<ListMetadata>> streamLists({
+    Timestamp startAfterTimestamp,
+    int limit = 10,
+  }) {
+    final baseQuery = _collection.limit(limit).orderBy(
+          "lastModified",
+          descending: true,
+        );
+    final startAfterQuery = baseQuery.startAfter([startAfterTimestamp]);
+    final query = startAfterTimestamp == null ? baseQuery : startAfterQuery;
+
+    return query.snapshots().map(
       (snapshot) {
         return snapshot.documents
             .map(

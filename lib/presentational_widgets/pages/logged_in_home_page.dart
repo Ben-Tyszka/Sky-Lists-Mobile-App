@@ -1,11 +1,14 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
+import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
+import 'package:list_metadata_repository/list_meta_data_repository.dart';
+import 'package:sky_lists/presentational_widgets/add_list_fab.dart';
 import 'package:sky_lists/presentational_widgets/bottom_nav_bar_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/account_page.dart';
+import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/qr_scanner_page.dart';
-import 'package:sky_lists/stateful_widgets/forms/new_list_form.dart';
 import 'package:sky_lists/stateful_widgets/shared_sky_lists_pagination.dart';
 import 'package:sky_lists/stateful_widgets/sky_lists_pagination.dart';
 
@@ -18,11 +21,6 @@ class LoggedInHomePage extends StatefulWidget {
 
 class _LoggedInHomePageState extends State<LoggedInHomePage>
     with TickerProviderStateMixin {
-  final List<Widget> _children = [
-    SkyListsPagination(),
-    SharedSkyListsPagination(),
-  ];
-
   TabController _controller;
 
   @override
@@ -30,7 +28,7 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
     super.initState();
     _controller = TabController(
       vsync: this,
-      length: _children.length,
+      length: 2,
     );
     _controller.addListener(() {
       setState(() {});
@@ -46,59 +44,81 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Sky Lists',
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.camera,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, QRScannerPage.routeName);
-          },
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.account_circle),
-            onPressed: () {
-              Navigator.pushNamed(context, AccountPage.routeName);
-            },
-          ),
-        ],
-      ),
-      body: TabBarView(
-        controller: _controller,
-        children: _children.map<Widget>((page) {
-          return SafeArea(
-            top: false,
-            bottom: false,
-            child: Container(
-              key: ObjectKey(page),
-              child: page,
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        if (state is Authenticated) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<ListMetadataBloc>(
+                create: (_) => ListMetadataBloc(
+                  listsRepository:
+                      FirebaseListMetadataRepository(state.user.uid),
+                )..add(LoadListsMetadata()),
+              ),
+            ],
+            child: Scaffold(
+              appBar: AppBar(
+                automaticallyImplyLeading: false,
+                title: Text(
+                  'Sky Lists',
+                ),
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.camera,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, QRScannerPage.routeName);
+                  },
+                ),
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.account_circle),
+                    onPressed: () {
+                      Navigator.pushNamed(context, AccountPage.routeName);
+                    },
+                  ),
+                ],
+              ),
+              body: TabBarView(
+                controller: _controller,
+                children: [
+                  SafeArea(
+                    top: false,
+                    bottom: false,
+                    child: Container(
+                      key: ObjectKey(SkyListsPagination),
+                      child: SkyListsPagination(),
+                    ),
+                  ),
+                  SafeArea(
+                    top: false,
+                    bottom: false,
+                    child: Container(
+                      key: ObjectKey(SharedSkyListsPagination),
+                      child: SharedSkyListsPagination(),
+                    ),
+                  ),
+                ],
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+              floatingActionButton: AddListFab(),
+              bottomNavigationBar: BottomNavBarLoggedInPage(
+                controller: _controller,
+                onTabTapped: onTabTapped,
+              ),
             ),
           );
-        }).toList(),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton.extended(
-        elevation: 10,
-        backgroundColor: Theme.of(context).accentColor,
-        onPressed: () {
-          Provider.of<FirebaseAnalytics>(context, listen: false)
-              .logEvent(name: 'list_create_start');
-
-          showDialog(context: context, builder: (context) => NewListForm());
-        },
-        icon: Icon(Icons.add),
-        label: Text('Add List'),
-      ),
-      bottomNavigationBar: BottomNavBarLoggedInPage(
-        controller: _controller,
-        onTabTapped: onTabTapped,
-      ),
+        } else {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            NotLoggedInPage.routeName,
+            (Route<dynamic> route) => false,
+          );
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }

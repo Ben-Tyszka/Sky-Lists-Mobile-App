@@ -1,16 +1,10 @@
-import 'dart:developer';
-
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:list_metadata_repository/list_meta_data_repository.dart';
+import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 
-import 'package:sky_lists/database_service.dart';
-import 'package:sky_lists/models/sky_list_meta.dart';
 import 'package:sky_lists/presentational_widgets/new_list_dialog.dart';
-import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
-import 'package:sky_lists/utils/sky_list_page_arguments.dart';
 
 class NewListForm extends StatefulWidget {
   @override
@@ -38,31 +32,9 @@ class _NewListFormState extends State<NewListForm> {
   }
 
   void onPressed() async {
-    final _db = DatabaseService();
-    setState(() {
-      loading = true;
-    });
-
-    Timeline.startSync('list_create');
-    final doc = await _db.createList(
-      name: _controller.value.text,
-      userId: Provider.of<FirebaseUser>(context, listen: false).uid,
-    );
-    final snapshot = await doc.get();
-    Timeline.finishSync();
-
-    Provider.of<FirebaseAnalytics>(context, listen: false)
-        .logEvent(name: 'list_create');
-
-    Navigator.pushNamed(
-      context,
-      SkyListPage.routeName,
-      arguments: SkyListPageArguments(SkyListMeta.fromFirestore(snapshot)),
-    );
-
-    setState(() {
-      loading = false;
-    });
+    final list = ListMetadata(_controller.text);
+    BlocProvider.of<ListMetadataBloc>(context).add(AddList(list));
+    Navigator.pop(context);
   }
 
   void onCancel() {
