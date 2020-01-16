@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
-import 'package:list_metadata_repository/list_meta_data_repository.dart';
+import 'package:list_metadata_repository/list_metadata_repository.dart';
 import 'package:sky_lists/presentational_widgets/add_list_fab.dart';
 import 'package:sky_lists/presentational_widgets/bottom_nav_bar_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/account_page.dart';

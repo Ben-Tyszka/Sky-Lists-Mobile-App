@@ -289,6 +289,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.1+1"
+  list_items_repository:
+    dependency: "direct main"
+    description:
+      path: list_items_repository
+      relative: true
+    source: path
+    version: "1.0.0+1"
   list_metadata_repository:
     dependency: "direct main"
     description:

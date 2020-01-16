@@ -1,38 +1,42 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:list_items_repository/list_items_repository.dart';
 import 'package:list_metadata_repository/list_metadata_repository.dart';
 import 'entities/entities.dart';
 
-class FirebaseListMetadataRepository implements ListMetadataRepository {
-  FirebaseListMetadataRepository(String userId)
-      : assert(userId != null),
+class FirebaseListItemsRepository implements ListItemsRepository {
+  FirebaseListItemsRepository(ListMetadata list, String ownerId)
+      : assert(list != null),
+        assert(ownerId != null),
         this._collection = Firestore.instance
             .collection('shopping lists')
-            .document(userId)
-            .collection('lists');
+            .document(ownerId)
+            .collection('lists')
+            .document(list.id)
+            .collection('items');
 
   final CollectionReference _collection;
 
   @override
-  Future<void> addNewList(ListMetadata list) {
+  Future<void> addNewItem(ListItem item) async {
     return _collection.add(
-      list.toEntity().toDocument(),
+      item.toEntity().toDocument(),
     );
   }
 
   @override
-  Future<void> deleteList(ListMetadata list) async {
-    return _collection.document(list.id).delete();
+  Future<void> deleteItem(ListItem item) async {
+    return _collection.document(item.id).delete();
   }
 
   @override
-  Stream<List<ListMetadata>> streamLists({
+  Stream<List<ListItem>> streamItemsFromList({
     Timestamp startAfterTimestamp,
     int limit = 10,
   }) {
     final baseQuery = _collection.limit(limit).orderBy(
-          "lastModified",
+          "addedAt",
           descending: true,
         );
     final startAfterQuery = baseQuery.startAfter([startAfterTimestamp]);
@@ -42,8 +46,8 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
       (snapshot) {
         return snapshot.documents
             .map(
-              (doc) => ListMetadata.fromEntity(
-                ListMetadataEntity.fromSnapshot(doc),
+              (doc) => ListItem.fromEntity(
+                ListItemEntity.fromSnapshot(doc),
               ),
             )
             .toList();
@@ -52,9 +56,9 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   }
 
   @override
-  Future<void> updateList(ListMetadata update) {
-    return _collection.document(update.id).updateData(
-          update.toEntity().toDocument(),
+  Future<void> updateItem(ListItem item) {
+    return _collection.document(item.id).updateData(
+          item.toEntity().toDocument(),
         );
   }
 }

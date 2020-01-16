@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:list_metadata_repository/list_meta_data_repository.dart';
+import 'package:list_metadata_repository/list_metadata_repository.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/new_list_dialog.dart';

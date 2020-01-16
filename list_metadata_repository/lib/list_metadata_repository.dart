@@ -1,4 +1,4 @@
-library list_repository;
+library list_metadata_repository;
 
 export 'src/firebase_list_metadata_repository.dart';
 export 'src/models/models.dart';

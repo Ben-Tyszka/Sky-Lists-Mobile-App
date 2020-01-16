@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'package:list_metadata_repository/list_meta_data_repository.dart';
+import 'package:list_metadata_repository/list_metadata_repository.dart';
 import 'package:sky_lists/utils/timestamp_to_formmated_date.dart';
 
 class SkyListsBuilder extends StatelessWidget {

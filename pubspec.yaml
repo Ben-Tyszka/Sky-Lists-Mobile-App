@@ -35,6 +35,8 @@ dependencies:
 
   list_metadata_repository:
     path: list_metadata_repository
+  list_items_repository:
+    path: list_items_repository
 
 dev_dependencies:
   flutter_test:
