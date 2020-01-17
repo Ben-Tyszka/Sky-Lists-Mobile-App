@@ -35,44 +35,38 @@ class SkyListBuilder extends StatelessWidget {
           ],
         ),
       );
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: ListView.builder(
-            controller: controller,
-            padding: EdgeInsets.only(
-              bottom: 14.0,
-            ),
-            itemCount: hasReachedMax ? items.length + 1 : items.length + 2,
-            itemBuilder: (context, index) {
-              if (index < items.length)
-                return SkyListItem(
-                  item: items[index],
-                );
-              if (index == items.length)
-                return ListTile(
-                  leading: Icon(Icons.add),
-                  onTap: () {
-                    BlocProvider.of<ListItemsBloc>(context).add(
-                      AddListItem(
-                        ListItem(''),
-                      ),
-                    );
-                  },
-                  title: Text('Add Item'),
-                );
-              return Container(
-                padding: EdgeInsets.only(
-                  top: 20.0,
-                ),
-                child: Center(
-                  child: CircularProgressIndicator(),
+    return ListView.builder(
+      controller: controller,
+      padding: EdgeInsets.only(
+        bottom: 14.0,
+      ),
+      itemCount: hasReachedMax ? items.length + 1 : items.length + 2,
+      itemBuilder: (context, index) {
+        if (index < items.length)
+          return SkyListItem(
+            item: items[index],
+          );
+        if (index == items.length)
+          return ListTile(
+            leading: Icon(Icons.add),
+            onTap: () {
+              BlocProvider.of<ListItemsBloc>(context).add(
+                AddListItem(
+                  ListItem(''),
                 ),
               );
             },
+            title: Text('Add Item'),
+          );
+        return Container(
+          padding: EdgeInsets.only(
+            top: 20.0,
           ),
-        ),
-      ],
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
     );
   }
 }

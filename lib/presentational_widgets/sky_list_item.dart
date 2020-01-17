@@ -28,17 +28,6 @@ class SkyListItem extends StatelessWidget {
         );
       },
       child: ListTile(
-        onLongPress: () {
-          showDialog(
-            context: context,
-            builder: (_) => BlocProvider<ListItemsBloc>.value(
-              value: BlocProvider.of<ListItemsBloc>(context),
-              child: QuantityDialogForm(
-                item: item,
-              ),
-            ),
-          );
-        },
         leading: Checkbox(
           activeColor: Theme.of(context).accentColor,
           value: item.checked,
@@ -56,9 +45,38 @@ class SkyListItem extends StatelessWidget {
           item: item,
         ),
         trailing: item.quantity > 0
-            ? Text(
-                '${item.quantity} ${item.descriptor}${item.quantity > 1 && item.descriptor != '' && item.descriptor != 'Tsp' && item.descriptor != 'Tblsp' && item.descriptor != 'ml' && item.descriptor != 'Fl oz' ? 's' : ''}')
-            : Container(),
+            ? FlatButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => BlocProvider<ListItemsBloc>.value(
+                      value: BlocProvider.of<ListItemsBloc>(context),
+                      child: QuantityDialogForm(
+                        item: item,
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                    '${item.quantity} ${item.descriptor}${item.quantity > 1 && item.descriptor.isNotEmpty && item.descriptor != 'Tsp' && item.descriptor != 'Tblsp' && item.descriptor != 'ml' && item.descriptor != 'Fl oz' ? 's' : ''}'),
+              )
+            : IconButton(
+                icon: Icon(
+                  Icons.add_shopping_cart,
+                ),
+                tooltip: 'Tap to set quantity',
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => BlocProvider<ListItemsBloc>.value(
+                      value: BlocProvider.of<ListItemsBloc>(context),
+                      child: QuantityDialogForm(
+                        item: item,
+                      ),
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }

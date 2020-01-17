@@ -14,7 +14,7 @@ class ShareListBloc extends Bloc<ShareListEvent, ShareListState> {
 
   ShareListBloc({
     @required ListMetadataRepository listMetadataRepository,
-  })  : assert(_listMetadataRepository != null),
+  })  : assert(listMetadataRepository != null),
         _listMetadataRepository = listMetadataRepository;
 
   @override

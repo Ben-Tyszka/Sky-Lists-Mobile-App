@@ -52,7 +52,7 @@ class Quantity extends StatelessWidget {
           children: <Widget>[
             Flexible(
               child: TextFormField(
-                controller: this.quantityController,
+                controller: quantityController,
                 decoration: InputDecoration(
                   counterText: '',
                   hintText: 'Quantity',
@@ -61,7 +61,10 @@ class Quantity extends StatelessWidget {
                     items: [
                       for (final quantity in _foodQuantityDescriptors)
                         DropdownMenuItem(
-                          child: Text(quantity),
+                          child: quantityController.text.isEmpty
+                              ? Text(quantity)
+                              : Text(
+                                  '$quantity${int.parse(quantityController.text) > 1 && descriptor.isNotEmpty && descriptor != 'Tsp' && descriptor != 'Tblsp' && descriptor != 'ml' && descriptor != 'Fl oz' ? 's' : ''}'),
                           value: quantity,
                         ),
                     ],

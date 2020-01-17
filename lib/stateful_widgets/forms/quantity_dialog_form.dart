@@ -23,11 +23,14 @@ class _QuantityDialogFormState extends State<QuantityDialogForm> {
   TextEditingController _quantityController;
   ListItem previousValue;
   StreamSubscription _streamSubscription;
+  String descriptor;
 
   @override
   void initState() {
-    _quantityController =
-        TextEditingController(text: widget.item.quantity.toString());
+    _quantityController = TextEditingController(
+        text: widget.item.quantity > 0 ? widget.item.quantity.toString() : '');
+    descriptor = widget.item.descriptor;
+
     _quantityController.addListener(_onQuantityChange);
     _streamSubscription =
         BlocProvider.of<ListItemsBloc>(context).listen((state) {
@@ -42,6 +45,7 @@ class _QuantityDialogFormState extends State<QuantityDialogForm> {
             previousValue = selectedItem;
             _quantityController.value = _quantityController.value
                 .copyWith(text: selectedItem.quantity.toString());
+            descriptor = selectedItem.descriptor;
           });
         } catch (_) {}
       }
@@ -57,11 +61,12 @@ class _QuantityDialogFormState extends State<QuantityDialogForm> {
   }
 
   void _onDescriptorChange(String value) {
-    if (widget.item.descriptor == value) return;
+    if (descriptor == value) return;
     BlocProvider.of<ListItemsBloc>(context).add(
       UpdateListItem(
         widget.item.copyWith(
           descriptor: value,
+          quantity: int.parse(_quantityController.text),
         ),
       ),
     );
@@ -83,7 +88,7 @@ class _QuantityDialogFormState extends State<QuantityDialogForm> {
     return Quantity(
       onDescriptorChange: _onDescriptorChange,
       quantityController: _quantityController,
-      descriptor: widget.item.descriptor,
+      descriptor: descriptor,
     );
   }
 }
