@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:list_items_repository/list_items_repository.dart';
-import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
 
+import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/item_title.dart';
+
+import 'package:list_items_repository/list_items_repository.dart';
 
 class ItemTitleForm extends StatefulWidget {
   ItemTitleForm({
@@ -19,12 +22,15 @@ class ItemTitleForm extends StatefulWidget {
 class _ItemTitleFormState extends State<ItemTitleForm> {
   TextEditingController _titleController;
   ListItem previousValue;
+  StreamSubscription _streamSubscription;
 
   @override
   void initState() {
     _titleController = TextEditingController(text: widget.item.name);
-    _titleController.addListener(onChange);
-    BlocProvider.of<ListItemsBloc>(context).listen((state) {
+    _titleController.addListener(_onChange);
+    _streamSubscription =
+        BlocProvider.of<ListItemsBloc>(context).listen((state) {
+      if (widget.item == null) return;
       if (state is ListItemsLoaded) {
         //Note: Not very efficient, esp. when dealing with large lists, needs to be worked on
         try {
@@ -46,10 +52,11 @@ class _ItemTitleFormState extends State<ItemTitleForm> {
   @override
   void dispose() {
     _titleController?.dispose();
+    _streamSubscription?.cancel();
     super.dispose();
   }
 
-  void onChange() {
+  void _onChange() {
     if (previousValue.name == _titleController.text) return;
     BlocProvider.of<ListItemsBloc>(context).add(
       UpdateListItem(

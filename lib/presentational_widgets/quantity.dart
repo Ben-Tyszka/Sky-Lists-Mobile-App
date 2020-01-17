@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class Quantity extends StatelessWidget {
   Quantity({
     @required this.onDescriptorChange,
-    @required this.onQuantityChange,
     @required this.quantityController,
     @required this.descriptor,
   });
@@ -37,7 +36,6 @@ class Quantity extends StatelessWidget {
   ];
 
   final void Function(String) onDescriptorChange;
-  final void Function(String) onQuantityChange;
   final TextEditingController quantityController;
   final String descriptor;
 
@@ -75,7 +73,6 @@ class Quantity extends StatelessWidget {
                 autocorrect: false,
                 keyboardType: TextInputType.number,
                 maxLength: 1000,
-                onChanged: onQuantityChange,
               ),
             ),
           ],

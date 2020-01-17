@@ -10,9 +10,11 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
         this._collection = Firestore.instance
             .collection('shopping lists')
             .document(userId)
-            .collection('lists');
+            .collection('lists'),
+        this._userId = userId;
 
   final CollectionReference _collection;
+  final String _userId;
 
   @override
   Future<void> addNewList(ListMetadata list) {
@@ -64,5 +66,69 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   Stream<ListMetadata> streamListTitle(ListMetadata list) {
     return list.docRef.snapshots().map((snapshot) =>
         ListMetadata.fromEntity(ListMetadataEntity.fromSnapshot(snapshot)));
+  }
+
+  @override
+  Future<void> shareListWith({
+    ListMetadata list,
+    String toShareWith,
+  }) async {
+    await list.docRef.collection('sharedwith').document(toShareWith).updateData(
+      {
+        'sharedAt': FieldValue.serverTimestamp(),
+      },
+    );
+    await Firestore.instance
+        .collection("users")
+        .document(toShareWith)
+        .collection("sharedwithme")
+        .document(list.id)
+        .updateData(
+      {
+        "owner": list.docRef.parent().parent().documentID,
+        "sharedAt": FieldValue.serverTimestamp(),
+      },
+    );
+    await Firestore.instance
+        .collection("users")
+        .document(list.docRef.parent().parent().documentID)
+        .collection("sharehistory")
+        .document(toShareWith)
+        .updateData(
+      {
+        "count": FieldValue.increment(1),
+        "lastShared": FieldValue.serverTimestamp(),
+      },
+    );
+  }
+
+  @override
+  Future<String> getUserUidFromEmail(String emailToSearchWith) async {
+    final query = await Firestore.instance
+        .collection("users")
+        .where(
+          "email",
+          isEqualTo: emailToSearchWith,
+        )
+        .getDocuments();
+    if (query.documents.isEmpty) return null;
+    return query.documents.first.documentID;
+  }
+
+  Stream<List<UserProfile>> streamCommonSharedWith() {
+    return Firestore.instance
+        .collection('users')
+        .document(_userId)
+        .collection('sharehistory')
+        .orderBy('count', descending: true)
+        .limit(4)
+        .snapshots()
+        .map((query) => query.documents
+            .map(
+              (doc) => UserProfile.fromEntity(
+                UserProfileEntity.fromSnapshot(doc),
+              ),
+            )
+            .toList());
   }
 }

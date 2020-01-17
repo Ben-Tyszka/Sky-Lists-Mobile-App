@@ -5,6 +5,7 @@ import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
 import 'package:sky_lists/stateful_widgets/forms/item_title_form.dart';
 
 import 'package:list_items_repository/list_items_repository.dart';
+import 'package:sky_lists/stateful_widgets/forms/quantity_dialog_form.dart';
 
 class SkyListItem extends StatelessWidget {
   SkyListItem({@required this.item});
@@ -27,7 +28,17 @@ class SkyListItem extends StatelessWidget {
         );
       },
       child: ListTile(
-        onLongPress: () {},
+        onLongPress: () {
+          showDialog(
+            context: context,
+            builder: (_) => BlocProvider<ListItemsBloc>.value(
+              value: BlocProvider.of<ListItemsBloc>(context),
+              child: QuantityDialogForm(
+                item: item,
+              ),
+            ),
+          );
+        },
         leading: Checkbox(
           activeColor: Theme.of(context).accentColor,
           value: item.checked,
@@ -46,7 +57,7 @@ class SkyListItem extends StatelessWidget {
         ),
         trailing: item.quantity > 0
             ? Text(
-                '${item.quantity} ${item.descriptor}${item.quantity > 1 ? 's' : ''}')
+                '${item.quantity} ${item.descriptor}${item.quantity > 1 && item.descriptor != '' && item.descriptor != 'Tsp' && item.descriptor != 'Tblsp' && item.descriptor != 'ml' && item.descriptor != 'Fl oz' ? 's' : ''}')
             : Container(),
       ),
     );

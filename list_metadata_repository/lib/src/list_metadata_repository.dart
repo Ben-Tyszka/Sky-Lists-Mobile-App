@@ -16,4 +16,13 @@ abstract class ListMetadataRepository {
   Future<void> updateList(ListMetadata list);
 
   Stream<ListMetadata> streamListTitle(ListMetadata list);
+
+  Future<void> shareListWith({
+    ListMetadata list,
+    String toShareWith,
+  });
+
+  Future<String> getUserUidFromEmail(String emailToSearchWith);
+
+  Stream<List<UserProfile>> streamCommonSharedWith();
 }

@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class LoginEvent extends Equatable {
-  const LoginEvent();
+  LoginEvent();
 
   @override
   List<Object> get props => [];
@@ -46,7 +46,7 @@ class Submitted extends LoginEvent {
   final String email;
   final String password;
 
-  const Submitted({
+  Submitted({
     @required this.email,
     @required this.password,
   });
@@ -66,7 +66,7 @@ class LoginWithEmailAndPasswordPressed extends LoginEvent {
   final String email;
   final String password;
 
-  const LoginWithEmailAndPasswordPressed({
+  LoginWithEmailAndPasswordPressed({
     @required this.email,
     @required this.password,
   });

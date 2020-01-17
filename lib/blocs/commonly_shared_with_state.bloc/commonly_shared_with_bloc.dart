@@ -1,0 +1,54 @@
+import 'dart:async';
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+
+import './bloc.dart';
+import 'package:list_metadata_repository/list_metadata_repository.dart';
+
+class CommonlySharedWithBloc
+    extends Bloc<CommonlySharedWithEvent, CommonlySharedWithState> {
+  final ListMetadataRepository _listRepository;
+  StreamSubscription _commonlySharedWithSubscription;
+
+  CommonlySharedWithBloc({@required ListMetadataRepository listRepository})
+      : assert(listRepository != null),
+        _listRepository = listRepository;
+
+  @override
+  CommonlySharedWithState get initialState => CommonlySharedWithLoading();
+
+  @override
+  Stream<CommonlySharedWithState> mapEventToState(
+    CommonlySharedWithEvent event,
+  ) async* {
+    if (event is LoadCommonlySharedWith) {
+      yield* _mapLoadCommonlySharedWithToState(event);
+    } else if (event is CommonlySharedWithUpdated) {
+      yield* _mapCommonlySharedWithUpdatedToState(event);
+    }
+  }
+
+  Stream<CommonlySharedWithState> _mapLoadCommonlySharedWithToState(
+      LoadCommonlySharedWith event) async* {
+    _commonlySharedWithSubscription?.cancel();
+    _commonlySharedWithSubscription =
+        _listRepository.streamCommonSharedWith().listen(
+              (profiles) => add(
+                CommonlySharedWithUpdated(profiles),
+              ),
+            );
+  }
+
+  Stream<CommonlySharedWithState> _mapCommonlySharedWithUpdatedToState(
+      CommonlySharedWithUpdated event) async* {
+    yield CommonlySharedWithLoaded(
+      event.profiles,
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _commonlySharedWithSubscription?.cancel();
+    return super.close();
+  }
+}
