@@ -117,6 +117,8 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             LoggedInHomePage.routeName,
             (Route<dynamic> route) => false,
           );
+        } else if (state.isFailure) {
+          _passwordController.text = '';
         }
       },
       child: BlocBuilder<RegisterBloc, RegisterState>(

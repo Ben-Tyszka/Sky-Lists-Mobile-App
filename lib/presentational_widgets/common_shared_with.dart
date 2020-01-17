@@ -10,16 +10,13 @@ class CommonSharedWith extends StatelessWidget {
     return BlocBuilder<CommonlySharedWithBloc, CommonlySharedWithState>(
       builder: (context, state) {
         if (state is CommonlySharedWithLoaded) {
+          if (state.profiles.isEmpty) return Container();
           return ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: state.profiles.length,
             itemBuilder: (context, index) {
               return ActionChip(
-                onPressed: () {
-                  // _db.shareList(
-                  //   list: Provider.of<SkyListMeta>(context),
-                  //   shareWithId: snapshot.data[index].docRef.documentID,
-                },
+                onPressed: () {},
                 label: Text(state.profiles[index].name),
                 backgroundColor: RandomColor().randomColor(),
               );

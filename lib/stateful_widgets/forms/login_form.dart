@@ -92,6 +92,9 @@ class _LoginFormState extends State<LoginForm> {
             LoggedInHomePage.routeName,
             (Route<dynamic> route) => false,
           );
+        } else if (state.isFailure) {
+          _emailController.text = '';
+          _passwordController.text = '';
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(

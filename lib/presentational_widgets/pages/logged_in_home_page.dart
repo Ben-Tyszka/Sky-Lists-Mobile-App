@@ -44,81 +44,87 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        if (state is Authenticated) {
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider<ListMetadataBloc>(
-                create: (_) => ListMetadataBloc(
-                  listsRepository:
-                      FirebaseListMetadataRepository(state.user.uid),
-                )..add(LoadListsMetadata()),
-              ),
-            ],
-            child: Scaffold(
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                title: Text(
-                  'Sky Lists',
-                ),
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.camera,
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, QRScannerPage.routeName);
-                  },
-                ),
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.account_circle),
-                    onPressed: () {
-                      Navigator.pushNamed(context, AccountPage.routeName);
-                    },
-                  ),
-                ],
-              ),
-              body: TabBarView(
-                controller: _controller,
-                children: [
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Container(
-                      key: ObjectKey(SkyListsPagination),
-                      child: SkyListsPagination(),
-                    ),
-                  ),
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Container(
-                      key: ObjectKey(SharedSkyListsPagination),
-                      child: SharedSkyListsPagination(),
-                    ),
-                  ),
-                ],
-              ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
-              floatingActionButton: AddListFab(),
-              bottomNavigationBar: BottomNavBarLoggedInPage(
-                controller: _controller,
-                onTabTapped: onTabTapped,
-              ),
-            ),
-          );
-        } else {
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state is Unauthenticated) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             NotLoggedInPage.routeName,
             (Route<dynamic> route) => false,
           );
-          return Center(
-            child: CircularProgressIndicator(),
-          );
         }
       },
+      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          if (state is Authenticated) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<ListMetadataBloc>(
+                  create: (_) => ListMetadataBloc(
+                    listsRepository:
+                        FirebaseListMetadataRepository(state.user.uid),
+                  )..add(LoadListsMetadata()),
+                ),
+              ],
+              child: Scaffold(
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  title: Text(
+                    'Sky Lists',
+                  ),
+                  leading: IconButton(
+                    icon: Icon(
+                      Icons.camera,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, QRScannerPage.routeName);
+                    },
+                  ),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.account_circle),
+                      onPressed: () {
+                        Navigator.pushNamed(context, AccountPage.routeName);
+                      },
+                    ),
+                  ],
+                ),
+                body: TabBarView(
+                  controller: _controller,
+                  children: [
+                    SafeArea(
+                      top: false,
+                      bottom: false,
+                      child: Container(
+                        key: ObjectKey(SkyListsPagination),
+                        child: SkyListsPagination(),
+                      ),
+                    ),
+                    SafeArea(
+                      top: false,
+                      bottom: false,
+                      child: Container(
+                        key: ObjectKey(SharedSkyListsPagination),
+                        child: SharedSkyListsPagination(),
+                      ),
+                    ),
+                  ],
+                ),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
+                floatingActionButton: AddListFab(),
+                bottomNavigationBar: BottomNavBarLoggedInPage(
+                  controller: _controller,
+                  onTabTapped: onTabTapped,
+                ),
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 }

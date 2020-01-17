@@ -23,57 +23,69 @@ class SkyListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SkyListPageArguments args = ModalRoute.of(context).settings.arguments;
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      builder: (context, state) {
-        if (state is Authenticated) {
-          return BlocProvider(
-            create: (_) => ListItemsBloc(
-              itemsRepository: FirebaseListItemsRepository(
-                args.list,
-                state.user.uid,
-              ),
-            )..add(LoadListItems()),
-            child: Scaffold(
-              appBar: AppBar(
-                actions: <Widget>[
-                  ShareListButton(
-                    user: state.user,
-                  ),
-                ],
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      LoggedInHomePage.routeName,
-                      (Route<dynamic> route) => false,
-                    );
-                  },
-                ),
-                title: BlocProvider<ListMetadataBloc>(
-                  create: (_) => ListMetadataBloc(
-                    listsRepository:
-                        FirebaseListMetadataRepository(state.user.uid),
-                  )..add(LoadListMetadata(args.list)),
-                  child: ListTitleForm(
-                    list: args.list,
-                  ),
-                ),
-              ),
-              body: SkyListPagination(),
-            ),
-          );
-        } else {
+
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state is Unauthenticated) {
           Navigator.of(context).pushNamedAndRemoveUntil(
             NotLoggedInPage.routeName,
             (Route<dynamic> route) => false,
           );
-          return Center(
-            child: CircularProgressIndicator(),
-          );
         }
       },
+      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          if (state is Authenticated) {
+            return BlocProvider(
+              create: (_) => ListItemsBloc(
+                itemsRepository: FirebaseListItemsRepository(
+                  args.list,
+                  state.user.uid,
+                ),
+              )..add(LoadListItems()),
+              child: Scaffold(
+                appBar: AppBar(
+                  actions: <Widget>[
+                    ShareListButton(
+                      user: state.user,
+                      list: args.list,
+                    ),
+                  ],
+                  leading: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        LoggedInHomePage.routeName,
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                  ),
+                  title: BlocProvider<ListMetadataBloc>(
+                    create: (_) => ListMetadataBloc(
+                      listsRepository:
+                          FirebaseListMetadataRepository(state.user.uid),
+                    )..add(LoadListMetadata(args.list)),
+                    child: ListTitleForm(
+                      list: args.list,
+                    ),
+                  ),
+                ),
+                body: SkyListPagination(),
+              ),
+            );
+          } else {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              NotLoggedInPage.routeName,
+              (Route<dynamic> route) => false,
+            );
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
     );
   }
 }

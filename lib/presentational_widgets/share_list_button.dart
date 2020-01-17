@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:sky_lists/presentational_widgets/pages/sky_list_share_with_page.dart';
+import 'package:sky_lists/utils/sky_list_page_arguments.dart';
+
+import 'package:list_metadata_repository/list_metadata_repository.dart';
+
 class ShareListButton extends StatelessWidget {
-  ShareListButton({@required this.user}) : assert(user != null);
+  ShareListButton({
+    @required this.user,
+    @required this.list,
+  });
 
   final FirebaseUser user;
+  final ListMetadata list;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +23,11 @@ class ShareListButton extends StatelessWidget {
       ),
       onPressed: () {
         if (user.isEmailVerified) {
-          // Navigator.pushNamed(context, SkyListShareWithPage.routeName,
-          //     arguments: args);
+          Navigator.pushNamed(
+            context,
+            SkyListShareWithPage.routeName,
+            arguments: SkyListPageArguments(list),
+          );
         } else {
           showDialog(
             context: context,
