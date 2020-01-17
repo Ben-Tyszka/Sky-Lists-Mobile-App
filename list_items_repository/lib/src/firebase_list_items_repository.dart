@@ -37,7 +37,6 @@ class FirebaseListItemsRepository implements ListItemsRepository {
   }) {
     final baseQuery = _collection.limit(limit).orderBy(
           "addedAt",
-          descending: true,
         );
     final startAfterQuery = baseQuery.startAfter([addedAtTimestamp]);
     final query = addedAtTimestamp == null ? baseQuery : startAfterQuery;
@@ -57,8 +56,8 @@ class FirebaseListItemsRepository implements ListItemsRepository {
 
   @override
   Future<void> updateItem(ListItem item) {
-    return _collection.document(item.id).updateData(
-          item.toEntity().toDocument(),
-        );
+    return item.docRef.updateData(
+      item.toEntity().toDocument(),
+    );
   }
 }

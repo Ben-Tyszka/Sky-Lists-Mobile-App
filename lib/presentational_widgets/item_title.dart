@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 
 class ItemTitle extends StatelessWidget {
   ItemTitle({
-    @required this.onChanged,
     @required this.controller,
     @required this.checked,
   });
 
-  final void Function(String) onChanged;
   final TextEditingController controller;
   final bool checked;
 
@@ -27,7 +25,6 @@ class ItemTitle extends StatelessWidget {
       ),
       enabled: !checked,
       maxLength: 100,
-      onChanged: onChanged,
       controller: controller,
     );
   }

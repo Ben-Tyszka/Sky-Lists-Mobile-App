@@ -56,14 +56,14 @@ class ListItem {
     String descriptor,
   }) {
     return ListItem(
-      name,
+      name ?? this.name,
       checked: checked ?? this.checked,
       docRef: docRef ?? this.docRef,
       hidden: hidden ?? this.hidden,
       id: id ?? this.id,
       addedAt: addedAt ?? this.addedAt,
       descriptor: descriptor ?? this.descriptor,
-      quantity: quantity ?? this.descriptor,
+      quantity: quantity ?? this.quantity,
     );
   }
 

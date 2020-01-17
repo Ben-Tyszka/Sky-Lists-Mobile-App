@@ -18,20 +18,39 @@ class ItemTitleForm extends StatefulWidget {
 
 class _ItemTitleFormState extends State<ItemTitleForm> {
   TextEditingController _titleController;
+  ListItem previousValue;
 
   @override
   void initState() {
     _titleController = TextEditingController(text: widget.item.name);
+    _titleController.addListener(onChange);
+    BlocProvider.of<ListItemsBloc>(context).listen((state) {
+      if (state is ListItemsLoaded) {
+        //Note: Not very efficient, esp. when dealing with large lists, needs to be worked on
+        try {
+          final selectedItem =
+              state.items.where((_) => _.id == widget.item.id)?.first;
+          if (!mounted || selectedItem == null) return;
+          setState(() {
+            previousValue = selectedItem;
+            _titleController.value =
+                _titleController.value.copyWith(text: selectedItem.name);
+          });
+        } catch (_) {}
+      }
+    });
+
     super.initState();
   }
 
   @override
   void dispose() {
-    _titleController.dispose();
+    _titleController?.dispose();
     super.dispose();
   }
 
-  void onChange(String value) {
+  void onChange() {
+    if (previousValue.name == _titleController.text) return;
     BlocProvider.of<ListItemsBloc>(context).add(
       UpdateListItem(
         widget.item.copyWith(
@@ -45,7 +64,6 @@ class _ItemTitleFormState extends State<ItemTitleForm> {
   Widget build(BuildContext context) {
     return ItemTitle(
       controller: _titleController,
-      onChanged: onChange,
       checked: widget.item.checked,
     );
   }

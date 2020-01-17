@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
 import 'package:sky_lists/stateful_widgets/forms/item_title_form.dart';
-import 'package:sky_lists/utils/timestamp_to_formmated_date.dart';
 
 import 'package:list_items_repository/list_items_repository.dart';
 
@@ -22,61 +21,33 @@ class SkyListItem extends StatelessWidget {
       onDismissed: (direction) {
         Scaffold.of(context).hideCurrentSnackBar();
         BlocProvider.of<ListItemsBloc>(context).add(
-          UpdateListItem(
-            item.copyWith(
-              hidden: true,
-            ),
+          DeleteListItem(
+            item,
           ),
         );
-        Scaffold.of(context)
-            .showSnackBar(
-              SnackBar(
-                duration: Duration(),
-                content: Text('Item deleted'),
-                action: SnackBarAction(
-                  label: 'Undo',
-                  onPressed: () {
-                    BlocProvider.of<ListItemsBloc>(context).add(
-                      UpdateListItem(
-                        item.copyWith(
-                          hidden: false,
-                        ),
-                      ),
-                    );
-                  },
+      },
+      child: ListTile(
+        onLongPress: () {},
+        leading: Checkbox(
+          activeColor: Theme.of(context).accentColor,
+          value: item.checked,
+          onChanged: (val) {
+            BlocProvider.of<ListItemsBloc>(context).add(
+              UpdateListItem(
+                item.copyWith(
+                  checked: val,
                 ),
               ),
-            )
-            .closed
-            .then(
-          (reason) {
-            if (reason != SnackBarClosedReason.action) {
-              BlocProvider.of<ListItemsBloc>(context).add(
-                DeleteListItem(
-                  item,
-                ),
-              );
-            }
+            );
           },
-        );
-      },
-      child: CheckboxListTile(
+        ),
         title: ItemTitleForm(
           item: item,
         ),
-        subtitle: Text(
-          timestampToFormmatedDate(item.addedAt),
-        ),
-        onChanged: (val) {
-          BlocProvider.of<ListItemsBloc>(context).add(
-            UpdateListItem(
-              item.copyWith(
-                checked: val,
-              ),
-            ),
-          );
-        },
-        value: item.checked,
+        trailing: item.quantity > 0
+            ? Text(
+                '${item.quantity} ${item.descriptor}${item.quantity > 1 ? 's' : ''}')
+            : Container(),
       ),
     );
   }

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 
 import './bloc.dart';
 import 'package:list_metadata_repository/list_metadata_repository.dart';
@@ -29,7 +28,7 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
 
         if (currentState is ListMetadataLoading) {
           _listsSubscription = _listsRepository.streamLists().listen(
-                (lists) => add(ListsUpdated(lists, false)),
+                (lists) => add(ListsUpdated(lists, true)),
               );
         }
         if (currentState is ListMetadatasLoaded) {

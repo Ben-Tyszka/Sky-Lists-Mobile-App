@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:rxdart/rxdart.dart';
 
 import './bloc.dart';
 import 'package:list_items_repository/list_items_repository.dart';
@@ -27,7 +26,7 @@ class ListItemsBloc extends Bloc<ListItemsEvent, ListItemsState> {
         if (currentState is ListItemsLoading) {
           _listItemsSubscription =
               _itemsRepository.streamItemsFromList().listen(
-                    (items) => add(ListItemsUpdated(items, false)),
+                    (items) => add(ListItemsUpdated(items, true)),
                   );
         }
         if (currentState is ListItemsLoaded) {

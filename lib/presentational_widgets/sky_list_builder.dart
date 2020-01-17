@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/add_first_item_button.dart';
 import 'package:sky_lists/presentational_widgets/sky_list_item.dart';
@@ -32,23 +35,44 @@ class SkyListBuilder extends StatelessWidget {
           ],
         ),
       );
-    return ListView.builder(
-      controller: controller,
-      padding: EdgeInsets.only(
-        bottom: 14.0,
-      ),
-      itemCount: hasReachedMax ? items.length : items.length + 1,
-      itemBuilder: (context, index) {
-        return index >= items.length
-            ? Container(
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: ListView.builder(
+            controller: controller,
+            padding: EdgeInsets.only(
+              bottom: 14.0,
+            ),
+            itemCount: hasReachedMax ? items.length + 1 : items.length + 2,
+            itemBuilder: (context, index) {
+              if (index < items.length)
+                return SkyListItem(
+                  item: items[index],
+                );
+              if (index == items.length)
+                return ListTile(
+                  leading: Icon(Icons.add),
+                  onTap: () {
+                    BlocProvider.of<ListItemsBloc>(context).add(
+                      AddListItem(
+                        ListItem(''),
+                      ),
+                    );
+                  },
+                  title: Text('Add Item'),
+                );
+              return Container(
+                padding: EdgeInsets.only(
+                  top: 20.0,
+                ),
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
-              )
-            : SkyListItem(
-                item: items[index],
               );
-      },
+            },
+          ),
+        ),
+      ],
     );
   }
 }

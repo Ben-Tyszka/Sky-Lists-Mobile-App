@@ -54,9 +54,9 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   @override
   Future<void> updateList(ListMetadata update) {
     return Firestore().runTransaction(
-      (Transaction transaction) => _collection.document(update.id).updateData(
-            update.toEntity().toDocument(),
-          ),
+      (Transaction transaction) => update.docRef.updateData(
+        update.toEntity().toDocument(),
+      ),
     );
   }
 
