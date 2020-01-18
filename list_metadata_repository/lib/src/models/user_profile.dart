@@ -50,8 +50,8 @@ class UserProfile {
     return 'ListProfile | name: $name, email: $email';
   }
 
-  UserProfile toEntity() {
-    return UserProfile(
+  UserProfileEntity toEntity() {
+    return UserProfileEntity(
       email: email,
       docRef: docRef,
       name: name,

@@ -131,4 +131,40 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
             )
             .toList());
   }
+
+  @override
+  Stream<List<ListSharedWith>> streamListSharedWith(
+    ListMetadata list, {
+    Timestamp afterSharedAt,
+    int limit = 10,
+  }) {
+    final baseQuery = list.docRef.collection('sharedwith').limit(limit).orderBy(
+          "sharedAt",
+          descending: true,
+        );
+    final startAfterQuery = baseQuery.startAfter([afterSharedAt]);
+    final query = afterSharedAt == null ? baseQuery : startAfterQuery;
+
+    return query.snapshots().map(
+      (snapshot) {
+        return snapshot.documents
+            .map(
+              (doc) => ListSharedWith.fromEntity(
+                ListSharedWithEntity.fromSnapshot(doc),
+              ),
+            )
+            .toList();
+      },
+    );
+  }
+
+  @override
+  Future<UserProfile> listSharedWithToUserProfile(
+      ListSharedWith listSharedWith) async {
+    final query = await Firestore.instance
+        .collection("users")
+        .document(listSharedWith.sharedWithId)
+        .get();
+    return UserProfile.fromEntity(UserProfileEntity.fromSnapshot(query));
+  }
 }

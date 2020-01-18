@@ -25,4 +25,13 @@ abstract class ListMetadataRepository {
   Future<String> getUserUidFromEmail(String emailToSearchWith);
 
   Stream<List<UserProfile>> streamCommonSharedWith();
+
+  Stream<List<ListSharedWith>> streamListSharedWith(
+    ListMetadata list, {
+    Timestamp afterSharedAt,
+    int limit = 10,
+  });
+
+  Future<UserProfile> listSharedWithToUserProfile(
+      ListSharedWith listSharedWith);
 }
