@@ -32,8 +32,10 @@ abstract class ListMetadataRepository {
     int limit = 10,
   });
 
-  Future<UserProfile> listSharedWithToUserProfile(
-      ListSharedWith listSharedWith);
-
   Future<void> unshareList(UserProfile profileToUnshareWith, ListMetadata list);
+
+  Stream<List<SharedWithMe>> streamListsSharedWithMe({
+    Timestamp afterSharedAt,
+    int limit = 10,
+  });
 }

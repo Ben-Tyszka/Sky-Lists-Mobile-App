@@ -27,20 +27,13 @@ class ListSharedWithBloc
         if (currentState is ListSharedWithLoading) {
           _listSharedWithSubscription =
               _listRepository.streamListSharedWith(event.list).listen(
-            (listSharedWith) {
-              final List<UserProfile> profiles = [];
-              listSharedWith.forEach((sharee) async {
-                final profile =
-                    await _listRepository.listSharedWithToUserProfile(sharee);
-                profiles.add(profile);
-              });
-              add(ListSharedWithUpdated(
-                profiles: profiles,
-                hasReachedMax: true,
-                listSharedWith: listSharedWith,
-              ));
-            },
-          );
+                    (listSharedWith) => add(
+                      ListSharedWithUpdated(
+                        hasReachedMax: true,
+                        listSharedWith: listSharedWith,
+                      ),
+                    ),
+                  );
         }
         if (currentState is ListSharedWithLoaded) {
           _listSharedWithSubscription = _listRepository
@@ -58,27 +51,25 @@ class ListSharedWithBloc
                 ));
               } else if (listSharedWith.length <
                   currentState.listSharedWith.length + 10) {
-                final List<UserProfile> profiles = [];
-                listSharedWith.forEach((sharee) async {
-                  final profile =
-                      await _listRepository.listSharedWithToUserProfile(sharee);
-                  profiles.add(profile);
-                });
-                add(
-                  ListSharedWithUpdated(
-                      profiles: currentState.profiles + profiles,
-                      hasReachedMax: true),
-                );
+                _listRepository.streamListSharedWith(event.list).listen(
+                      (listSharedWith) => add(
+                        ListSharedWithUpdated(
+                          hasReachedMax: true,
+                          listSharedWith:
+                              currentState.listSharedWith + listSharedWith,
+                        ),
+                      ),
+                    );
               } else {
-                final List<UserProfile> profiles = [];
-                listSharedWith.forEach((sharee) async {
-                  final profile =
-                      await _listRepository.listSharedWithToUserProfile(sharee);
-                  profiles.add(profile);
-                });
-                add(ListSharedWithUpdated(
-                    profiles: currentState.profiles + profiles,
-                    hasReachedMax: false));
+                _listRepository.streamListSharedWith(event.list).listen(
+                      (listSharedWith) => add(
+                        ListSharedWithUpdated(
+                          hasReachedMax: false,
+                          listSharedWith:
+                              currentState.listSharedWith + listSharedWith,
+                        ),
+                      ),
+                    );
               }
             },
           );

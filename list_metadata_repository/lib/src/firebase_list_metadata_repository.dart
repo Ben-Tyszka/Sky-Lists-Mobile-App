@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:list_metadata_repository/list_metadata_repository.dart';
 import 'entities/entities.dart';
 
@@ -34,7 +35,7 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
     int limit = 10,
   }) {
     final baseQuery = _collection.limit(limit).orderBy(
-          "lastModified",
+          'lastModified',
           descending: true,
         );
     final startAfterQuery = baseQuery.startAfter([startAfterTimestamp]);
@@ -79,25 +80,25 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
       },
     );
     await Firestore.instance
-        .collection("users")
+        .collection('users')
         .document(toShareWith)
-        .collection("sharedwithme")
+        .collection('sharedwithme')
         .document(list.id)
         .updateData(
       {
-        "owner": list.docRef.parent().parent().documentID,
-        "sharedAt": FieldValue.serverTimestamp(),
+        'owner': list.docRef.parent().parent().documentID,
+        'sharedAt': FieldValue.serverTimestamp(),
       },
     );
     await Firestore.instance
-        .collection("users")
+        .collection('users')
         .document(list.docRef.parent().parent().documentID)
-        .collection("sharehistory")
+        .collection('sharehistory')
         .document(toShareWith)
         .updateData(
       {
-        "count": FieldValue.increment(1),
-        "lastShared": FieldValue.serverTimestamp(),
+        'count': FieldValue.increment(1),
+        'lastShared': FieldValue.serverTimestamp(),
       },
     );
   }
@@ -105,9 +106,9 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   @override
   Future<String> getUserUidFromEmail(String emailToSearchWith) async {
     final query = await Firestore.instance
-        .collection("users")
+        .collection('users')
         .where(
-          "email",
+          'email',
           isEqualTo: emailToSearchWith,
         )
         .getDocuments();
@@ -139,48 +140,65 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
     int limit = 10,
   }) {
     final baseQuery = list.docRef.collection('sharedwith').limit(limit).orderBy(
-          "sharedAt",
+          'sharedAt',
           descending: true,
         );
     final startAfterQuery = baseQuery.startAfter([afterSharedAt]);
     final query = afterSharedAt == null ? baseQuery : startAfterQuery;
 
     return query.snapshots().map(
-      (snapshot) {
-        return snapshot.documents
-            .map(
-              (doc) => ListSharedWith.fromEntity(
-                ListSharedWithEntity.fromSnapshot(doc),
-              ),
-            )
-            .toList();
-      },
-    );
-  }
-
-  @override
-  Future<UserProfile> listSharedWithToUserProfile(
-      ListSharedWith listSharedWith) async {
-    final query = await Firestore.instance
-        .collection("users")
-        .document(listSharedWith.sharedWithId)
-        .get();
-    return UserProfile.fromEntity(UserProfileEntity.fromSnapshot(query));
+          (snapshot) => snapshot.documents
+              .map(
+                (doc) => ListSharedWith.fromEntity(
+                  ListSharedWithEntity.fromSnapshot(doc),
+                ),
+              )
+              .toList(),
+        );
   }
 
   @override
   Future<void> unshareList(
       UserProfile profileToUnshareWith, ListMetadata list) async {
     await list.docRef
-        .collection("sharedwith")
+        .collection('sharedwith')
         .document(profileToUnshareWith.docRef.documentID)
         .delete();
 
     await Firestore.instance
-        .collection("users")
+        .collection('users')
         .document(profileToUnshareWith.docRef.documentID)
-        .collection("sharedwithme")
+        .collection('sharedwithme')
         .document(list.id)
         .delete();
+  }
+
+  @override
+  Stream<List<SharedWithMe>> streamListsSharedWithMe({
+    Timestamp afterSharedAt,
+    int limit = 10,
+  }) {
+    final baseQuery = Firestore.instance
+        .collection('users')
+        .document(_userId)
+        .collection('sharedwithme')
+        .limit(limit)
+        .orderBy(
+          'sharedAt',
+          descending: true,
+        );
+
+    final startAfterQuery = baseQuery.startAfter([afterSharedAt]);
+    final query = afterSharedAt == null ? baseQuery : startAfterQuery;
+
+    return query.snapshots().map(
+          (snapshot) => snapshot.documents
+              .map(
+                (doc) => SharedWithMe.fromEntity(
+                  SharedWithMeEntity.fromSnapshot(doc),
+                ),
+              )
+              .toList(),
+        );
   }
 }
