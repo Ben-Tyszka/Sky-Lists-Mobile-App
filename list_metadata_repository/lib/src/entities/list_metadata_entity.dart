@@ -29,16 +29,6 @@ class ListMetadataEntity extends Equatable {
     this.lastModified,
   });
 
-  Map<String, Object> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'archived': archived,
-      'hidden': archived,
-      'lastModified': lastModified.toDate().toLocal(),
-    };
-  }
-
   @override
   List<Object> get props => [
         name,

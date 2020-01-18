@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 class CustomIcons {
   CustomIcons._();
 
-  static const _kFontFam = 'CustomIcons';
+  static final _kFontFam = 'CustomIcons';
 
   /// The qr code icon used in the share page
-  static const IconData qrcode = const IconData(0xe800, fontFamily: _kFontFam);
+  static final IconData qrcode = IconData(0xe800, fontFamily: _kFontFam);
 }

@@ -37,18 +37,6 @@ class ListItemEntity extends Equatable {
     this.quantity,
   });
 
-  Map<String, Object> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'hidden': hidden,
-      'checked': checked,
-      'addedAt': addedAt.toString(),
-      'descriptor': descriptor,
-      'quantity': quantity,
-    };
-  }
-
   @override
   List<Object> get props => [
         name,

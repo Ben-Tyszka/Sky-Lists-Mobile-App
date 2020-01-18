@@ -68,7 +68,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                 style: Theme.of(context).textTheme.title,
               ),
               Text(
-                'Although most changes are likely to be minor, Sky Lists Mobile may change its Privacy Policy from time to time, and in Sky Lists Mobile\'s sole discretion. Sky Lists  Mobile encourages visitors to frequently check this page for any changes to its Privacy Policy. Your continued use of this app after any change in this Privacy Policy will constitute your acceptance of such change.',
+                'Although most changes are likely to be minor, Sky Lists Mobile may change its Privacy Policy from time to time, and in Sky Lists Mobile\'s sole discretion. Sky Lists  Mobile encourages visitors to frequently check this page for any changes to its Privacy Policy. Your continued use of this app after any change in this Privacy Policy will finalitute your acceptance of such change.',
                 style: Theme.of(context).textTheme.body1,
               ),
               Divider(),
@@ -84,7 +84,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                     TextSpan(
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
-                          const url = 'mailto:contact@skylists.app';
+                          final url = 'mailto:contact@skylists.app';
                           if (await canLaunch(url)) {
                             await launch(url);
                           }
@@ -106,7 +106,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                     TextSpan(
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
-                          const url = 'mailto:biz@skylists.app';
+                          final url = 'mailto:biz@skylists.app';
                           if (await canLaunch(url)) {
                             await launch(url);
                           }
@@ -128,7 +128,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                     TextSpan(
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
-                          const url = 'mailto:legal@skylists.app';
+                          final url = 'mailto:legal@skylists.app';
                           if (await canLaunch(url)) {
                             await launch(url);
                           }

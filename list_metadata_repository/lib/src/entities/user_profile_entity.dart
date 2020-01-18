@@ -17,13 +17,6 @@ class UserProfileEntity extends Equatable {
     this.email,
   });
 
-  Map<String, Object> toJson() {
-    return {
-      'email': email,
-      'name': name,
-    };
-  }
-
   @override
   List<Object> get props => [
         name,
@@ -42,12 +35,5 @@ class UserProfileEntity extends Equatable {
       name: snapshot['name'] ?? '',
       email: snapshot['email'] ?? '',
     );
-  }
-
-  Map<String, Object> toDocument() {
-    return {
-      'name': name,
-      'email': email,
-    };
   }
 }

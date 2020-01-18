@@ -17,13 +17,6 @@ class ListSharedWithEntity extends Equatable {
     this.sharedAt,
   });
 
-  Map<String, Object> toJson() {
-    return {
-      'sharedWithId': sharedWithId,
-      'sharedAt': sharedAt.toDate().toString(),
-    };
-  }
-
   @override
   List<Object> get props => [
         sharedWithId,
@@ -42,12 +35,5 @@ class ListSharedWithEntity extends Equatable {
       sharedWithId: snapshot['sharedWithId'] ?? '',
       sharedAt: snapshot['sharedAt'] ?? Timestamp.now(),
     );
-  }
-
-  Map<String, Object> toDocument() {
-    return {
-      'sharedWithId': sharedWithId,
-      'sharedAt': sharedAt.toDate().toString(),
-    };
   }
 }

@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 abstract class RegisterEvent extends Equatable {
-  const RegisterEvent();
+  RegisterEvent();
 
   @override
   List<Object> get props => [];
@@ -71,7 +71,7 @@ class Submitted extends RegisterEvent {
   final String password;
   final String name;
 
-  const Submitted({
+  Submitted({
     @required this.email,
     @required this.password,
     @required this.name,

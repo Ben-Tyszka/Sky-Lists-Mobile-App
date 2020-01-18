@@ -38,8 +38,6 @@ class SkyListShareWithPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
           actions: <Widget>[
             IconButton(
               icon: Icon(CustomIcons.qrcode),

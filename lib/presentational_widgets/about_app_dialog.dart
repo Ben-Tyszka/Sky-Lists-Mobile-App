@@ -65,7 +65,7 @@ class AboutAppDialog extends StatelessWidget {
               TextSpan(
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
-                    const url = 'https://skylists.app';
+                    final url = 'https://skylists.app';
                     if (await canLaunch(url)) {
                       await launch(url);
                     }
@@ -87,7 +87,7 @@ class AboutAppDialog extends StatelessWidget {
               TextSpan(
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
-                    const url = 'mailto:contact@skylists.app';
+                    final url = 'mailto:contact@skylists.app';
                     if (await canLaunch(url)) {
                       await launch(url);
                     }
@@ -109,7 +109,7 @@ class AboutAppDialog extends StatelessWidget {
               TextSpan(
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
-                    const url = 'mailto:biz@skylists.app';
+                    final url = 'mailto:biz@skylists.app';
                     if (await canLaunch(url)) {
                       await launch(url);
                     }
@@ -131,7 +131,7 @@ class AboutAppDialog extends StatelessWidget {
               TextSpan(
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
-                    const url = 'mailto:legal@skylists.app';
+                    final url = 'mailto:legal@skylists.app';
                     if (await canLaunch(url)) {
                       await launch(url);
                     }
