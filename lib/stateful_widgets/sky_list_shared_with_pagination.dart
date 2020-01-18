@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:sky_lists/models/sky_list_meta.dart';
-import 'package:sky_lists/models/sky_list_share_page_meta.dart';
+import 'package:sky_lists/blocs/list_shared_with_bloc/bloc.dart';
+
 import 'package:sky_lists/presentational_widgets/sky_list_shared_with_builder.dart';
-import 'package:sky_lists/database_service.dart';
 
 class SkyListSharedWithPagination extends StatefulWidget {
   @override
@@ -16,99 +13,47 @@ class SkyListSharedWithPagination extends StatefulWidget {
 
 class _SkyListSharedWithPaginationState
     extends State<SkyListSharedWithPagination> {
-  ScrollController _controller;
-  List<SkyListSharePageMeta> _people = [];
-  bool _isLoading = true;
-  bool _morePeopleAvailable = true;
-  bool _gettingMorePeople = false;
-  SkyListSharePageMeta _lastPerson;
-
-  final _db = DatabaseService();
+  final _scrollController = ScrollController();
+  ListSharedWithBloc _bloc;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    _scrollController.addListener(_onScroll);
+    _bloc = BlocProvider.of<ListSharedWithBloc>(context);
 
-    _controller = ScrollController()
-      ..addListener(() {
-        final maxScroll = _controller.position.maxScrollExtent;
-        final current = _controller.position.pixels;
-        final delta = MediaQuery.of(context).size.height;
-
-        if (maxScroll - current <= delta) {
-          log('More list shared with people are set to be loaded',
-              name: 'SkyListSharedWithPagination didChangeDependencies()');
-          _loadMorePeople();
-        }
-      });
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    final list = Provider.of<SkyListMeta>(context);
-    assert(list != null);
-
-    _db
-        .streamListSharedWith(
-      list: Provider.of<SkyListMeta>(context),
-    )
-        .listen((snapshots) {
-      if (snapshots.isNotEmpty) {
-        _lastPerson = snapshots.last;
-      }
-      _people = snapshots;
-
-      setState(() {
-        _isLoading = false;
-      });
-      log('List shared with people were updated',
-          name: 'SkyListSharedWithPagination stream');
-    });
+    super.initState();
   }
 
-  _loadMorePeople() async {
-    if (!_morePeopleAvailable) return;
-    if (_gettingMorePeople) return;
-
-    setState(() {
-      _gettingMorePeople = true;
-    });
-
-    _db
-        .streamListSharedWith(
-      list: Provider.of<SkyListMeta>(context),
-      afterSharedAt: _lastPerson.sharedAt,
-    )
-        .listen((snapshots) {
-      if (snapshots.length < 10) {
-        _morePeopleAvailable = false;
-      }
-
-      _lastPerson = snapshots.last;
-
-      _people.addAll(snapshots);
-
-      setState(() {
-        _gettingMorePeople = false;
-      });
-      log('Additional shared with list people were updated',
-          name: 'SkyListSharedWithPagination _loadMoreLists()');
-    });
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    final delta = MediaQuery.of(context).size.height;
+    if (maxScroll - currentScroll <= delta) {
+      _bloc.add(LoadListSharedWith());
+    }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SkyListSharedWithBuilder(
-        controller: _controller,
-        data: _people,
-        isLoading: _isLoading,
-        isGettingMorePeople: _gettingMorePeople);
+    return BlocBuilder<ListSharedWithBloc, ListSharedWithState>(
+      builder: (context, state) {
+        if (state is ListSharedWithLoaded) {
+          return SkyListSharedWithBuilder(
+            controller: _scrollController,
+            hasReachedMax: state.hasReachedMax,
+            profiles: state.profiles,
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }

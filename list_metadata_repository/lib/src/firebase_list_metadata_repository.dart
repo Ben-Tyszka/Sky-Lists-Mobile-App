@@ -167,4 +167,20 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
         .get();
     return UserProfile.fromEntity(UserProfileEntity.fromSnapshot(query));
   }
+
+  @override
+  Future<void> unshareList(
+      UserProfile profileToUnshareWith, ListMetadata list) async {
+    await list.docRef
+        .collection("sharedwith")
+        .document(profileToUnshareWith.docRef.documentID)
+        .delete();
+
+    await Firestore.instance
+        .collection("users")
+        .document(profileToUnshareWith.docRef.documentID)
+        .collection("sharedwithme")
+        .document(list.id)
+        .delete();
+  }
 }

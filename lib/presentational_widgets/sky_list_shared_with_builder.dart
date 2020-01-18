@@ -1,62 +1,45 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sky_lists/models/sky_list_meta.dart';
-import 'package:sky_lists/models/sky_list_profile.dart';
-import 'package:sky_lists/models/sky_list_share_page_meta.dart';
-import 'package:sky_lists/database_service.dart';
+import 'package:list_metadata_repository/list_metadata_repository.dart';
+import 'package:sky_lists/blocs/list_shared_with_bloc/bloc.dart';
 
 class SkyListSharedWithBuilder extends StatelessWidget {
   SkyListSharedWithBuilder({
     @required this.controller,
-    @required this.data,
-    @required this.isLoading,
-    @required this.isGettingMorePeople,
+    @required this.profiles,
+    @required this.hasReachedMax,
   });
 
   final ScrollController controller;
-  final List<SkyListSharePageMeta> data;
-  final bool isLoading;
-  final bool isGettingMorePeople;
-
-  final _db = DatabaseService();
+  final List<UserProfile> profiles;
+  final bool hasReachedMax;
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
-        : ListView.builder(
-            controller: controller,
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              return FutureBuilder<SkyListProfile>(
-                future: _db.getUsersProfile(userId: data[index].sharedWithId),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return CircularProgressIndicator();
-                  return ListTile(
-                    title: Text(snapshot.data.name),
-                    subtitle: Text(snapshot.data.email),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        Provider.of<FirebaseAnalytics>(context)
-                            .logEvent(name: 'list_unshare');
+    if (profiles.isEmpty) return Text('List has not been shared with anyone');
+    return ListView.builder(
+      controller: controller,
+      itemCount: profiles.length,
+      itemBuilder: (context, index) {
+        final profile = profiles[index];
 
-                        _db.removeFromSharedList(
-                          list: Provider.of<SkyListMeta>(context),
-                          ownerId: Provider.of<FirebaseUser>(context).uid,
-                          sharedWithId: data[index].sharedWithId,
-                        );
-                      },
-                    ),
-                  );
-                },
+        return ListTile(
+          title: Text(profile.name),
+          trailing: IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              BlocProvider.of<ListSharedWithBloc>(context).add(
+                ListSharedWithUnshareUser(
+                  profile: profile,
+                  list: Provider.of<ListMetadata>(context),
+                ),
               );
             },
-          );
+          ),
+        );
+      },
+    );
   }
 }

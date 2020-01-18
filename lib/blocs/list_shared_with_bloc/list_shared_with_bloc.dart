@@ -88,28 +88,23 @@ class ListSharedWithBloc
       }
     } else if (event is ListSharedWithUpdated) {
       yield* _mapListSharedWithUpdatedToState(event);
+    } else if (event is ListSharedWithUnshareUser) {
+      yield* _mapListSharedWithUnshareUserToState(event);
     }
   }
 
   bool _hasReachedMax(ListSharedWithState state) =>
       state is ListSharedWithLoaded && state.hasReachedMax;
 
-  // Stream<ListSharedWithState> _mapLoadListSharedWithToState(
-  //     LoadListSharedWith event) async* {
-  //   _listSharedWithSubscription?.cancel();
-  //   _listSharedWithSubscription = _listRepository
-  //       .streamListSharedWith(event.list)
-  //       .listen((listSharedWith) {
-  //         add(
-  //               ListSharedWithUpdated(hasReachedMax: null, profiles: ),
-  //             ),
-  //       });
-  // }
-
   Stream<ListSharedWithState> _mapListSharedWithUpdatedToState(
       ListSharedWithUpdated event) async* {
     yield ListSharedWithLoaded(
         event.profiles, event.hasReachedMax, event.listSharedWith);
+  }
+
+  Stream<ListSharedWithState> _mapListSharedWithUnshareUserToState(
+      ListSharedWithUnshareUser event) async* {
+    _listRepository.unshareList(event.profile, event.list);
   }
 
   @override

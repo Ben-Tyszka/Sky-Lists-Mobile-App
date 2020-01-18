@@ -34,4 +34,6 @@ abstract class ListMetadataRepository {
 
   Future<UserProfile> listSharedWithToUserProfile(
       ListSharedWith listSharedWith);
+
+  Future<void> unshareList(UserProfile profileToUnshareWith, ListMetadata list);
 }

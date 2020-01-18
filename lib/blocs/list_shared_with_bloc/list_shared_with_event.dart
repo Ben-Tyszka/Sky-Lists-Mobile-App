@@ -36,3 +36,19 @@ class ListSharedWithUpdated extends ListSharedWithEvent {
         listSharedWith,
       ];
 }
+
+class ListSharedWithUnshareUser extends ListSharedWithEvent {
+  final UserProfile profile;
+  final ListMetadata list;
+
+  ListSharedWithUnshareUser({
+    this.profile,
+    this.list,
+  });
+
+  @override
+  List<Object> get props => [
+        profile,
+        list,
+      ];
+}

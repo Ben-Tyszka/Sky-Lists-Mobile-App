@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/share_list_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/share_with.dart';
@@ -7,9 +8,6 @@ import 'package:sky_lists/presentational_widgets/share_with.dart';
 import 'package:list_metadata_repository/list_metadata_repository.dart';
 
 class ShareWithForm extends StatefulWidget {
-  ShareWithForm({this.list});
-  final ListMetadata list;
-
   @override
   _ShareWithFormState createState() => _ShareWithFormState();
 }
@@ -58,7 +56,7 @@ class _ShareWithFormState extends State<ShareWithForm> {
     _shareBloc.add(
       Submitted(
         email: _emailController.text,
-        list: widget.list,
+        list: Provider.of<ListMetadata>(context),
       ),
     );
   }
