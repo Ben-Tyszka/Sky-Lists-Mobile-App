@@ -41,4 +41,7 @@ abstract class ListMetadataRepository {
 
   Stream<UserProfile> streamUserProfileFromListSharedWith(
       ListSharedWith listSharedWith);
+
+  Stream<ListMetadata> streamListMetaFromSharedWithMe(
+      SharedWithMe sharedWithMe);
 }

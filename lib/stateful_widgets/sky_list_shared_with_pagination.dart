@@ -51,7 +51,6 @@ class _SkyListSharedWithPaginationState
           return SkyListSharedWithBuilder(
             controller: _scrollController,
             listSharedWith: state.listSharedWith,
-            repo: widget.repo,
           );
         }
         return Center(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/list_shared_with_convert_bloc/list_shared_with_convert_profile_bloc.dart';
 import 'package:sky_lists/blocs/list_shared_with_convert_bloc/list_shared_with_convert_profile_event.dart';
@@ -12,12 +13,10 @@ class SkyListSharedWithBuilder extends StatelessWidget {
   SkyListSharedWithBuilder({
     @required this.controller,
     @required this.listSharedWith,
-    @required this.repo,
   });
 
   final ScrollController controller;
   final List<ListSharedWith> listSharedWith;
-  final ListMetadataRepository repo;
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +26,13 @@ class SkyListSharedWithBuilder extends StatelessWidget {
       controller: controller,
       itemCount: listSharedWith.length,
       itemBuilder: (context, index) {
-        final listSharedWithItem = listSharedWith[index];
-
         return BlocProvider(
-          create: (_) => ListSharedWithConvertProfileBloc(listRepository: repo)
-            ..add(
+          create: (_) => ListSharedWithConvertProfileBloc(
+            listRepository:
+                Provider.of<FirebaseListMetadataRepository>(context),
+          )..add(
               LoadListSharedWithConvertProfile(
-                sharedWith: listSharedWithItem,
+                sharedWith: listSharedWith[index],
               ),
             ),
           child: ListSharedWithUserTile(),

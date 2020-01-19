@@ -1,76 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:vibration/vibration.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
-import 'package:sky_lists/models/sky_list_shared_meta.dart';
-import 'package:sky_lists/models/sky_list_meta.dart';
-import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
-import 'package:sky_lists/presentational_widgets/shared_list_info_dialog.dart';
-import 'package:sky_lists/utils/timestamp_to_formmated_date.dart';
-import 'package:sky_lists/database_service.dart';
+import 'package:sky_lists/blocs/shared_with_me_convert_to_list_bloc/shared_with_me_convert_to_list_bloc.dart';
+import 'package:sky_lists/blocs/shared_with_me_convert_to_list_bloc/shared_with_me_convert_to_list_event.dart';
+
+import 'package:list_metadata_repository/list_metadata_repository.dart';
+import 'package:sky_lists/presentational_widgets/shared_lists_tile.dart';
 
 class SharedSkyListsBuilder extends StatelessWidget {
   SharedSkyListsBuilder({
     @required this.controller,
-    @required this.data,
-    @required this.isLoading,
-    @required this.isGettingMoreLists,
+    @required this.sharedWithMe,
+    @required this.hasReachedMax,
   });
 
   final ScrollController controller;
-  final List<SkyListSharedMeta> data;
-  final bool isLoading;
-  final bool isGettingMoreLists;
-
-  final _db = DatabaseService();
+  final List<SharedWithMe> sharedWithMe;
+  final bool hasReachedMax;
 
   @override
   Widget build(BuildContext context) {
-    final listView = ListView.builder(
+    if (sharedWithMe.length == 0)
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'No lists are shared with you',
+              style: Theme.of(context).primaryTextTheme.display1,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    return ListView.builder(
       controller: controller,
-      itemCount: data.length,
+      itemCount: sharedWithMe.length,
       itemBuilder: (context, index) {
-        final skyList = data[index];
-        return StreamBuilder(
-          stream: _db.streamListMetaFromSharedMeta(
-            list: skyList,
-          ),
-          builder: (context, AsyncSnapshot<SkyListMeta> snapshot) {
-            if (!snapshot.hasData) return CircularProgressIndicator();
-            return ListTile(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  SkyListPage.routeName,
-                  arguments: null, //SkyListPageArguments(snapshot.data),
-                );
-              },
-              onLongPress: () {
-                Vibration.vibrate();
-                showDialog(
-                  context: context,
-                  builder: (context) => SharedListInfoDialog(
-                    list: snapshot.data,
-                    sharedList: skyList,
-                  ),
-                );
-              },
-              title: Text(snapshot.data.name),
-              subtitle: Text(
-                timestampToFormmatedDate(snapshot.data.lastModified),
+        return BlocProvider(
+          create: (_) => SharedWithMeConvertToListBloc(
+            listRepository:
+                Provider.of<FirebaseListMetadataRepository>(context),
+          )..add(
+              LoadSharedWithMeConvertToList(
+                sharedWithMe: sharedWithMe[index],
               ),
-            );
-          },
+            ),
+          child: SharedListsTile(),
         );
       },
     );
-    return isLoading
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
-        : data.length == 0
-            ? Center(
-                child: Text('No Lists Have Been Shared With You'),
-              )
-            : listView;
   }
 }
