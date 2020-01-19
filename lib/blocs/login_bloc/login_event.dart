@@ -42,24 +42,6 @@ class HidePasswordChanged extends LoginEvent {
   String toString() => 'HidePasswordChanged toggled';
 }
 
-class Submitted extends LoginEvent {
-  final String email;
-  final String password;
-
-  Submitted({
-    @required this.email,
-    @required this.password,
-  });
-
-  @override
-  List<Object> get props => [email, password];
-
-  @override
-  String toString() {
-    return 'Submitted { email: $email, password: $password }';
-  }
-}
-
 class LoginWithGooglePressed extends LoginEvent {}
 
 class LoginWithEmailAndPasswordPressed extends LoginEvent {
