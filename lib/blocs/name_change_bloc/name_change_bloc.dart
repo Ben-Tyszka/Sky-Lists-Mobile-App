@@ -1,15 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:sky_lists/blocs/name_change_bloc/bloc.dart';
 
 import 'package:sky_lists/repositories/user_repository.dart';
+
 import 'package:sky_lists/utils/validation.dart';
 
 class NameChangeBloc extends Bloc<NameChangeEvent, NameChangeState> {
@@ -57,26 +55,11 @@ class NameChangeBloc extends Bloc<NameChangeEvent, NameChangeState> {
 
   Stream<NameChangeState> _mapSubmittedToState(String name) async* {
     yield NameChangeState.loading();
-    // try {
-    //   await _userRepository.signInWithEmailAndPassword(email, password);
-    //   yield NameChangeState.success();
-    // } on PlatformException catch (error) {
-    //   if (error.code.contains('ERROR_INVALID_EMAIL') ||
-    //       error.code.contains('ERROR_WRONG_PASSWORD')) {
-    //     yield NameChangeState.failure('Wrong Email/Password');
-    //   } else if (error.code.contains('ERROR_USER_NOT_FOUND') ||
-    //       error.code.contains('ERROR_USER_DISABLED')) {
-    //     yield NameChangeState.failure('User does not exist');
-    //   } else if (error.code.contains('ERROR_TOO_MANY_REQUESTS')) {
-    //     yield NameChangeState.failure('Too many login requests');
-    //   } else {
-    //     log(
-    //       'Login error',
-    //       name: 'NameChangeBloc _mapLoginWithEmailAndPasswordPressedToState',
-    //       error: jsonEncode(error),
-    //     );
-    //     yield NameChangeState.failure('Internal error, try again later');
-    //   }
-    // }
+    try {
+      _userRepository.changeName(name: name);
+      yield NameChangeState.success();
+    } catch (_) {
+      yield NameChangeState.failure('Error, try again later');
+    }
   }
 }

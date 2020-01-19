@@ -4,18 +4,26 @@ import 'package:sky_lists/utils/validation.dart';
 
 class NameChange extends StatelessWidget {
   NameChange({
+    @required this.isSubmitting,
+    @required this.onFormSubmitted,
+    @required this.nameController,
+    @required this.isFailure,
+    @required this.isSubmitButtonEnabled,
+    @required this.failureMessage,
     @required this.formKey,
-    @required this.controller,
-    @required this.isLoading,
-    @required this.onSaved,
-    @required this.submit,
   });
 
+  final TextEditingController nameController;
+
+  final bool isSubmitting;
+  final bool isFailure;
+  final bool isSubmitButtonEnabled;
+
+  final Function onFormSubmitted;
+
+  final String failureMessage;
+
   final GlobalKey<FormState> formKey;
-  final TextEditingController controller;
-  final bool isLoading;
-  final void Function(String) onSaved;
-  final void Function() submit;
 
   @override
   Widget build(BuildContext context) {
@@ -28,27 +36,38 @@ class NameChange extends StatelessWidget {
         child: Column(
           children: <Widget>[
             TextFormField(
+              controller: nameController,
               decoration: InputDecoration(
+                filled: true,
                 labelText: 'Name',
-                hintText: 'Your name',
-                counterText: '',
+                counterText: "",
                 icon: Icon(Icons.person),
               ),
               autocorrect: false,
-              maxLength: 50,
-              controller: controller,
-              validator: validateFullName,
-              enabled: !isLoading,
-              onSaved: onSaved,
+              autovalidate: true,
+              enabled: !isSubmitting,
+              maxLength: 100,
+              validator: (val) => val.isEmpty ? null : validateFullName(val),
             ),
             SizedBox(
               height: 20.0,
             ),
-            !isLoading
+            if (isFailure) ...[
+              Text(
+                failureMessage,
+                style: Theme.of(context).primaryTextTheme.body1.copyWith(
+                      color: Theme.of(context).errorColor,
+                    ),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+            ],
+            !isSubmitting
                 ? OutlineButton.icon(
                     label: Text('Change Name'),
                     icon: Icon(Icons.update),
-                    onPressed: submit,
+                    onPressed: isSubmitButtonEnabled ? onFormSubmitted : null,
                   )
                 : CircularProgressIndicator(),
           ],

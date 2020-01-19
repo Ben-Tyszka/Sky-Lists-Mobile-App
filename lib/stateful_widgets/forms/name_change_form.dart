@@ -1,77 +1,83 @@
-// import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:provider/provider.dart';
-// import 'package:sky_lists/database_service.dart';
 
-// import 'package:sky_lists/presentational_widgets/name_change.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_lists/blocs/authentication_bloc/authentication_state.dart';
+import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 
-// class NameChangeForm extends StatefulWidget {
-//   @override
-//   _NameChangeFormState createState() => _NameChangeFormState();
-// }
+import 'package:sky_lists/blocs/name_change_bloc/bloc.dart';
 
-// class NameData {
-//   String name = '';
-// }
+import 'package:sky_lists/presentational_widgets/name_change.dart';
 
-// class _NameChangeFormState extends State<NameChangeForm> {
-//   final _formKey = GlobalKey<FormState>();
-//   final _db = DatabaseService();
+class NameChangeForm extends StatefulWidget {
+  @override
+  _NameChangeFormState createState() => _NameChangeFormState();
+}
 
-//   TextEditingController _controller;
-//   bool _isLoading = false;
-//   NameData _data = NameData();
+class _NameChangeFormState extends State<NameChangeForm> {
+  final _formKey = GlobalKey<FormState>();
 
-//   @override
-//   void didChangeDependencies() {
-//     super.didChangeDependencies();
-//     final user = Provider.of<FirebaseUser>(context);
-//     _controller = TextEditingController(text: user?.displayName ?? '');
-//   }
+  NameChangeBloc _nameBloc;
 
-//   _submit() async {
-//     if (_formKey.currentState.validate()) {
-//       setState(() {
-//         _isLoading = true;
-//       });
+  TextEditingController _nameController;
 
-//       _formKey.currentState.save();
+  String nameVal;
 
-//       final user = Provider.of<FirebaseUser>(context, listen: false);
-//       final userUpdateInfo = UserUpdateInfo();
-//       userUpdateInfo.displayName = _data.name;
-//       user.updateProfile(userUpdateInfo);
+  bool get isPopulated => _nameController.text.isNotEmpty;
 
-//       _db.updateDisplayName(userId: user.uid, newName: _data.name);
+  bool isSubmitButtonEnabled(NameChangeState state) {
+    return state.isFormValid && isPopulated && !state.isSubmitting;
+  }
 
-//       Provider.of<FirebaseAnalytics>(context).logEvent(name: 'name_change');
+  @override
+  void initState() {
+    super.initState();
+    _nameBloc = BlocProvider.of<NameChangeBloc>(context);
+    _nameController.addListener(_onNameChanged);
+    _nameController = TextEditingController(
+      text:
+          (BlocProvider.of<AuthenticationBloc>(context).state as Authenticated)
+              .user
+              .displayName,
+    );
+  }
 
-//       _formKey.currentState.reset();
-//     }
-//     setState(() {
-//       _isLoading = false;
-//     });
-//   }
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
 
-//   void _onSaved(String val) {
-//     _data.name = val;
-//   }
+  void _onNameChanged() {
+    if (nameVal == _nameController.text) return;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return NameChange(
-//       controller: _controller,
-//       formKey: _formKey,
-//       isLoading: _isLoading,
-//       onSaved: _onSaved,
-//       submit: _submit,
-//     );
-//   }
-// }
-class NameChangeForm extends StatelessWidget {
+    setState(() {
+      nameVal = _nameController.text;
+    });
+    _nameBloc.add(
+      NameChanged(name: _nameController.text),
+    );
+  }
+
+  void _onFormSubmitted() {
+    _nameBloc.add(
+      Submitted(name: _nameController.text),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return BlocBuilder<NameChangeBloc, NameChangeState>(
+      builder: (context, state) {
+        return NameChange(
+          formKey: _formKey,
+          nameController: _nameController,
+          isSubmitting: state.isSubmitting,
+          onFormSubmitted: _onFormSubmitted,
+          isFailure: state.isFailure,
+          isSubmitButtonEnabled: isSubmitButtonEnabled(state),
+          failureMessage: state.failureMessage,
+        );
+      },
+    );
   }
 }

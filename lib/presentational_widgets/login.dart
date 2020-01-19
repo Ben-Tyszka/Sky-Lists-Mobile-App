@@ -5,17 +5,18 @@ import 'package:sky_lists/presentational_widgets/pages/send_password_reset_page.
 import 'package:sky_lists/utils/validation.dart';
 
 class Login extends StatelessWidget {
-  Login(
-      {@required this.isSubmitting,
-      @required this.hidePassword,
-      @required this.onFormSubmitted,
-      @required this.emailController,
-      @required this.passwordController,
-      @required this.togglePasswordHide,
-      @required this.isFailure,
-      @required this.isLoginButtonEnabled,
-      @required this.failureMessage,
-      @required this.formKey});
+  Login({
+    @required this.isSubmitting,
+    @required this.hidePassword,
+    @required this.onFormSubmitted,
+    @required this.emailController,
+    @required this.passwordController,
+    @required this.togglePasswordHide,
+    @required this.isFailure,
+    @required this.isLoginButtonEnabled,
+    @required this.failureMessage,
+    @required this.formKey,
+  });
 
   final TextEditingController emailController;
   final TextEditingController passwordController;
