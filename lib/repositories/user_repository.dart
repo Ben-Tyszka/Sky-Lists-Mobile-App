@@ -48,8 +48,8 @@ class UserRepository {
         .collection('users')
         .document(result.user.uid)
         .setData({
-      "name": name,
-      "email": email,
+      'name': name,
+      'email': email,
     });
 
     return result;

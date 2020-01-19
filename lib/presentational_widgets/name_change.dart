@@ -40,7 +40,7 @@ class NameChange extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 labelText: 'Name',
-                counterText: "",
+                counterText: '',
                 icon: Icon(Icons.person),
               ),
               autocorrect: false,

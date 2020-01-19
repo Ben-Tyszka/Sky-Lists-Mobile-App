@@ -119,7 +119,7 @@ class _SendPasswordResetFormState extends State<SendPasswordResetForm> {
               TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  counterText: "",
+                  counterText: '',
                   hintText: 'you@example.com',
                   icon: Icon(Icons.email),
                 ),

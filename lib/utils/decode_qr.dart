@@ -22,7 +22,7 @@ DecodeData decodeQR(String raw) {
   // Splits raw string into two parts
   final data = raw.split(QrCodeAlertDialog.centerPart);
   // If wrong format, throw error
-  if (data.length == 0 || data == [""]) {
+  if (data.length == 0 || data == ['']) {
     throw Error();
   }
   // If wrong format, throw error

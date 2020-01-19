@@ -41,7 +41,7 @@ class _AboutAppState extends State<AboutApp> {
     }
 
     setState(() {
-      version = "v$projectVersion+$projectCode for $platformVersion";
+      version = 'v$projectVersion+$projectCode for $platformVersion';
     });
   }
 

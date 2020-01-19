@@ -57,10 +57,10 @@ class ListMetadataEntity extends Equatable {
 
   Map<String, Object> toDocument() {
     return {
-      "name": name,
-      "archived": archived,
-      "lastModified": lastModified,
-      "hidden": hidden,
+      'name': name,
+      'archived': archived,
+      'lastModified': lastModified,
+      'hidden': hidden,
     };
   }
 }

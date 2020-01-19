@@ -47,7 +47,7 @@ class ChangePassword extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 labelText: 'Email',
-                counterText: "",
+                counterText: '',
                 hintText: 'you@example.com',
                 icon: Icon(Icons.email),
               ),
@@ -66,7 +66,7 @@ class ChangePassword extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 labelText: 'Password',
-                counterText: "",
+                counterText: '',
                 icon: Icon(
                   Icons.lock,
                 ),
@@ -93,7 +93,7 @@ class ChangePassword extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 labelText: 'New Password',
-                counterText: "",
+                counterText: '',
                 icon: Icon(
                   Icons.lock_outline,
                 ),

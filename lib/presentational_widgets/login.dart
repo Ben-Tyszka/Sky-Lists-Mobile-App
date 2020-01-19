@@ -49,7 +49,7 @@ class Login extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 labelText: 'Email',
-                counterText: "",
+                counterText: '',
                 hintText: 'you@example.com',
                 icon: Icon(Icons.email),
               ),
@@ -68,7 +68,7 @@ class Login extends StatelessWidget {
               decoration: InputDecoration(
                 filled: true,
                 labelText: 'Password',
-                counterText: "",
+                counterText: '',
                 icon: Icon(
                   Icons.lock,
                 ),

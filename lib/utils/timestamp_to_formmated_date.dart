@@ -8,7 +8,7 @@ String timestampToFormmatedDate(dynamic timestamp) {
 
   try {
     final castedTimestamp = timestamp as Timestamp;
-    return 'Last Modified: ${DateFormat("EEE MMM d,").add_jm().format(castedTimestamp.toDate())}';
+    return 'Last Modified: ${DateFormat('EEE MMM d,').add_jm().format(castedTimestamp.toDate())}';
   } catch (_) {
     return 'Loading...';
   }

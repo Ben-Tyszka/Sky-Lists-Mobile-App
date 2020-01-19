@@ -36,7 +36,7 @@ class FirebaseListItemsRepository implements ListItemsRepository {
     int limit = 10,
   }) {
     final baseQuery = _collection.limit(limit).orderBy(
-          "addedAt",
+          'addedAt',
         );
     final startAfterQuery = baseQuery.startAfter([addedAtTimestamp]);
     final query = addedAtTimestamp == null ? baseQuery : startAfterQuery;

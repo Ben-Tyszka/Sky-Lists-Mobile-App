@@ -41,7 +41,7 @@ class ShareWith extends StatelessWidget {
                 controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Email to share with',
-                  counterText: "",
+                  counterText: '',
                   hintText: 'you@example.com',
                   icon: Icon(Icons.email),
                 ),
