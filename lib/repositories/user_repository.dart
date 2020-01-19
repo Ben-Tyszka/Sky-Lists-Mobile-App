@@ -85,4 +85,73 @@ class UserRepository {
 
     await user.reload();
   }
+
+  Future<void> deleteAccount() async {
+    final user = await _firebaseAuth.currentUser();
+    assert(user != null);
+
+    final listDocs = await Firestore.instance
+        .collection('shopping lists')
+        .document(user.uid)
+        .collection('lists')
+        .getDocuments();
+
+    listDocs.documents.forEach((doc) async {
+      final peopleListIsSharedWith =
+          await doc.reference.collection('sharedwith').getDocuments();
+
+      peopleListIsSharedWith.documents.forEach((personSharedWith) async {
+        await Firestore.instance
+            .collection('users')
+            .document(personSharedWith.documentID)
+            .collection('sharedwithme')
+            .document(doc.documentID)
+            .delete();
+      });
+    });
+
+    await Firestore.instance
+        .collection('shopping lists')
+        .document(user.uid)
+        .delete();
+
+    await Firestore.instance.collection('users').document(user.uid).delete();
+    // Note: Share history is preserved with users that had shared a list with this user
+    user.delete();
+  }
+
+  Future<void> reauthenticateWithEmailAndPassword(
+    String email,
+    String password,
+  ) async {
+    final user = await _firebaseAuth.currentUser();
+    assert(user != null);
+
+    final authCred = EmailAuthProvider.getCredential(
+      email: email,
+      password: password,
+    );
+
+    final result = await user.reauthenticateWithCredential(authCred);
+
+    return result;
+  }
+
+  Future<void> reauthenticateWithGoogle() async {
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    final AuthCredential authCred = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final user = await _firebaseAuth.currentUser();
+    assert(user != null);
+
+    final result = await user.reauthenticateWithCredential(authCred);
+
+    return result;
+  }
 }

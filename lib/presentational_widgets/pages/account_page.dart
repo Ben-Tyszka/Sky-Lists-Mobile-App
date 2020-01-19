@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 
-import 'package:sky_lists/presentational_widgets/delete_account.dart';
 import 'package:sky_lists/presentational_widgets/pages/change_password_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
+import 'package:sky_lists/presentational_widgets/pages/require_reauthentication_page.dart';
 import 'package:sky_lists/presentational_widgets/sign_out_button.dart';
 
 import 'package:sky_lists/stateful_widgets/about_app.dart';
 import 'package:sky_lists/stateful_widgets/forms/name_change_form.dart';
+import 'package:sky_lists/utils/reauth_type_argument.dart';
 
 class AccountPage extends StatelessWidget {
   static final routeName = '/account_page';
@@ -81,6 +82,11 @@ class AccountPage extends StatelessWidget {
                             ),
                             onPressed: () {
                               state.user.sendEmailVerification();
+                              Scaffold.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Email sent, check your inbox'),
+                                ),
+                              );
                             },
                           ),
                         ],
@@ -90,7 +96,20 @@ class AccountPage extends StatelessWidget {
                   Divider(),
                   SignOutButton(),
                   Divider(),
-                  DeleteAccount(),
+                  RaisedButton.icon(
+                    color: Theme.of(context).errorColor,
+                    icon: Icon(Icons.delete_forever),
+                    label: Text('Delete Account'),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        RequireReauthenticationPage.routeName,
+                        arguments: ReauthTypeArgument(
+                          SensitiveOperationType.DELETE_ACCOUNT,
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             );

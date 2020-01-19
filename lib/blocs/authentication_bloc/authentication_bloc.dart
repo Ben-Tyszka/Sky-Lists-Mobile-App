@@ -26,6 +26,8 @@ class AuthenticationBloc
       yield* _mapLoggedInToState();
     } else if (event is LoggedOut) {
       yield* _mapLoggedOutToState();
+    } else if (event is DeleteUsersAccount) {
+      yield* _mapDeleteUsersAccountToState();
     }
   }
 
@@ -50,5 +52,10 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
     yield Unauthenticated();
     _userRepository.signOut();
+  }
+
+  Stream<AuthenticationState> _mapDeleteUsersAccountToState() async* {
+    yield Unauthenticated();
+    _userRepository.deleteAccount();
   }
 }

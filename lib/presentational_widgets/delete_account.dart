@@ -1,53 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-enum ConfirmDelete { YES, NO }
+import 'package:sky_lists/blocs/authentication_bloc/authentication_bloc.dart';
+import 'package:sky_lists/blocs/authentication_bloc/authentication_event.dart';
+
+import 'package:sky_lists/blocs/require_reauthentication/bloc.dart';
 
 class DeleteAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return RaisedButton.icon(
-      color: Theme.of(context).errorColor,
-      icon: Icon(Icons.delete_forever),
-      label: Text('Hold to Delete Account'),
-      onPressed: () {},
-      onLongPress: () async {
-        switch (await showDialog(
-          context: context,
-          builder: (context) => SimpleDialog(
-            title: Text(
-              'Confirm Delete Account',
-              textAlign: TextAlign.center,
-            ),
-            children: <Widget>[
-              Text(
-                'Caution: All data will be lost.',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).primaryTextTheme.body2,
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              SimpleDialogOption(
-                child: Text('Yes, delete my account'),
-                onPressed: () {
-                  Navigator.pop(context, ConfirmDelete.YES);
-                },
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              SimpleDialogOption(
-                child: Text('No, do not delete my account'),
-                onPressed: () {
-                  Navigator.pop(context, ConfirmDelete.YES);
-                },
-              ),
-            ],
-          ),
-        )) {
-          case ConfirmDelete.YES:
-          //TODO: Delete account
-        }
+    return BlocBuilder<RequireReauthenticationBloc,
+        RequireReauthenticationState>(
+      builder: (context, state) {
+        return RaisedButton.icon(
+          color: Theme.of(context).errorColor,
+          icon: Icon(Icons.delete_forever),
+          label: Text('Hold to Delete Account'),
+          onPressed: state.isSuccess ? () {} : null,
+          onLongPress: state.isSuccess
+              ? () {
+                  BlocProvider.of<AuthenticationBloc>(context).add(
+                    DeleteUsersAccount(),
+                  );
+                }
+              : null,
+        );
       },
     );
   }
