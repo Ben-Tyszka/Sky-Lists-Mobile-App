@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:sky_lists/database_service.dart';
-import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 
 enum ConfirmDelete { YES, NO }
-
-final _db = DatabaseService();
 
 class DeleteAccount extends StatelessWidget {
   @override
@@ -53,16 +46,7 @@ class DeleteAccount extends StatelessWidget {
           ),
         )) {
           case ConfirmDelete.YES:
-            final user = Provider.of<FirebaseUser>(
-              context,
-              listen: false,
-            );
-            await _db.deleteUser(userId: user.uid);
-            await user.delete();
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              NotLoggedInPage.routeName,
-              (Route<dynamic> route) => false,
-            );
+          //TODO: Delete account
         }
       },
     );

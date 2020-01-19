@@ -47,7 +47,10 @@ class SharedSkyListsBuilder extends StatelessWidget {
                 sharedWithMe: sharedWithMe[index],
               ),
             ),
-          child: SharedListsTile(),
+          child: Provider(
+            create: (_) => sharedWithMe[index],
+            child: SharedListsTile(),
+          ),
         );
       },
     );

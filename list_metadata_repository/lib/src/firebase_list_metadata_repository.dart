@@ -231,4 +231,18 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
           ),
         );
   }
+
+  @override
+  Stream<UserProfile> streamUserProfileFromSharedWithMe(
+      SharedWithMe sharedWithMe) {
+    return Firestore.instance
+        .collection('users')
+        .document(sharedWithMe.owner)
+        .snapshots()
+        .map(
+          (docSnapshot) => UserProfile.fromEntity(
+            UserProfileEntity.fromSnapshot(docSnapshot),
+          ),
+        );
+  }
 }

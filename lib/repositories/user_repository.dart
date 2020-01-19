@@ -1,20 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import 'package:sky_lists/database_service.dart';
 
 class UserRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
-  final DatabaseService _db;
 
   UserRepository({
     FirebaseAuth firebaseAuth,
     GoogleSignIn googleSignin,
-    DatabaseService db,
   })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _googleSignIn = googleSignin ?? GoogleSignIn(),
-        _db = db ?? DatabaseService();
+        _googleSignIn = googleSignin ?? GoogleSignIn();
 
   Future<FirebaseUser> signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
@@ -48,11 +44,13 @@ class UserRepository {
       password: password,
     );
 
-    _db.updateUserProfile(
-      userId: result.user.uid,
-      email: email,
-      name: name,
-    );
+    await Firestore.instance
+        .collection('users')
+        .document(result.user.uid)
+        .setData({
+      "name": name,
+      "email": email,
+    });
 
     return result;
   }
@@ -81,7 +79,10 @@ class UserRepository {
     userUpdateInfo.displayName = name;
     await user.updateProfile(userUpdateInfo);
 
-    await _db.updateDisplayName(userId: user.uid, newName: name);
+    await Firestore.instance.collection('users').document(user.uid).updateData({
+      'name': name,
+    });
+
     await user.reload();
   }
 }
