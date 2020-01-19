@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
@@ -114,12 +112,6 @@ class RequireReauthenticationBloc
         yield RequireReauthenticationState.failure(
             'User not found or has been disabled');
       } else {
-        log(
-          'Login error',
-          name:
-              'RequireReauthenticationBloc _mapLoginWithEmailAndPasswordPressedToState',
-          error: jsonEncode(error),
-        );
         yield RequireReauthenticationState.failure('Error, try again later');
       }
     }

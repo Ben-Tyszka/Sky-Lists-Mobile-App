@@ -154,4 +154,13 @@ class UserRepository {
 
     return result;
   }
+
+  Future<void> changePassword(
+    String newPassword,
+  ) async {
+    final user = await _firebaseAuth.currentUser();
+    assert(user != null);
+
+    return await user.updatePassword(newPassword);
+  }
 }
