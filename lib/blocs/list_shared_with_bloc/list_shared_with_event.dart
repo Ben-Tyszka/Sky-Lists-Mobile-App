@@ -19,19 +19,16 @@ class LoadListSharedWith extends ListSharedWithEvent {
 }
 
 class ListSharedWithUpdated extends ListSharedWithEvent {
-  final List<UserProfile> profiles;
   final List<ListSharedWith> listSharedWith;
   final bool hasReachedMax;
 
   ListSharedWithUpdated({
-    this.profiles,
     this.hasReachedMax,
     this.listSharedWith,
   });
 
   @override
   List<Object> get props => [
-        profiles,
         hasReachedMax,
         listSharedWith,
       ];

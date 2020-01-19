@@ -1,43 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
+
+import 'package:sky_lists/blocs/list_shared_with_convert_bloc/list_shared_with_convert_profile_bloc.dart';
+import 'package:sky_lists/blocs/list_shared_with_convert_bloc/list_shared_with_convert_profile_event.dart';
+
+import 'package:sky_lists/presentational_widgets/list_shared_with_user_tile.dart';
 
 import 'package:list_metadata_repository/list_metadata_repository.dart';
-import 'package:sky_lists/blocs/list_shared_with_bloc/bloc.dart';
 
 class SkyListSharedWithBuilder extends StatelessWidget {
   SkyListSharedWithBuilder({
     @required this.controller,
-    @required this.profiles,
-    @required this.hasReachedMax,
+    @required this.listSharedWith,
+    @required this.repo,
   });
 
   final ScrollController controller;
-  final List<UserProfile> profiles;
-  final bool hasReachedMax;
+  final List<ListSharedWith> listSharedWith;
+  final ListMetadataRepository repo;
 
   @override
   Widget build(BuildContext context) {
-    if (profiles.isEmpty) return Text('List has not been shared with anyone');
+    if (listSharedWith.isEmpty)
+      return Text('List has not been shared with anyone');
     return ListView.builder(
       controller: controller,
-      itemCount: profiles.length,
+      itemCount: listSharedWith.length,
       itemBuilder: (context, index) {
-        final profile = profiles[index];
+        final listSharedWithItem = listSharedWith[index];
 
-        return ListTile(
-          title: Text(profile.name),
-          trailing: IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () {
-              BlocProvider.of<ListSharedWithBloc>(context).add(
-                ListSharedWithUnshareUser(
-                  profile: profile,
-                  list: Provider.of<ListMetadata>(context),
-                ),
-              );
-            },
-          ),
+        return BlocProvider(
+          create: (_) => ListSharedWithConvertProfileBloc(listRepository: repo)
+            ..add(
+              LoadListSharedWithConvertProfile(
+                sharedWith: listSharedWithItem,
+              ),
+            ),
+          child: ListSharedWithUserTile(),
         );
       },
     );

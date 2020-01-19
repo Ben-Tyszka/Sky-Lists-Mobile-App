@@ -69,7 +69,7 @@ class SkyListShareWithPage extends StatelessWidget {
                       create: (_) => ListSharedWithBloc(
                         listRepository: repo,
                       )..add(LoadListSharedWith()),
-                      child: SkyListSharedWithPagination(),
+                      child: SkyListSharedWithPagination(repo),
                     ),
                     Divider(),
                     BlocProvider(

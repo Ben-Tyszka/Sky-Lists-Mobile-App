@@ -38,4 +38,7 @@ abstract class ListMetadataRepository {
     Timestamp afterSharedAt,
     int limit = 10,
   });
+
+  Stream<UserProfile> streamUserProfileFromListSharedWith(
+      ListSharedWith listSharedWith);
 }

@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sky_lists/blocs/list_shared_with_bloc/bloc.dart';
-
 import 'package:sky_lists/presentational_widgets/sky_list_shared_with_builder.dart';
 
+import 'package:list_metadata_repository/list_metadata_repository.dart';
+
 class SkyListSharedWithPagination extends StatefulWidget {
+  SkyListSharedWithPagination(this.repo);
+
+  final ListMetadataRepository repo;
   @override
   _SkyListSharedWithPaginationState createState() =>
       _SkyListSharedWithPaginationState();
@@ -46,8 +50,8 @@ class _SkyListSharedWithPaginationState
         if (state is ListSharedWithLoaded) {
           return SkyListSharedWithBuilder(
             controller: _scrollController,
-            hasReachedMax: state.hasReachedMax,
-            profiles: state.profiles,
+            listSharedWith: state.listSharedWith,
+            repo: widget.repo,
           );
         }
         return Center(

@@ -12,23 +12,19 @@ abstract class ListSharedWithState extends Equatable {
 class ListSharedWithLoading extends ListSharedWithState {}
 
 class ListSharedWithLoaded extends ListSharedWithState {
-  final List<UserProfile> profiles;
   final List<ListSharedWith> listSharedWith;
   final bool hasReachedMax;
 
   ListSharedWithLoaded(
-    this.profiles,
     this.hasReachedMax,
     this.listSharedWith,
   );
 
   ListSharedWithLoaded copyWith({
-    List<UserProfile> profiles,
     bool hasReachedMax,
     List<ListSharedWith> listSharedWith,
   }) {
     return ListSharedWithLoaded(
-      profiles ?? this.profiles,
       hasReachedMax ?? this.hasReachedMax,
       listSharedWith ?? this.listSharedWith,
     );
@@ -36,14 +32,13 @@ class ListSharedWithLoaded extends ListSharedWithState {
 
   @override
   List<Object> get props => [
-        profiles,
         hasReachedMax,
         listSharedWith,
       ];
 
   @override
   String toString() =>
-      'ListSharedWithLoaded | profiles: $profiles, hasReachedMax: $hasReachedMax, listSharedWith: $listSharedWith';
+      'ListSharedWithLoaded | hasReachedMax: $hasReachedMax, listSharedWith: $listSharedWith';
 }
 
 class ListSharedWithNotLoaded extends ListSharedWithState {}

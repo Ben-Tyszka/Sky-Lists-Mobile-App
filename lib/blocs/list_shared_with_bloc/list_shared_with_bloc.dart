@@ -45,7 +45,6 @@ class ListSharedWithBloc
             (listSharedWith) {
               if (listSharedWith.isEmpty) {
                 add(ListSharedWithUpdated(
-                  profiles: currentState.profiles,
                   hasReachedMax: true,
                   listSharedWith: currentState.listSharedWith,
                 ));
@@ -89,8 +88,7 @@ class ListSharedWithBloc
 
   Stream<ListSharedWithState> _mapListSharedWithUpdatedToState(
       ListSharedWithUpdated event) async* {
-    yield ListSharedWithLoaded(
-        event.profiles, event.hasReachedMax, event.listSharedWith);
+    yield ListSharedWithLoaded(event.hasReachedMax, event.listSharedWith);
   }
 
   Stream<ListSharedWithState> _mapListSharedWithUnshareUserToState(
