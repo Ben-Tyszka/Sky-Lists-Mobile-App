@@ -98,14 +98,13 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
   //For list title
 
   Stream<ListMetadataState> _mapLoadListToState(LoadListMetadata event) async* {
-    _listTitleSubscription =
-        _listsRepository.streamListTitle(event.list).listen(
-              (newList) => add(ListUpdated(newList)),
-            );
+    _listTitleSubscription = _listsRepository.streamList(event.list).listen(
+          (newList) => add(ListUpdated(newList)),
+        );
   }
 
   Stream<ListMetadataState> _mapListUpdateToState(ListUpdated event) async* {
-    yield ListTitleLoaded(
+    yield ListLoaded(
       event.list,
     );
   }

@@ -40,13 +40,13 @@ class ListMetadatasLoaded extends ListMetadataState {
 
 class ListMetadataNotLoaded extends ListMetadataState {}
 
-class ListTitleLoaded extends ListMetadataState {
+class ListLoaded extends ListMetadataState {
   final ListMetadata list;
 
-  ListTitleLoaded(this.list);
+  ListLoaded(this.list);
 
-  ListTitleLoaded copyWith({ListMetadata list}) {
-    return ListTitleLoaded(
+  ListLoaded copyWith({ListMetadata list}) {
+    return ListLoaded(
       list ?? this.list,
     );
   }
@@ -55,5 +55,5 @@ class ListTitleLoaded extends ListMetadataState {
   List<Object> get props => [list];
 
   @override
-  String toString() => 'ListTitleLoaded | list: $list';
+  String toString() => 'ListLoaded | list: $list';
 }

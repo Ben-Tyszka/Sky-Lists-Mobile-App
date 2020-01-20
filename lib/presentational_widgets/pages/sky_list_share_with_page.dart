@@ -3,18 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
-import 'package:sky_lists/blocs/commonly_shared_with_state.bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
-import 'package:sky_lists/blocs/list_shared_with_bloc/bloc.dart';
-import 'package:sky_lists/blocs/share_list_bloc/bloc.dart';
 
-import 'package:sky_lists/presentational_widgets/common_shared_with.dart';
-import 'package:sky_lists/presentational_widgets/list_share_settings_button.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/qr_code_dialog.dart';
-
-import 'package:sky_lists/stateful_widgets/forms/share_with_form.dart';
-import 'package:sky_lists/stateful_widgets/sky_list_shared_with_pagination.dart';
+import 'package:sky_lists/presentational_widgets/share_with_page_column.dart';
 
 import 'package:sky_lists/utils/custom_icons.dart';
 import 'package:sky_lists/utils/sky_list_page_arguments.dart';
@@ -64,42 +57,14 @@ class SkyListShareWithPage extends StatelessWidget {
           builder: (context, state) {
             if (state is Authenticated) {
               final repo = FirebaseListMetadataRepository(state.user.uid);
-              return Provider(
-                create: (_) => args.list,
+              return BlocProvider<ListMetadataBloc>(
+                create: (_) => ListMetadataBloc(
+                  listsRepository: repo,
+                )..add(LoadListMetadata(args.list)),
                 child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      BlocProvider(
-                        create: (_) => ShareListBloc(
-                          listMetadataRepository: repo,
-                        ),
-                        child: ShareWithForm(),
-                      ),
-                      BlocProvider<ListMetadataBloc>(
-                        create: (_) => ListMetadataBloc(
-                          listsRepository:
-                              FirebaseListMetadataRepository(state.user.uid),
-                        )..add(LoadListMetadata(args.list)),
-                        child: ListShareSettingsButton(),
-                      ),
-                      BlocProvider(
-                        create: (_) => CommonlySharedWithBloc(
-                          listRepository: repo,
-                        )..add(LoadCommonlySharedWith()),
-                        child: CommonSharedWith(),
-                      ),
-                      Divider(),
-                      BlocProvider(
-                        create: (_) => ListSharedWithBloc(
-                          listRepository: repo,
-                        )..add(
-                            LoadListSharedWith(
-                              list: args.list,
-                            ),
-                          ),
-                        child: SkyListSharedWithPagination(repo),
-                      ),
-                    ],
+                  child: Provider(
+                    create: (_) => repo,
+                    child: ShareWithPageColumn(),
                   ),
                 ),
               );

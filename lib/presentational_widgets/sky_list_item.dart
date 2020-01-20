@@ -73,7 +73,7 @@ class SkyListItem extends StatelessWidget {
 
     return BlocBuilder<ListMetadataBloc, ListMetadataState>(
       builder: (context, state) {
-        if (state is ListTitleLoaded) {
+        if (state is ListLoaded) {
           return !state.list.othersCanDeleteItems &&
                   !Provider.of<FirebaseListMetadataRepository>(context)
                       .isOwner(state.list)

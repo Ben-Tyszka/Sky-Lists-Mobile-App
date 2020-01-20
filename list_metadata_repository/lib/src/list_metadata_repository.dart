@@ -20,7 +20,7 @@ abstract class ListMetadataRepository {
 
   Future<void> updateList(ListMetadata list);
 
-  Stream<ListMetadata> streamListTitle(ListMetadata list);
+  Stream<ListMetadata> streamList(ListMetadata list);
 
   Future<void> shareListWith({
     ListMetadata list,

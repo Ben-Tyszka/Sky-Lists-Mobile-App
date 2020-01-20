@@ -15,7 +15,7 @@ class ListShareSettingsButton extends StatelessWidget {
     if (_listRepo.isOwner(list))
       return BlocBuilder<ListMetadataBloc, ListMetadataState>(
         builder: (context, state) {
-          if (state is ListTitleLoaded) {
+          if (state is ListLoaded) {
             return Column(
               children: <Widget>[
                 Row(

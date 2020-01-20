@@ -64,7 +64,7 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   }
 
   @override
-  Stream<ListMetadata> streamListTitle(ListMetadata list) {
+  Stream<ListMetadata> streamList(ListMetadata list) {
     return list.docRef.snapshots().map((snapshot) =>
         ListMetadata.fromEntity(ListMetadataEntity.fromSnapshot(snapshot)));
   }

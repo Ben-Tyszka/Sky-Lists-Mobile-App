@@ -27,7 +27,7 @@ class _ListTitleFormState extends State<ListTitleForm> {
 
     _titleController.addListener(onChange);
     BlocProvider.of<ListMetadataBloc>(context).listen((state) {
-      if (state is ListTitleLoaded) {
+      if (state is ListLoaded) {
         setState(() {
           previousValue = state.list.name;
           _titleController.value =
@@ -59,7 +59,7 @@ class _ListTitleFormState extends State<ListTitleForm> {
   Widget build(BuildContext context) {
     return BlocBuilder<ListMetadataBloc, ListMetadataState>(
       builder: (_, state) {
-        if (state is ListTitleLoaded) {
+        if (state is ListLoaded) {
           return ListTitle(
             controller: _titleController,
           );
