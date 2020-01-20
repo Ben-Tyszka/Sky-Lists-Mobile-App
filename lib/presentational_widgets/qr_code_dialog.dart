@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:list_metadata_repository/list_metadata_repository.dart';

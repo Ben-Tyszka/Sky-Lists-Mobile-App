@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:list_metadata_repository/list_metadata_repository.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
@@ -16,6 +16,8 @@ import 'package:sky_lists/stateful_widgets/sky_list_pagination.dart';
 import 'package:sky_lists/utils/sky_list_page_arguments.dart';
 
 import 'package:list_items_repository/list_items_repository.dart';
+
+import 'package:list_metadata_repository/list_metadata_repository.dart';
 
 class SkyListPage extends StatelessWidget {
   static final String routeName = '/list';
@@ -36,13 +38,23 @@ class SkyListPage extends StatelessWidget {
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is Authenticated) {
-            return BlocProvider(
-              create: (_) => ListItemsBloc(
-                itemsRepository: FirebaseListItemsRepository(
-                  args.list,
-                  state.user.uid,
+            final repo = FirebaseListMetadataRepository(state.user.uid);
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<ListMetadataBloc>(
+                  create: (_) => ListMetadataBloc(
+                    listsRepository: repo,
+                  )..add(LoadListMetadata(args.list)),
                 ),
-              )..add(LoadListItems()),
+                BlocProvider<ListItemsBloc>(
+                  create: (_) => ListItemsBloc(
+                    itemsRepository: FirebaseListItemsRepository(
+                      args.list,
+                      state.user.uid,
+                    ),
+                  )..add(LoadListItems()),
+                ),
+              ],
               child: Scaffold(
                 appBar: AppBar(
                   actions: <Widget>[
@@ -62,17 +74,12 @@ class SkyListPage extends StatelessWidget {
                       );
                     },
                   ),
-                  title: BlocProvider<ListMetadataBloc>(
-                    create: (_) => ListMetadataBloc(
-                      listsRepository:
-                          FirebaseListMetadataRepository(state.user.uid),
-                    )..add(LoadListMetadata(args.list)),
-                    child: ListTitleForm(
-                      list: args.list,
-                    ),
-                  ),
+                  title: ListTitleForm(list: args.list),
                 ),
-                body: SkyListPagination(),
+                body: Provider(
+                  create: (_) => repo,
+                  child: SkyListPagination(),
+                ),
               ),
             );
           } else {
