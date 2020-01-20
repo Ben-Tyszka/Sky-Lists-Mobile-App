@@ -108,9 +108,13 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
           _passwordController.text = '';
           _newPasswordController.text = '';
           _emailController.text = '';
-          Navigator.of(context).popAndPushNamed(
-            AccountPage.routeName,
-          );
+          Future.delayed(
+            Duration(seconds: 2),
+          ).then((_) {
+            Navigator.of(context).popAndPushNamed(
+              AccountPage.routeName,
+            );
+          });
         } else if (state.isFailure) {
           _passwordController.text = '';
           _newPasswordController.text = '';
@@ -119,6 +123,16 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
       },
       child: BlocBuilder<ChangePasswordBloc, ChangePasswordState>(
         builder: (context, state) {
+          if (state.isSuccess)
+            return Center(
+              child: Column(
+                children: <Widget>[
+                  Text('Password Changed Sucessfully!'),
+                  CircularProgressIndicator(),
+                ],
+              ),
+            );
+
           return ChangePassword(
             emailController: _emailController,
             isSubmitting: state.isSubmitting,

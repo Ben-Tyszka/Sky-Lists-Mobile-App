@@ -49,15 +49,17 @@ class AccountPage extends StatelessWidget {
                   ),
                   if (state.user.isEmailVerified) ...[
                     NameChangeForm(),
-                    //TODO: Hide this for people not on email/password logins
-                    FlatButton.icon(
-                      icon: Icon(Icons.lock_outline),
-                      label: Text('Change Password'),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context, ChangePasswordPage.routeName);
-                      },
-                    ),
+                    if (state.user.providerData[1].providerId
+                        .contains('password')) ...[
+                      FlatButton.icon(
+                        icon: Icon(Icons.lock_outline),
+                        label: Text('Change Password'),
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, ChangePasswordPage.routeName);
+                        },
+                      ),
+                    ],
                   ] else ...[
                     Card(
                       elevation: 2,
