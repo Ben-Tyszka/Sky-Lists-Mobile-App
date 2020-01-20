@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
+import 'package:sky_lists/blocs/shared_permission_bloc/shared_permission_bloc.dart';
+import 'package:sky_lists/blocs/shared_permission_bloc/shared_permission_event.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/qr_code_dialog.dart';
@@ -57,10 +59,23 @@ class SkyListShareWithPage extends StatelessWidget {
           builder: (context, state) {
             if (state is Authenticated) {
               final repo = FirebaseListMetadataRepository(state.user.uid);
-              return BlocProvider<ListMetadataBloc>(
-                create: (_) => ListMetadataBloc(
-                  listsRepository: repo,
-                )..add(LoadListMetadata(args.list)),
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<ListMetadataBloc>(
+                    create: (_) => ListMetadataBloc(
+                      listsRepository: repo,
+                    )..add(
+                        LoadListMetadata(args.list),
+                      ),
+                  ),
+                  BlocProvider<SharedPermissionBloc>(
+                    create: (_) => SharedPermissionBloc(
+                      listRepository: repo,
+                    )..add(
+                        LoadSharedPermission(list: args.list),
+                      ),
+                  ),
+                ],
                 child: SingleChildScrollView(
                   child: Provider(
                     create: (_) => repo,

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:list_metadata_repository/list_metadata_repository.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
+import 'package:sky_lists/blocs/shared_permission_bloc/bloc.dart';
+import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 
 import 'package:sky_lists/presentational_widgets/sky_list_builder.dart';
 
@@ -42,19 +46,32 @@ class _SkyListPaginationState extends State<SkyListPagination> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListItemsBloc, ListItemsState>(
-      builder: (context, state) {
-        if (state is ListItemsLoaded) {
-          return SkyListBuilder(
-            controller: _scrollController,
-            hasReachedMax: state.hasReachedMax,
-            items: state.items,
+    return BlocListener<SharedPermissionBloc, SharedPermissionState>(
+      listener: (context, state) {
+        if (state is SharedPermissionNotAllowed &&
+            !Provider.of<FirebaseListMetadataRepository>(context).isOwner(
+              (Provider.of<ListMetadataBloc>(context).state as ListLoaded).list,
+            )) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            LoggedInHomePage.routeName,
+            (Route<dynamic> route) => false,
           );
         }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
       },
+      child: BlocBuilder<ListItemsBloc, ListItemsState>(
+        builder: (context, state) {
+          if (state is ListItemsLoaded) {
+            return SkyListBuilder(
+              controller: _scrollController,
+              hasReachedMax: state.hasReachedMax,
+              items: state.items,
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      ),
     );
   }
 }

@@ -57,4 +57,6 @@ abstract class ListMetadataRepository {
 
   Future<void> setListPermission(
       ListPermission permission, bool state, ListMetadata list);
+
+  Stream<bool> streamListSharedWithYouIsAllowed(ListMetadata list);
 }

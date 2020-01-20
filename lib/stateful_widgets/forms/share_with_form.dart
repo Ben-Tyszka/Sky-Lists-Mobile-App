@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 import 'package:sky_lists/blocs/share_list_bloc/bloc.dart';
+import 'package:sky_lists/blocs/shared_permission_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/share_with.dart';
 
@@ -42,6 +43,7 @@ class _ShareWithFormState extends State<ShareWithForm> {
     super.dispose();
     BlocProvider.of<ShareListBloc>(context)?.close();
     BlocProvider.of<ListMetadataBloc>(context)?.close();
+    BlocProvider.of<SharedPermissionBloc>(context)?.close();
 
     _emailController.dispose();
   }

@@ -263,4 +263,13 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
       });
     return null;
   }
+
+  @override
+  Stream<bool> streamListSharedWithYouIsAllowed(ListMetadata list) {
+    return list.docRef.collection('sharedwith').snapshots().map(
+          (query) => query.documents
+              .where((doc) => doc.documentID == _userId)
+              .isNotEmpty,
+        );
+  }
 }

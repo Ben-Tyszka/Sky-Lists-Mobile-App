@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
+import 'package:sky_lists/blocs/shared_permission_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/share_list_button.dart';
@@ -53,6 +54,13 @@ class SkyListPage extends StatelessWidget {
                       state.user.uid,
                     ),
                   )..add(LoadListItems()),
+                ),
+                BlocProvider<SharedPermissionBloc>(
+                  create: (_) => SharedPermissionBloc(
+                    listRepository: repo,
+                  )..add(
+                      LoadSharedPermission(list: args.list),
+                    ),
                 ),
               ],
               child: Scaffold(

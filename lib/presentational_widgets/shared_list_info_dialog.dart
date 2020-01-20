@@ -43,6 +43,10 @@ class SharedListInfoDialog extends StatelessWidget {
           Text(
             'Last modified: ${timestampToFormmatedDate(state.list.lastModified)}',
           ),
+          Text(
+              '''Can share list with others? ${state.list.othersCanShareList ? 'Yes' : 'No'}'''),
+          Text(
+              '''Can delete list items? ${state.list.othersCanDeleteItems ? 'Yes' : 'No'}'''),
           SizedBox(
             height: 10,
           ),
