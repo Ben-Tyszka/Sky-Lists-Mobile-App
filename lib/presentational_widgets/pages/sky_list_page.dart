@@ -6,11 +6,11 @@ import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 
-import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/share_list_button.dart';
-import 'package:sky_lists/stateful_widgets/forms/list_title_form.dart';
+import 'package:sky_lists/presentational_widgets/sky_list_page_leading.dart';
 
+import 'package:sky_lists/stateful_widgets/forms/list_title_form.dart';
 import 'package:sky_lists/stateful_widgets/sky_list_pagination.dart';
 
 import 'package:sky_lists/utils/sky_list_page_arguments.dart';
@@ -63,17 +63,7 @@ class SkyListPage extends StatelessWidget {
                       list: args.list,
                     ),
                   ],
-                  leading: IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        LoggedInHomePage.routeName,
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                  ),
+                  leading: SkyListPageLeading(),
                   title: ListTitleForm(list: args.list),
                 ),
                 body: Provider(
@@ -83,10 +73,6 @@ class SkyListPage extends StatelessWidget {
               ),
             );
           } else {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              NotLoggedInPage.routeName,
-              (Route<dynamic> route) => false,
-            );
             return Center(
               child: CircularProgressIndicator(),
             );

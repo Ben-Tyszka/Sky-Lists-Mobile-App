@@ -75,5 +75,3 @@ class ListUpdated extends ListMetadataEvent {
   @override
   List<Object> get props => [list];
 }
-
-class EndStreams extends ListMetadataEvent {}

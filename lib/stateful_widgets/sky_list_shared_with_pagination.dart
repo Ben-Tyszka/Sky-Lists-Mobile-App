@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 
 import 'package:sky_lists/blocs/list_shared_with_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/sky_list_shared_with_builder.dart';
@@ -40,6 +41,8 @@ class _SkyListSharedWithPaginationState
   @override
   void dispose() {
     _scrollController.dispose();
+    BlocProvider.of<ListSharedWithBloc>(context)?.close();
+    BlocProvider.of<ListMetadataBloc>(context)?.close();
     super.dispose();
   }
 

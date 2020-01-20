@@ -31,10 +31,3 @@ class SharedWithMeUpdated extends SharedWithMeEvent {
         sharedWithMe,
       ];
 }
-
-class EndStreams extends SharedWithMeEvent {
-  EndStreams();
-
-  @override
-  List<Object> get props => [];
-}

@@ -65,9 +65,6 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
       yield* _mapLoadListToState(event);
     } else if (event is ListUpdated) {
       yield* _mapListUpdateToState(event);
-    } else if (event is EndStreams) {
-      _listsSubscription?.cancel();
-      _listTitleSubscription?.cancel();
     }
   }
 

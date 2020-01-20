@@ -44,6 +44,7 @@ class _NameChangeFormState extends State<NameChangeForm> {
   @override
   void dispose() {
     _nameController.dispose();
+    BlocProvider.of<NameChangeBloc>(context).close();
     super.dispose();
   }
 

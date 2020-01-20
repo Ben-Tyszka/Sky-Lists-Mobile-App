@@ -70,8 +70,6 @@ class SharedWithMeBloc extends Bloc<SharedWithMeEvent, SharedWithMeState> {
       }
     } else if (event is SharedWithMeUpdated) {
       yield* _mapSharedWithMeUpdateToState(event);
-    } else if (event is EndStreams) {
-      _sharedWithMeSubscription?.cancel();
     }
   }
 

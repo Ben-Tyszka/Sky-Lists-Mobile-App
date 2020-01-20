@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
+import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 import 'package:sky_lists/blocs/share_list_bloc/bloc.dart';
+
 import 'package:sky_lists/presentational_widgets/share_with.dart';
 
 import 'package:list_metadata_repository/list_metadata_repository.dart';
@@ -38,6 +40,9 @@ class _ShareWithFormState extends State<ShareWithForm> {
   @override
   void dispose() {
     super.dispose();
+    BlocProvider.of<ShareListBloc>(context)?.close();
+    BlocProvider.of<ListMetadataBloc>(context)?.close();
+
     _emailController.dispose();
   }
 
