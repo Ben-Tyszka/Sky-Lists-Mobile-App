@@ -20,6 +20,10 @@ class ListMetadataEntity extends Equatable {
   /// Name of the list
   final String name;
 
+  final bool othersCanShareList;
+
+  final bool othersCanDeleteItems;
+
   ListMetadataEntity({
     this.id,
     this.name,
@@ -27,6 +31,8 @@ class ListMetadataEntity extends Equatable {
     this.hidden,
     this.archived,
     this.lastModified,
+    this.othersCanDeleteItems,
+    this.othersCanShareList,
   });
 
   @override
@@ -37,11 +43,13 @@ class ListMetadataEntity extends Equatable {
         docRef,
         lastModified,
         hidden,
+        othersCanDeleteItems,
+        othersCanShareList,
       ];
 
   @override
   String toString() {
-    return 'ListMetadataEntity | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden';
+    return 'ListMetadataEntity | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden, othersCanShareList: $othersCanShareList, othersCanDeleteItems: $othersCanDeleteItems';
   }
 
   static ListMetadataEntity fromSnapshot(DocumentSnapshot snapshot) {
@@ -52,6 +60,8 @@ class ListMetadataEntity extends Equatable {
       archived: snapshot['archived'] ?? false,
       lastModified: snapshot['lastModified'] ?? FieldValue.serverTimestamp(),
       hidden: snapshot['hidden'] ?? false,
+      othersCanDeleteItems: snapshot['othersCanDeleteItems'] ?? true,
+      othersCanShareList: snapshot['othersCanShareList'] ?? true,
     );
   }
 
@@ -61,6 +71,8 @@ class ListMetadataEntity extends Equatable {
       'archived': archived,
       'lastModified': lastModified,
       'hidden': hidden,
+      'othersCanShareList': othersCanShareList,
+      'othersCanShareList': othersCanShareList,
     };
   }
 }

@@ -245,4 +245,22 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
           ),
         );
   }
+
+  bool isOwner(ListMetadata list) {
+    return list.id == _userId;
+  }
+
+  Future<void> setListPermission(
+      ListPermission permission, bool state, ListMetadata list) {
+    if (!isOwner(list)) return null;
+    if (permission == ListPermission.OTHERS_CAN_DELETE_ITEMS)
+      return list.docRef.updateData({
+        'othersCanDeleteItems': state,
+      });
+    if (permission == ListPermission.OTHERS_CAN_SHARE_LIST)
+      return list.docRef.updateData({
+        'othersCanShareList': state,
+      });
+    return null;
+  }
 }

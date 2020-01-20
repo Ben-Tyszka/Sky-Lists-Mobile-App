@@ -22,6 +22,10 @@ class ListMetadata {
   /// Name of the list
   final String name;
 
+  final bool othersCanShareList;
+
+  final bool othersCanDeleteItems;
+
   ListMetadata(
     this.name, {
     bool archived,
@@ -29,11 +33,15 @@ class ListMetadata {
     String id,
     dynamic lastModified,
     DocumentReference docRef,
+    bool othersCanShareList,
+    bool othersCanDeleteItems,
   })  : this.archived = archived ?? false,
         this.hidden = hidden ?? false,
         this.lastModified = lastModified ?? FieldValue.serverTimestamp(),
         this.id = id ?? '',
-        this.docRef = docRef ?? null;
+        this.docRef = docRef ?? null,
+        this.othersCanShareList = othersCanShareList ?? true,
+        this.othersCanDeleteItems = othersCanDeleteItems ?? true;
 
   ListMetadata copyWith({
     String id,
@@ -42,6 +50,8 @@ class ListMetadata {
     dynamic lastModified,
     DocumentReference docRef,
     String name,
+    bool othersCanShareList,
+    bool othersCanDeleteItems,
   }) {
     return ListMetadata(
       name,
@@ -50,6 +60,8 @@ class ListMetadata {
       hidden: hidden ?? this.hidden,
       id: id ?? this.id,
       lastModified: lastModified ?? this.lastModified,
+      othersCanShareList: othersCanShareList ?? this.othersCanShareList,
+      othersCanDeleteItems: othersCanDeleteItems ?? this.othersCanDeleteItems,
     );
   }
 
@@ -60,7 +72,9 @@ class ListMetadata {
       hidden.hashCode ^
       id.hashCode ^
       docRef.hashCode ^
-      lastModified.hashCode;
+      lastModified.hashCode ^
+      othersCanDeleteItems.hashCode ^
+      othersCanShareList.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -72,11 +86,13 @@ class ListMetadata {
           hidden == other.hidden &&
           id == other.id &&
           archived == other.archived &&
-          lastModified == other.lastModified;
+          lastModified == other.lastModified &&
+          othersCanDeleteItems == other.othersCanDeleteItems &&
+          othersCanShareList == other.othersCanShareList;
 
   @override
   String toString() {
-    return 'ListMetadata | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden';
+    return 'ListMetadata | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden, othersCanShareList: $othersCanShareList, othersCanDeleteItems: $othersCanDeleteItems';
   }
 
   ListMetadataEntity toEntity() {
@@ -87,6 +103,8 @@ class ListMetadata {
       id: id,
       lastModified: lastModified,
       name: name,
+      othersCanDeleteItems: othersCanDeleteItems,
+      othersCanShareList: othersCanShareList,
     );
   }
 
@@ -98,6 +116,8 @@ class ListMetadata {
       hidden: entity.hidden,
       id: entity.id,
       lastModified: entity.lastModified,
+      othersCanDeleteItems: entity.othersCanDeleteItems,
+      othersCanShareList: entity.othersCanShareList,
     );
   }
 }

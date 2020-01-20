@@ -3,6 +3,11 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:list_metadata_repository/list_metadata_repository.dart';
 
+enum ListPermission {
+  OTHERS_CAN_DELETE_ITEMS,
+  OTHERS_CAN_SHARE_LIST,
+}
+
 abstract class ListMetadataRepository {
   Future<void> addNewList(ListMetadata list);
 
@@ -47,4 +52,9 @@ abstract class ListMetadataRepository {
 
   Stream<UserProfile> streamUserProfileFromSharedWithMe(
       SharedWithMe sharedWithMe);
+
+  bool isOwner(ListMetadata list);
+
+  Future<void> setListPermission(
+      ListPermission permission, bool state, ListMetadata list);
 }
