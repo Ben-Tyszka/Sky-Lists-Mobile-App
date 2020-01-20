@@ -44,12 +44,14 @@ class SkyListShareWithPage extends StatelessWidget {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => QrCodeAlertDialog(),
+                  builder: (context) => QrCodeAlertDialog(
+                    list: args.list,
+                  ),
                 );
               },
             ),
           ],
-          title: Text('Share List'),
+          title: Text('Share'),
           leading: IconButton(
             icon: Icon(Icons.close),
             onPressed: () {
@@ -63,35 +65,37 @@ class SkyListShareWithPage extends StatelessWidget {
               final repo = FirebaseListMetadataRepository(state.user.uid);
               return Provider(
                 create: (_) => args.list,
-                child: Column(
-                  children: <Widget>[
-                    BlocProvider(
-                      create: (_) => ListSharedWithBloc(
-                        listRepository: repo,
-                      )..add(LoadListSharedWith()),
-                      child: SkyListSharedWithPagination(repo),
-                    ),
-                    Divider(),
-                    BlocProvider(
-                      create: (_) => CommonlySharedWithBloc(
-                        listRepository: repo,
-                      )..add(LoadCommonlySharedWith()),
-                      child: CommonSharedWith(),
-                    ),
-                    BlocProvider(
-                      create: (_) => ShareListBloc(
-                        listMetadataRepository: repo,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      BlocProvider(
+                        create: (_) => ShareListBloc(
+                          listMetadataRepository: repo,
+                        ),
+                        child: ShareWithForm(),
                       ),
-                      child: ShareWithForm(),
-                    ),
-                  ],
+                      BlocProvider(
+                        create: (_) => CommonlySharedWithBloc(
+                          listRepository: repo,
+                        )..add(LoadCommonlySharedWith()),
+                        child: CommonSharedWith(),
+                      ),
+                      Divider(),
+                      BlocProvider(
+                        create: (_) => ListSharedWithBloc(
+                          listRepository: repo,
+                        )..add(
+                            LoadListSharedWith(
+                              list: args.list,
+                            ),
+                          ),
+                        child: SkyListSharedWithPagination(repo),
+                      ),
+                    ],
+                  ),
                 ),
               );
             } else {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                NotLoggedInPage.routeName,
-                (Route<dynamic> route) => false,
-              );
               return Center(
                 child: CircularProgressIndicator(),
               );

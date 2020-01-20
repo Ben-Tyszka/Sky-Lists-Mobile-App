@@ -20,24 +20,42 @@ class SkyListSharedWithBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (listSharedWith.isEmpty)
-      return Text('List has not been shared with anyone');
-    return ListView.builder(
-      controller: controller,
-      itemCount: listSharedWith.length,
-      itemBuilder: (context, index) {
-        return BlocProvider(
-          create: (_) => ListSharedWithConvertProfileBloc(
-            listRepository:
-                Provider.of<FirebaseListMetadataRepository>(context),
-          )..add(
-              LoadListSharedWithConvertProfile(
-                sharedWith: listSharedWith[index],
-              ),
-            ),
-          child: ListSharedWithUserTile(),
-        );
-      },
+    return Column(
+      children: <Widget>[
+        Text(
+          'Shared With',
+          style: Theme.of(context).primaryTextTheme.title,
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        if (listSharedWith.isEmpty) ...[
+          Text(
+            'List has not been shared with anyone.',
+            style: Theme.of(context).primaryTextTheme.body1,
+            textAlign: TextAlign.center,
+          ),
+        ] else ...[
+          ListView.builder(
+            controller: controller,
+            itemCount: listSharedWith.length,
+            itemBuilder: (context, index) {
+              return BlocProvider(
+                create: (_) => ListSharedWithConvertProfileBloc(
+                  listRepository:
+                      Provider.of<FirebaseListMetadataRepository>(context),
+                )..add(
+                    LoadListSharedWithConvertProfile(
+                      sharedWith: listSharedWith[index],
+                    ),
+                  ),
+                child: ListSharedWithUserTile(),
+              );
+            },
+          ),
+        ],
+      ],
     );
   }
 }

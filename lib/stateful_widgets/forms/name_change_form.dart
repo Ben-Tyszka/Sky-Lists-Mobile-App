@@ -32,13 +32,13 @@ class _NameChangeFormState extends State<NameChangeForm> {
   void initState() {
     super.initState();
     _nameBloc = BlocProvider.of<NameChangeBloc>(context);
-    _nameController.addListener(_onNameChanged);
     _nameController = TextEditingController(
       text:
           (BlocProvider.of<AuthenticationBloc>(context).state as Authenticated)
               .user
               .displayName,
     );
+    _nameController.addListener(_onNameChanged);
   }
 
   @override

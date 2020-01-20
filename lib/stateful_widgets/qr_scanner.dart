@@ -30,15 +30,20 @@ class _QRScannerState extends State<QRScanner> {
 
   @override
   Widget build(BuildContext context) {
-    return CameraMlVision<List<Barcode>>(
-      detector: FirebaseVision.instance
-          .barcodeDetector(
-            BarcodeDetectorOptions(
-              barcodeFormats: BarcodeFormat.qrCode,
-            ),
-          )
-          .detectInImage,
-      onResult: _onResult,
+    return SafeArea(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: CameraMlVision<List<Barcode>>(
+          detector: FirebaseVision.instance
+              .barcodeDetector(
+                BarcodeDetectorOptions(
+                  barcodeFormats: BarcodeFormat.qrCode,
+                ),
+              )
+              .detectInImage,
+          onResult: _onResult,
+        ),
+      ),
     );
   }
 }

@@ -10,17 +10,36 @@ class CommonSharedWith extends StatelessWidget {
     return BlocBuilder<CommonlySharedWithBloc, CommonlySharedWithState>(
       builder: (context, state) {
         if (state is CommonlySharedWithLoaded) {
-          if (state.profiles.isEmpty) return Container();
-          return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: state.profiles.length,
-            itemBuilder: (context, index) {
-              return ActionChip(
-                onPressed: () {},
-                label: Text(state.profiles[index].name),
-                backgroundColor: RandomColor().randomColor(),
-              );
-            },
+          return Column(
+            children: <Widget>[
+              Text(
+                'Suggestions',
+                style: Theme.of(context).primaryTextTheme.title,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              if (state.profiles.isEmpty) ...[
+                Text(
+                  'None at this time, use the app to generate suggestions',
+                  style: Theme.of(context).primaryTextTheme.body1,
+                  textAlign: TextAlign.center,
+                ),
+              ] else ...[
+                ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.profiles.length,
+                  itemBuilder: (context, index) {
+                    return ActionChip(
+                      onPressed: () {},
+                      label: Text(state.profiles[index].name),
+                      backgroundColor: RandomColor().randomColor(),
+                    );
+                  },
+                ),
+              ],
+            ],
           );
         } else {
           return Center(

@@ -24,6 +24,7 @@ class ListSharedWithBloc
     final currentState = state;
     if (event is LoadListSharedWith && !_hasReachedMax(currentState)) {
       try {
+        _listSharedWithSubscription?.cancel();
         if (currentState is ListSharedWithLoading) {
           _listSharedWithSubscription =
               _listRepository.streamListSharedWith(event.list).listen(

@@ -56,7 +56,10 @@ class _ShareWithFormState extends State<ShareWithForm> {
     _shareBloc.add(
       Submitted(
         email: _emailController.text,
-        list: Provider.of<ListMetadata>(context),
+        list: Provider.of<ListMetadata>(
+          context,
+          listen: false,
+        ),
       ),
     );
   }
