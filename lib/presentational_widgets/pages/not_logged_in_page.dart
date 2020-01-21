@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
@@ -18,8 +17,6 @@ import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart'
 import 'package:sky_lists/repositories/user_repository.dart';
 
 import 'package:sky_lists/stateful_widgets/forms/login_form.dart';
-
-import 'package:sky_lists/utils/authentication_service.dart';
 
 /// Page user sees when not logged in
 class NotLoggedInPage extends StatelessWidget {
@@ -94,13 +91,6 @@ class NotLoggedInPage extends StatelessWidget {
                     },
                   ),
                   GoogleSignIn(),
-                  FacebookSignInButton(
-                    borderRadius: 18,
-                    onPressed: () {
-                      // Starts facebook login flow
-                      loginToFacebook(context);
-                    },
-                  ),
                 ],
               ),
             ),

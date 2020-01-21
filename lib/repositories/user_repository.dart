@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class UserRepository {
@@ -56,6 +57,16 @@ class UserRepository {
   }
 
   Future<void> signOut() async {
+    final user = await FirebaseAuth.instance.currentUser();
+    String fcmToken = await FirebaseMessaging().getToken();
+
+    Firestore.instance
+        .collection('users')
+        .document(user.uid)
+        .collection('tokens')
+        .document(fcmToken)
+        .delete();
+
     return Future.wait([
       _firebaseAuth.signOut(),
       _googleSignIn.signOut(),
