@@ -16,7 +16,7 @@ class UserRepository {
     FirebaseMessaging firebaseMessaging,
   })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _googleSignIn = googleSignin ?? GoogleSignIn(),
-        _firebaseMessaging = firebaseMessaging ?? FirebaseMessaging;
+        _firebaseMessaging = firebaseMessaging ?? FirebaseMessaging();
 
   Future<FirebaseUser> signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();

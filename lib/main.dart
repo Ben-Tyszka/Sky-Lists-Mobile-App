@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import 'package:sky_lists/presentational_widgets/sky_lists_app.dart';
+import 'package:sky_lists/stateful_widgets/sky_lists_app.dart';
 import 'package:sky_lists/repositories/user_repository.dart';
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/utils/app_bloc_delagate.dart';

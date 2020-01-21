@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/login_bloc/bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/google_sign_in.dart';
 import 'package:sky_lists/presentational_widgets/pages/create_account_page.dart';
@@ -24,9 +25,10 @@ class NotLoggedInPage extends StatelessWidget {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) async {
         if (state is Authenticated) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            LoggedInHomePage.routeName,
-            (Route<dynamic> route) => false,
+          BlocProvider.of<NavigatorBloc>(context).add(
+            NavigatorReplace(
+              LoggedInHomePage.routeName,
+            ),
           );
         }
       },

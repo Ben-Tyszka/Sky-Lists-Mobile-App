@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 
@@ -37,9 +38,17 @@ class _StartupPageState extends State<StartupPage> {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) async {
         if (state is Authenticated) {
-          Navigator.pushReplacementNamed(context, LoggedInHomePage.routeName);
+          BlocProvider.of<NavigatorBloc>(context).add(
+            NavigatorReplace(
+              LoggedInHomePage.routeName,
+            ),
+          );
         } else if (state is Unauthenticated) {
-          Navigator.pushReplacementNamed(context, NotLoggedInPage.routeName);
+          BlocProvider.of<NavigatorBloc>(context).add(
+            NavigatorReplace(
+              NotLoggedInPage.routeName,
+            ),
+          );
         }
       },
       child: Scaffold(

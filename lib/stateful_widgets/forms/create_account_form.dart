@@ -113,38 +113,12 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     );
   }
 
-  _routeToHomePage() async {
-    final FirebaseMessaging _fcm = Provider.of<FirebaseMessaging>(context);
-
-    String fcmToken = await _fcm.getToken();
-    final user = await FirebaseAuth.instance.currentUser();
-
-    if (fcmToken != null) {
-      final tokens = Firestore.instance
-          .collection('users')
-          .document(user.uid)
-          .collection('tokens')
-          .document(fcmToken);
-
-      await tokens.setData({
-        'token': fcmToken,
-        'createdAt': FieldValue.serverTimestamp(),
-        'platform': Platform.operatingSystem,
-      });
-    }
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      LoggedInHomePage.routeName,
-      (Route<dynamic> route) => false,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-          _routeToHomePage();
         } else if (state.isFailure) {
           _passwordController.text = '';
         }
