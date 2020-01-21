@@ -1,7 +1,3 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,29 +16,8 @@ class StartupPage extends StatefulWidget {
 }
 
 class _StartupPageState extends State<StartupPage> {
-  _routeToHomePage(BuildContext context, FirebaseUser user) async {
-    final FirebaseMessaging _fcm = Provider.of<FirebaseMessaging>(context);
-
-    String fcmToken = await _fcm.getToken();
-
-    if (fcmToken != null) {
-      final tokens = Firestore.instance
-          .collection('users')
-          .document(user.uid)
-          .collection('tokens')
-          .document(fcmToken);
-
-      await tokens.setData({
-        'token': fcmToken,
-        'createdAt': FieldValue.serverTimestamp(),
-        'platform': Platform.operatingSystem,
-      });
-    }
-    Navigator.pushReplacementNamed(context, LoggedInHomePage.routeName);
-  }
-
   @override
-  void initState() {
+  void didChangeDependencies() {
     Provider.of<FirebaseMessaging>(context).configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
@@ -54,42 +29,38 @@ class _StartupPageState extends State<StartupPage> {
         print("onResume: $message");
       },
     );
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is Authenticated) {
-          _routeToHomePage(context, state.user);
+          Navigator.pushReplacementNamed(context, LoggedInHomePage.routeName);
         } else if (state is Unauthenticated) {
           Navigator.pushReplacementNamed(context, NotLoggedInPage.routeName);
         }
       },
-      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          return Scaffold(
-            body: Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Sky Lists',
-                    style: Theme.of(context).primaryTextTheme.display1,
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 40.0,
-                  ),
-                  Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ],
+      child: Scaffold(
+        body: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Sky Lists',
+                style: Theme.of(context).primaryTextTheme.display1,
+                textAlign: TextAlign.center,
               ),
-            ),
-          );
-        },
+              SizedBox(
+                height: 40.0,
+              ),
+              Center(
+                child: CircularProgressIndicator(),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

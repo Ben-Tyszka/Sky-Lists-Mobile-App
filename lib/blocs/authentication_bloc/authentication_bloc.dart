@@ -35,8 +35,8 @@ class AuthenticationBloc
     try {
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
-        final name = await _userRepository.getUser();
-        yield Authenticated(name);
+        final user = await _userRepository.getUser();
+        yield Authenticated(user);
       } else {
         yield Unauthenticated();
       }
@@ -46,15 +46,21 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
-    yield Authenticated(await _userRepository.getUser());
+    final user = await _userRepository.getUser();
+    await _userRepository.setToken(user);
+    yield Authenticated(user);
   }
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
+    final user = await _userRepository.getUser();
+    await _userRepository.setToken(user);
     yield Unauthenticated();
     _userRepository.signOut();
   }
 
   Stream<AuthenticationState> _mapDeleteUsersAccountToState() async* {
+    final user = await _userRepository.getUser();
+    await _userRepository.setToken(user);
     yield Unauthenticated();
     _userRepository.deleteAccount();
   }

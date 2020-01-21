@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -6,12 +8,15 @@ import 'package:google_sign_in/google_sign_in.dart';
 class UserRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  final FirebaseMessaging _firebaseMessaging;
 
   UserRepository({
     FirebaseAuth firebaseAuth,
     GoogleSignIn googleSignin,
+    FirebaseMessaging firebaseMessaging,
   })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _googleSignIn = googleSignin ?? GoogleSignIn();
+        _googleSignIn = googleSignin ?? GoogleSignIn(),
+        _firebaseMessaging = firebaseMessaging ?? FirebaseMessaging;
 
   Future<FirebaseUser> signInWithGoogle() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
@@ -173,5 +178,38 @@ class UserRepository {
     assert(user != null);
 
     return await user.updatePassword(newPassword);
+  }
+
+  Future<void> setToken(FirebaseUser user) async {
+    String fcmToken = await _firebaseMessaging.getToken();
+
+    if (fcmToken != null) {
+      final token = Firestore.instance
+          .collection('users')
+          .document(user.uid)
+          .collection('tokens')
+          .document(fcmToken);
+
+      await token.setData(
+        {
+          'token': fcmToken,
+          'createdAt': FieldValue.serverTimestamp(),
+          'platform': Platform.operatingSystem,
+        },
+      );
+    }
+  }
+
+  Future<void> removeCurrentToken(FirebaseUser user) async {
+    String fcmToken = await _firebaseMessaging.getToken();
+
+    if (fcmToken != null) {
+      Firestore.instance
+          .collection('users')
+          .document(user.uid)
+          .collection('tokens')
+          .document(fcmToken)
+          .delete();
+    }
   }
 }

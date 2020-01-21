@@ -32,11 +32,7 @@ class SkyListsApp extends StatelessWidget {
       theme: brightTheme,
       routes: {
         // All pages are registered
-        StartupPage.routeName: (context) =>
-            BlocProvider<AuthenticationBloc>.value(
-              value: BlocProvider.of<AuthenticationBloc>(context),
-              child: StartupPage(),
-            ),
+        StartupPage.routeName: (context) => StartupPage(),
         NotLoggedInPage.routeName: (context) =>
             BlocProvider<AuthenticationBloc>.value(
               value: BlocProvider.of<AuthenticationBloc>(context),

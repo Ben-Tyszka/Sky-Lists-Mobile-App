@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:random_color/random_color.dart';
 
 import 'package:sky_lists/blocs/commonly_shared_with_state.bloc/bloc.dart';
-import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
-import 'package:sky_lists/blocs/shared_permission_bloc/bloc.dart';
 
 class CommonSharedWith extends StatefulWidget {
   @override
@@ -14,9 +12,6 @@ class CommonSharedWith extends StatefulWidget {
 class _CommonSharedWithState extends State<CommonSharedWith> {
   @override
   void dispose() {
-    BlocProvider.of<CommonlySharedWithBloc>(context)?.close();
-    BlocProvider.of<ListMetadataBloc>(context)?.close();
-    BlocProvider.of<SharedPermissionBloc>(context)?.close();
     super.dispose();
   }
 

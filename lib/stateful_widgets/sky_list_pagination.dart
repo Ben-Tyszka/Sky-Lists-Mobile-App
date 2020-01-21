@@ -39,8 +39,7 @@ class _SkyListPaginationState extends State<SkyListPagination> {
   @override
   void dispose() {
     _scrollController.dispose();
-    BlocProvider.of<ListMetadataBloc>(context)?.close();
-    BlocProvider.of<ListItemsBloc>(context)?.close();
+
     super.dispose();
   }
 

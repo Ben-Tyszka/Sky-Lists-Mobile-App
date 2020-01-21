@@ -1,9 +1,5 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
@@ -23,46 +19,24 @@ class NotLoggedInPage extends StatelessWidget {
   /// Name for page route
   static final String routeName = '/not_logged_in_page';
 
-  _routeToHomePage(BuildContext context, FirebaseUser user) async {
-    final FirebaseMessaging _fcm = Provider.of<FirebaseMessaging>(context);
-
-    String fcmToken = await _fcm.getToken();
-
-    if (fcmToken != null) {
-      final tokens = Firestore.instance
-          .collection('users')
-          .document(user.uid)
-          .collection('tokens')
-          .document(fcmToken);
-
-      await tokens.setData({
-        'token': fcmToken,
-        'createdAt': FieldValue.serverTimestamp(),
-        'platform': Platform.operatingSystem,
-      });
-    }
-
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      LoggedInHomePage.routeName,
-      (Route<dynamic> route) => false,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<LoginBloc>(
-      create: (_) => LoginBloc(
-        userRepository: Provider.of<UserRepository>(context),
-      ),
-      child: BlocListener<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          if (state is Authenticated) {
-            _routeToHomePage(context, state.user);
-          }
-        },
-        child: Scaffold(
-          body: Center(
-            child: SingleChildScrollView(
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) async {
+        if (state is Authenticated) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            LoggedInHomePage.routeName,
+            (Route<dynamic> route) => false,
+          );
+        }
+      },
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: BlocProvider<LoginBloc>(
+              create: (_) => LoginBloc(
+                userRepository: Provider.of<UserRepository>(context),
+              ),
               child: Column(
                 children: <Widget>[
                   SizedBox(

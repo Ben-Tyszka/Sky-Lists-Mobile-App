@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/list_title.dart';
@@ -43,8 +42,7 @@ class _ListTitleFormState extends State<ListTitleForm> {
   @override
   void dispose() {
     _titleController?.dispose();
-    BlocProvider.of<ListMetadataBloc>(context)?.close();
-    BlocProvider.of<ListItemsBloc>(context)?.close();
+
     super.dispose();
   }
 
