@@ -13,6 +13,7 @@ dependencies:
   firebase_ml_vision: ^0.9.3+5
   firebase_analytics: ^5.0.9
   cloud_firestore: ^0.13.0+1
+  firebase_messaging: ^6.0.9
   google_sign_in: ^4.1.1
   google_fonts: ^0.3.2
   flutter_camera_ml_vision: ^2.2.4

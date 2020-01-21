@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,39 +14,61 @@ import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 class StartupPage extends StatelessWidget {
   static final String routeName = '/startup';
 
+  _routeToHomePage(BuildContext context, FirebaseUser user) async {
+    final FirebaseMessaging _fcm = FirebaseMessaging();
+
+    String fcmToken = await _fcm.getToken();
+
+    if (fcmToken != null) {
+      final tokens = Firestore.instance
+          .collection('users')
+          .document(user.uid)
+          .collection('tokens')
+          .document(fcmToken);
+
+      await tokens.setData({
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(),
+        'platform': Platform.operatingSystem,
+      });
+    }
+    Navigator.pushReplacementNamed(context, LoggedInHomePage.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-      condition: (previousState, state) {
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
         if (state is Authenticated) {
-          Navigator.pushReplacementNamed(context, LoggedInHomePage.routeName);
+          _routeToHomePage(context, state.user);
         } else if (state is Unauthenticated) {
           Navigator.pushReplacementNamed(context, NotLoggedInPage.routeName);
         }
-        return true;
       },
-      builder: (context, state) {
-        return Scaffold(
-          body: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'Sky Lists',
-                  style: Theme.of(context).primaryTextTheme.display1,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 40.0,
-                ),
-                Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ],
+      child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+        builder: (context, state) {
+          return Scaffold(
+            body: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Sky Lists',
+                    style: Theme.of(context).primaryTextTheme.display1,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 40.0,
+                  ),
+                  Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

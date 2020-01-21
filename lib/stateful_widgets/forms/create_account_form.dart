@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -107,16 +112,38 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
     );
   }
 
+  _routeToHomePage() async {
+    final FirebaseMessaging _fcm = FirebaseMessaging();
+
+    String fcmToken = await _fcm.getToken();
+    final user = await FirebaseAuth.instance.currentUser();
+
+    if (fcmToken != null) {
+      final tokens = Firestore.instance
+          .collection('users')
+          .document(user.uid)
+          .collection('tokens')
+          .document(fcmToken);
+
+      await tokens.setData({
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(),
+        'platform': Platform.operatingSystem,
+      });
+    }
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      LoggedInHomePage.routeName,
+      (Route<dynamic> route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
         if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            LoggedInHomePage.routeName,
-            (Route<dynamic> route) => false,
-          );
+          _routeToHomePage();
         } else if (state.isFailure) {
           _passwordController.text = '';
         }

@@ -62,7 +62,7 @@ ThemeData _buildLightTheme() {
 }
 
 TextTheme _buildAppTextTheme(TextTheme base) {
-  return GoogleFonts.latoTextTheme()
+  return GoogleFonts.openSansTextTheme()
       .copyWith(
         display1: base.display1.copyWith(
           fontWeight: FontWeight.w200,
