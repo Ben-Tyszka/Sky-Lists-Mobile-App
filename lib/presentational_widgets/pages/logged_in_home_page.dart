@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +35,15 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
   @override
   initState() {
     super.initState();
+    if (Platform.isIOS) {
+      Provider.of(
+        context,
+        listen: false,
+      ).requestNotificationPermissions(
+        IosNotificationSettings(),
+      );
+    }
+
     _controller = TabController(
       vsync: this,
       length: 2,

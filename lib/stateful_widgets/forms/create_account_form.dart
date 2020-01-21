@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/register_bloc/bloc.dart';
@@ -113,7 +114,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
   }
 
   _routeToHomePage() async {
-    final FirebaseMessaging _fcm = FirebaseMessaging();
+    final FirebaseMessaging _fcm = Provider.of<FirebaseMessaging>(context);
 
     String fcmToken = await _fcm.getToken();
     final user = await FirebaseAuth.instance.currentUser();

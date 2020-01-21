@@ -24,7 +24,7 @@ class NotLoggedInPage extends StatelessWidget {
   static final String routeName = '/not_logged_in_page';
 
   _routeToHomePage(BuildContext context, FirebaseUser user) async {
-    final FirebaseMessaging _fcm = FirebaseMessaging();
+    final FirebaseMessaging _fcm = Provider.of<FirebaseMessaging>(context);
 
     String fcmToken = await _fcm.getToken();
 
