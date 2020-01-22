@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/privacy_policy_page.dart';
@@ -33,7 +35,11 @@ class AboutAppDialog extends StatelessWidget {
           children: <Widget>[
             OutlineButton(
               onPressed: () {
-                Navigator.pushNamed(context, PrivacyPolicyPage.routeName);
+                BlocProvider.of<NavigatorBloc>(context).add(
+                  NavigatorPushTo(
+                    PrivacyPolicyPage.routeName,
+                  ),
+                );
               },
               child: Text(
                 'Privacy Policy',
@@ -41,7 +47,11 @@ class AboutAppDialog extends StatelessWidget {
             ),
             OutlineButton(
               onPressed: () {
-                Navigator.pushNamed(context, TermsOfServicePage.routeName);
+                BlocProvider.of<NavigatorBloc>(context).add(
+                  NavigatorPushTo(
+                    TermsOfServicePage.routeName,
+                  ),
+                );
               },
               child: Text(
                 'Terms of Service',

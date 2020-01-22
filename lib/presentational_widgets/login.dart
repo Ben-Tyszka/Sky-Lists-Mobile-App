@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/send_password_reset_page.dart';
 import 'package:sky_lists/utils/validation.dart';
@@ -123,8 +125,11 @@ class Login extends StatelessWidget {
                       ..onTap = isSubmitting
                           ? null
                           : () {
-                              Navigator.pushNamed(
-                                  context, SendPasswordResetPage.routeName);
+                              BlocProvider.of<NavigatorBloc>(context).add(
+                                NavigatorPushTo(
+                                  SendPasswordResetPage.routeName,
+                                ),
+                              );
                             },
                     text: 'Reset it here',
                     style: Theme.of(context).primaryTextTheme.caption.copyWith(

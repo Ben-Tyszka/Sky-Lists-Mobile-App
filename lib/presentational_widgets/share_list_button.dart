@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/sky_list_share_with_page.dart';
 import 'package:sky_lists/utils/sky_list_page_arguments.dart';
@@ -23,10 +25,10 @@ class ShareListButton extends StatelessWidget {
       ),
       onPressed: () {
         if (user.isEmailVerified) {
-          Navigator.pushNamed(
-            context,
-            SkyListShareWithPage.routeName,
-            arguments: SkyListPageArguments(list),
+          BlocProvider.of<NavigatorBloc>(context).add(
+            NavigatorPushTo(
+              SkyListShareWithPage.routeName,
+            ),
           );
         } else {
           showDialog(

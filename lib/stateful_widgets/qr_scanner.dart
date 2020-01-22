@@ -22,6 +22,7 @@ class _QRScannerState extends State<QRScanner> {
     setState(() {
       _scanned = true;
     });
+
     final rawValue = barcodes.first.rawValue;
     log(rawValue);
     final data = decodeQR(rawValue);

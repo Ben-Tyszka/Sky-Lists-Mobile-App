@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/list_items_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 import 'package:sky_lists/blocs/shared_permission_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 
@@ -47,13 +48,21 @@ class _SkyListPaginationState extends State<SkyListPagination> {
   Widget build(BuildContext context) {
     return BlocListener<SharedPermissionBloc, SharedPermissionState>(
       listener: (context, state) {
+        final repo = Provider.of<FirebaseListMetadataRepository>(
+          context,
+          listen: false,
+        );
+
+        if (BlocProvider.of<ListMetadataBloc>(context).state is! ListLoaded)
+          return;
         if (state is SharedPermissionNotAllowed &&
-            !Provider.of<FirebaseListMetadataRepository>(context).isOwner(
-              (Provider.of<ListMetadataBloc>(context).state as ListLoaded).list,
-            )) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            LoggedInHomePage.routeName,
-            (Route<dynamic> route) => false,
+            !repo.isOwner(
+                (BlocProvider.of<ListMetadataBloc>(context).state as ListLoaded)
+                    .list)) {
+          BlocProvider.of<NavigatorBloc>(context).add(
+            NavigatorPushTo(
+              LoggedInHomePage.routeName,
+            ),
           );
         }
       },

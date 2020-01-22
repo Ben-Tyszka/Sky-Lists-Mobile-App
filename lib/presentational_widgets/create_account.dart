@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/privacy_policy_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/terms_of_service_page.dart';
@@ -129,8 +131,11 @@ class CreateAccount extends StatelessWidget {
                           TextSpan(
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.pushNamed(
-                                    context, TermsOfServicePage.routeName);
+                                BlocProvider.of<NavigatorBloc>(context).add(
+                                  NavigatorPushTo(
+                                    TermsOfServicePage.routeName,
+                                  ),
+                                );
                               },
                             text: 'Terms of Service',
                             style: Theme.of(context).textTheme.body1.copyWith(
@@ -145,8 +150,11 @@ class CreateAccount extends StatelessWidget {
                           TextSpan(
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.pushNamed(
-                                    context, PrivacyPolicyPage.routeName);
+                                BlocProvider.of<NavigatorBloc>(context).add(
+                                  NavigatorPushTo(
+                                    PrivacyPolicyPage.routeName,
+                                  ),
+                                );
                               },
                             text: 'Privacy Policy',
                             style: Theme.of(context).textTheme.body1.copyWith(

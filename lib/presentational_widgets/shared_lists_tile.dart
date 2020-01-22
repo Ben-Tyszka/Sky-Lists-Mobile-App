@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:provider/provider.dart';
+
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 import 'package:sky_lists/blocs/shared_with_me_convert_to_list_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
@@ -20,10 +21,13 @@ class SharedListsTile extends StatelessWidget {
         if (state is SharedWithMeConvertToListLoaded) {
           return ListTile(
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                SkyListPage.routeName,
-                arguments: SkyListPageArguments(state.list),
+              BlocProvider.of<NavigatorBloc>(context).add(
+                NavigatorPushTo(
+                  SkyListPage.routeName,
+                  arguments: SkyListPageArguments(
+                    state.list,
+                  ),
+                ),
               );
             },
             onLongPress: () {

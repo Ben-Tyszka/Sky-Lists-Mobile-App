@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/blocs/require_reauthentication/bloc.dart';
 import 'package:sky_lists/presentational_widgets/delete_account.dart';
@@ -30,9 +31,10 @@ class RequireReauthenticationPage extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                AccountPage.routeName,
-                (Route<dynamic> route) => false,
+              BlocProvider.of<NavigatorBloc>(context).add(
+                NavigatorPopAllAndPushTo(
+                  AccountPage.routeName,
+                ),
               );
             },
           ),

@@ -35,8 +35,8 @@ class _StartupPageState extends State<StartupPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) async {
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
         if (state is Authenticated) {
           BlocProvider.of<NavigatorBloc>(context).add(
             NavigatorReplace(
@@ -50,27 +50,27 @@ class _StartupPageState extends State<StartupPage> {
             ),
           );
         }
-      },
-      child: Scaffold(
-        body: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Sky Lists',
-                style: Theme.of(context).primaryTextTheme.display1,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 40.0,
-              ),
-              Center(
-                child: CircularProgressIndicator(),
-              ),
-            ],
+        return Scaffold(
+          body: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Sky Lists',
+                  style: Theme.of(context).primaryTextTheme.display1,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 40.0,
+                ),
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

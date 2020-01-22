@@ -19,10 +19,11 @@ class NavigatorReplace extends NavigatorEvent {
 
 class NavigatorPushTo extends NavigatorEvent {
   final String routeName;
-  NavigatorPushTo(this.routeName);
+  final Object arguments;
+  NavigatorPushTo(this.routeName, {this.arguments});
 
   @override
-  List<Object> get props => [routeName];
+  List<Object> get props => [routeName, arguments];
 }
 
 class NavigatorPopAndPushTo extends NavigatorEvent {

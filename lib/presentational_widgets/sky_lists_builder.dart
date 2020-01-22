@@ -17,6 +17,22 @@ class SkyListsBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (lists.isEmpty)
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'No Lists',
+            style: Theme.of(context).primaryTextTheme.display1,
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            'Tap below to add',
+            style: Theme.of(context).primaryTextTheme.body1,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      );
     return ListView.builder(
       controller: controller,
       padding: EdgeInsets.only(

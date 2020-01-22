@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sky_lists/blocs/commonly_shared_with_state.bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_shared_with_bloc/bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 import 'package:sky_lists/blocs/share_list_bloc/bloc.dart';
 import 'package:sky_lists/blocs/shared_permission_bloc/bloc.dart';
 
@@ -22,13 +23,21 @@ class ShareWithPageColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<SharedPermissionBloc, SharedPermissionState>(
       listener: (context, state) {
+        final repo = Provider.of<FirebaseListMetadataRepository>(
+          context,
+          listen: false,
+        );
+
+        if (BlocProvider.of<ListMetadataBloc>(context).state is! ListLoaded)
+          return;
         if (state is SharedPermissionNotAllowed &&
-            !Provider.of<FirebaseListMetadataRepository>(context).isOwner(
-              (Provider.of<ListMetadataBloc>(context).state as ListLoaded).list,
-            )) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            LoggedInHomePage.routeName,
-            (Route<dynamic> route) => false,
+            !repo.isOwner(
+                (BlocProvider.of<ListMetadataBloc>(context).state as ListLoaded)
+                    .list)) {
+          BlocProvider.of<NavigatorBloc>(context).add(
+            NavigatorPushTo(
+              LoggedInHomePage.routeName,
+            ),
           );
         }
       },

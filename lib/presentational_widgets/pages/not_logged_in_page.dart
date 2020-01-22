@@ -22,8 +22,8 @@ class NotLoggedInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) async {
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
         if (state is Authenticated) {
           BlocProvider.of<NavigatorBloc>(context).add(
             NavigatorReplace(
@@ -31,48 +31,54 @@ class NotLoggedInPage extends StatelessWidget {
             ),
           );
         }
-      },
-      child: Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: BlocProvider<LoginBloc>(
-              create: (_) => LoginBloc(
-                userRepository: Provider.of<UserRepository>(context),
-              ),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Sky Lists',
-                    style: Theme.of(context).primaryTextTheme.display2,
-                  ),
-                  SizedBox(
-                    height: 4.0,
-                  ),
-                  Text(
-                    'simple and connected',
-                    style: Theme.of(context).primaryTextTheme.display1,
-                  ),
-                  SizedBox(height: 15.0),
-                  LoginForm(),
-                  SizedBox(height: 15.0),
-                  OutlineButton.icon(
-                    icon: Icon(Icons.email),
-                    label: Text('Sign up with Email'),
-                    onPressed: () {
-                      // Pushes the CreateAccountPage for user to make account
-                      Navigator.pushNamed(context, CreateAccountPage.routeName);
-                    },
-                  ),
-                  GoogleSignIn(),
-                ],
+        return Scaffold(
+          body: Center(
+            child: SingleChildScrollView(
+              child: BlocProvider<LoginBloc>(
+                create: (_) => LoginBloc(
+                  userRepository: Provider.of<UserRepository>(context),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Sky Lists',
+                      style: Theme.of(context).primaryTextTheme.display2,
+                    ),
+                    SizedBox(
+                      height: 4.0,
+                    ),
+                    Text(
+                      'simple and connected',
+                      style: Theme.of(context).primaryTextTheme.display1,
+                    ),
+                    SizedBox(height: 15.0),
+                    LoginForm(),
+                    SizedBox(height: 15.0),
+                    OutlineButton.icon(
+                      icon: Icon(Icons.email),
+                      label: Text('Sign up with Email'),
+                      onPressed: () {
+                        // Pushes the CreateAccountPage for user to make account
+                        Navigator.pushNamed(
+                            context, CreateAccountPage.routeName);
+                        BlocProvider.of<NavigatorBloc>(context).add(
+                          NavigatorPushTo(
+                            CreateAccountPage.routeName,
+                          ),
+                        );
+                      },
+                    ),
+                    GoogleSignIn(),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

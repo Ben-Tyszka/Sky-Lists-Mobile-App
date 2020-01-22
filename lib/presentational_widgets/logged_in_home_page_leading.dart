@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/qr_scanner_page.dart';
 
@@ -10,7 +12,11 @@ class LoggedInHomePageLeading extends StatelessWidget {
         Icons.camera,
       ),
       onPressed: () {
-        Navigator.pushNamed(context, QRScannerPage.routeName);
+        BlocProvider.of<NavigatorBloc>(context).add(
+          NavigatorPushTo(
+            QRScannerPage.routeName,
+          ),
+        );
       },
     );
   }

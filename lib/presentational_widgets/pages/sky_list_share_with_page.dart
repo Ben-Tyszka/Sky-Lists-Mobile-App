@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 import 'package:sky_lists/blocs/shared_permission_bloc/shared_permission_bloc.dart';
 import 'package:sky_lists/blocs/shared_permission_bloc/shared_permission_event.dart';
 
@@ -23,74 +24,69 @@ class SkyListShareWithPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final SkyListPageArguments args = ModalRoute.of(context).settings.arguments;
 
-    return BlocListener<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        if (state is Unauthenticated) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            NotLoggedInPage.routeName,
-            (Route<dynamic> route) => false,
+    return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+      builder: (context, state) {
+        if (state is Authenticated) {
+          final repo = FirebaseListMetadataRepository(state.user.uid);
+          return Scaffold(
+            appBar: AppBar(
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(CustomIcons.qrcode),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => QrCodeAlertDialog(
+                        list: args.list,
+                      ),
+                    );
+                  },
+                ),
+              ],
+              title: Text('Share'),
+              leading: IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            body: MultiBlocProvider(
+              providers: [
+                BlocProvider<ListMetadataBloc>(
+                  create: (_) => ListMetadataBloc(
+                    listsRepository: repo,
+                  )..add(
+                      LoadListMetadata(args.list),
+                    ),
+                ),
+                BlocProvider<SharedPermissionBloc>(
+                  create: (_) => SharedPermissionBloc(
+                    listRepository: repo,
+                  )..add(
+                      LoadSharedPermission(list: args.list),
+                    ),
+                ),
+              ],
+              child: SingleChildScrollView(
+                child: Provider(
+                  create: (_) => repo,
+                  child: ShareWithPageColumn(),
+                ),
+              ),
+            ),
+          );
+        } else if (state is Unauthenticated) {
+          BlocProvider.of<NavigatorBloc>(context).add(
+            NavigatorPopAllAndPushTo(
+              NotLoggedInPage.routeName,
+            ),
           );
         }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
-      child: Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(CustomIcons.qrcode),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => QrCodeAlertDialog(
-                    list: args.list,
-                  ),
-                );
-              },
-            ),
-          ],
-          title: Text('Share'),
-          leading: IconButton(
-            icon: Icon(Icons.close),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-        body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
-            if (state is Authenticated) {
-              final repo = FirebaseListMetadataRepository(state.user.uid);
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider<ListMetadataBloc>(
-                    create: (_) => ListMetadataBloc(
-                      listsRepository: repo,
-                    )..add(
-                        LoadListMetadata(args.list),
-                      ),
-                  ),
-                  BlocProvider<SharedPermissionBloc>(
-                    create: (_) => SharedPermissionBloc(
-                      listRepository: repo,
-                    )..add(
-                        LoadSharedPermission(list: args.list),
-                      ),
-                  ),
-                ],
-                child: SingleChildScrollView(
-                  child: Provider(
-                    create: (_) => repo,
-                    child: ShareWithPageColumn(),
-                  ),
-                ),
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
-      ),
     );
   }
 }
