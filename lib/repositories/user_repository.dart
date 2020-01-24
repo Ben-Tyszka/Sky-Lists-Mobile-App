@@ -28,9 +28,17 @@ class UserRepository {
       idToken: googleAuth.idToken,
     );
 
-    await _firebaseAuth.signInWithCredential(credential);
+    final result = await _firebaseAuth.signInWithCredential(credential);
 
-    return _firebaseAuth.currentUser();
+    await Firestore.instance
+        .collection('users')
+        .document(result.user.uid)
+        .setData({
+      'name': result.user.displayName,
+      'email': result.user.email,
+    });
+
+    return result.user;
   }
 
   Future<void> signInWithEmailAndPassword(String email, String password) {

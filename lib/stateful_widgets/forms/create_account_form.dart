@@ -20,6 +20,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
   String emailVal;
   String nameVal;
   String passwordVal;
+  String errorMessage;
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty &&
@@ -110,10 +111,16 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
   Widget build(BuildContext context) {
     return BlocListener<RegisterBloc, RegisterState>(
       listener: (context, state) {
-        if (state.isSuccess) {
+        if (state.isSuccess || state.isSubmitting) {
+          setState(() {
+            errorMessage = '';
+          });
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         } else if (state.isFailure) {
           _passwordController.text = '';
+          setState(() {
+            errorMessage = state.failureMessage;
+          });
         }
       },
       child: BlocBuilder<RegisterBloc, RegisterState>(
@@ -122,7 +129,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             emailController: _emailController,
             isSubmitting: state.isSubmitting,
             isRegisterButtonEnabled: isRegisterButtonEnabled(state),
-            isFailure: state.isFailure,
+            isFailure: errorMessage.isNotEmpty,
             nameController: _nameController,
             passwordController: _passwordController,
             hidePassword: state.hidePassword,
@@ -130,7 +137,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
             togglePasswordHide: togglePasswordHide,
             agreementsValue: state.isAgreementsValid,
             onAgreementsChange: _onAgreementsChanged,
-            failureMessage: state.failureMessage,
+            failureMessage: errorMessage,
           );
         },
       ),

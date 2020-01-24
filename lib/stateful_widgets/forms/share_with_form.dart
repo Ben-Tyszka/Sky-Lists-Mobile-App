@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 
+import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 import 'package:sky_lists/blocs/share_list_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/share_with.dart';
-
-import 'package:list_metadata_repository/list_metadata_repository.dart';
 
 class ShareWithForm extends StatefulWidget {
   @override
@@ -21,6 +18,7 @@ class _ShareWithFormState extends State<ShareWithForm> {
 
   String emailVal;
   String passwordVal;
+  String errorMessage;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -67,18 +65,31 @@ class _ShareWithFormState extends State<ShareWithForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ShareListBloc, ShareListState>(
-      builder: (context, state) {
-        return ShareWith(
-          formKey: _formKey,
-          emailController: _emailController,
-          isSubmitting: state.isSubmitting,
-          onFormSubmitted: _onFormSubmitted,
-          isFailure: state.isFailure,
-          isSubmitButtonEnabled: isShareButtonEnabled(state),
-          failureMessage: state.failureMessage,
-        );
+    return BlocListener<ShareListBloc, ShareListState>(
+      listener: (context, state) {
+        if (state.isFailure) {
+          setState(() {
+            errorMessage = state.failureMessage;
+          });
+        } else if (state.isSubmitting || state.isSuccess) {
+          setState(() {
+            errorMessage = '';
+          });
+        }
       },
+      child: BlocBuilder<ShareListBloc, ShareListState>(
+        builder: (context, state) {
+          return ShareWith(
+            formKey: _formKey,
+            emailController: _emailController,
+            isSubmitting: state.isSubmitting,
+            onFormSubmitted: _onFormSubmitted,
+            isFailure: errorMessage.isNotEmpty,
+            isSubmitButtonEnabled: isShareButtonEnabled(state),
+            failureMessage: errorMessage,
+          );
+        },
+      ),
     );
   }
 }

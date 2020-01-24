@@ -20,6 +20,7 @@ class _LoginFormState extends State<LoginForm> {
 
   String emailVal;
   String passwordVal;
+  String errorMessage;
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
@@ -85,11 +86,17 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.isSuccess) {
+        if (state.isSuccess || state.isSubmitting) {
+          setState(() {
+            errorMessage = '';
+          });
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         } else if (state.isFailure) {
           _emailController.text = '';
           _passwordController.text = '';
+          setState(() {
+            errorMessage = state.failureMessage;
+          });
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -101,9 +108,9 @@ class _LoginFormState extends State<LoginForm> {
             passwordController: _passwordController,
             onFormSubmitted: _onFormSubmitted,
             togglePasswordHide: togglePasswordHide,
-            isFailure: state.isFailure,
+            isFailure: errorMessage.isNotEmpty,
             isLoginButtonEnabled: isLoginButtonEnabled(state),
-            failureMessage: state.failureMessage,
+            failureMessage: errorMessage,
             hidePassword: state.hidePassword,
           );
         },

@@ -34,17 +34,17 @@ class ShareWithPageColumn extends StatelessWidget {
           builder: (context, state) {
             if (state is ListLoaded) {
               final repo = Provider.of<FirebaseListMetadataRepository>(context);
+              final isOwner = repo.isOwner(state.list);
               return Column(
                 children: <Widget>[
-                  if (repo.isOwner(state.list) ||
-                      state.list.othersCanShareList) ...[
+                  if (isOwner || state.list.othersCanShareList) ...[
                     BlocProvider(
                       create: (_) => ShareListBloc(
                         listMetadataRepository: repo,
                       ),
                       child: ShareWithForm(),
                     ),
-                    if (repo.isOwner(state.list)) ...[
+                    if (isOwner) ...[
                       ListShareSettingsButton(list: state.list),
                     ],
                     BlocProvider(

@@ -52,8 +52,8 @@ class SkyListSharedWithBuilder extends StatelessWidget {
       );
     }
     return Text(
-      'People you share the list with will appear here',
-      style: Theme.of(context).primaryTextTheme.subtitle,
+      'Not Shared',
+      style: Theme.of(context).primaryTextTheme.display1,
       textAlign: TextAlign.center,
     );
   }
