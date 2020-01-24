@@ -18,7 +18,7 @@ class _ShareWithFormState extends State<ShareWithForm> {
 
   String emailVal;
   String passwordVal;
-  String errorMessage;
+  String errorMessage = '';
 
   final _formKey = GlobalKey<FormState>();
 

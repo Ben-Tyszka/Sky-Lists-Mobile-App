@@ -20,7 +20,7 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
   String emailVal;
   String nameVal;
   String passwordVal;
-  String errorMessage;
+  String errorMessage = '';
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty &&
@@ -115,6 +115,8 @@ class _CreateAccountFormState extends State<CreateAccountForm> {
           setState(() {
             errorMessage = '';
           });
+        }
+        if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         } else if (state.isFailure) {
           _passwordController.text = '';

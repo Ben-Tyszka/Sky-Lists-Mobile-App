@@ -72,7 +72,7 @@ class ListMetadataEntity extends Equatable {
       'lastModified': lastModified,
       'hidden': hidden,
       'othersCanShareList': othersCanShareList,
-      'othersCanShareList': othersCanShareList,
+      'othersCanDeleteItems': othersCanDeleteItems,
     };
   }
 }

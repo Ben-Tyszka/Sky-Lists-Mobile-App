@@ -7,6 +7,7 @@ import 'package:sky_lists/blocs/name_change_bloc/bloc.dart';
 import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/change_password_page.dart';
+import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/require_reauthentication_page.dart';
 import 'package:sky_lists/presentational_widgets/sign_out_button.dart';
@@ -29,6 +30,16 @@ class AccountPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text('Your Account'),
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () {
+                  BlocProvider.of<NavigatorBloc>(context).add(
+                    NavigatorPushTo(
+                      LoggedInHomePage.routeName,
+                    ),
+                  );
+                },
+              ),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.info_outline),
@@ -76,7 +87,7 @@ class AccountPage extends StatelessWidget {
                             child: Column(
                               children: <Widget>[
                                 Text(
-                                  'Your email is not verified, some account may be disabled until your email is verified.',
+                                  'Your email is not veified, some features may be disabled.',
                                   textAlign: TextAlign.center,
                                   style:
                                       Theme.of(context).primaryTextTheme.title,

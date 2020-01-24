@@ -20,7 +20,7 @@ class _LoginFormState extends State<LoginForm> {
 
   String emailVal;
   String passwordVal;
-  String errorMessage;
+  String errorMessage = '';
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
@@ -90,6 +90,8 @@ class _LoginFormState extends State<LoginForm> {
           setState(() {
             errorMessage = '';
           });
+        }
+        if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         } else if (state.isFailure) {
           _emailController.text = '';

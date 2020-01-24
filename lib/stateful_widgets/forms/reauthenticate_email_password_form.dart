@@ -22,6 +22,7 @@ class _ReauthenticateEmailAndPasswordFormState
 
   String emailVal;
   String passwordVal;
+  String errorMessage = '';
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
@@ -91,6 +92,9 @@ class _ReauthenticateEmailAndPasswordFormState
         if (state.isFailure) {
           _emailController.text = '';
           _passwordController.text = '';
+          setState(() {
+            errorMessage = state.failureMessage;
+          });
         }
       },
       child: BlocBuilder<RequireReauthenticationBloc,
@@ -106,9 +110,9 @@ class _ReauthenticateEmailAndPasswordFormState
             passwordController: _passwordController,
             onFormSubmitted: _onFormSubmitted,
             togglePasswordHide: togglePasswordHide,
-            isFailure: state.isFailure,
+            isFailure: errorMessage.isNotEmpty,
             isReauthenticateButtonEnabled: isReauthenticateButtonEnabled(state),
-            failureMessage: state.failureMessage,
+            failureMessage: errorMessage,
             hidePassword: state.hidePassword,
           );
         },

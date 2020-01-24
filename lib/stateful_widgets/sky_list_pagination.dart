@@ -47,7 +47,7 @@ class _SkyListPaginationState extends State<SkyListPagination> {
       listener: (context, state) {
         if (state is SharedPermissionNotAllowed) {
           BlocProvider.of<NavigatorBloc>(context).add(
-            NavigatorPushTo(
+            NavigatorPopAllAndPushTo(
               LoggedInHomePage.routeName,
             ),
           );
