@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 
 import 'package:sky_lists/blocs/share_list_bloc/bloc.dart';
 
@@ -58,35 +59,26 @@ class _ShareWithFormState extends State<ShareWithForm> {
     _shareBloc.add(
       Submitted(
         email: _emailController.text,
-        list: Provider.of<ListMetadata>(
-          context,
-          listen: false,
-        ),
+        list: (BlocProvider.of<ListMetadataBloc>(context).state as ListLoaded)
+            .list,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ShareListBloc, ShareListState>(
-      listener: (context, state) {
-        if (state.isFailure) {
-          _emailController.text = '';
-        }
+    return BlocBuilder<ShareListBloc, ShareListState>(
+      builder: (context, state) {
+        return ShareWith(
+          formKey: _formKey,
+          emailController: _emailController,
+          isSubmitting: state.isSubmitting,
+          onFormSubmitted: _onFormSubmitted,
+          isFailure: state.isFailure,
+          isSubmitButtonEnabled: isShareButtonEnabled(state),
+          failureMessage: state.failureMessage,
+        );
       },
-      child: BlocBuilder<ShareListBloc, ShareListState>(
-        builder: (context, state) {
-          return ShareWith(
-            formKey: _formKey,
-            emailController: _emailController,
-            isSubmitting: state.isSubmitting,
-            onFormSubmitted: _onFormSubmitted,
-            isFailure: state.isFailure,
-            isSubmitButtonEnabled: isShareButtonEnabled(state),
-            failureMessage: state.failureMessage,
-          );
-        },
-      ),
     );
   }
 }

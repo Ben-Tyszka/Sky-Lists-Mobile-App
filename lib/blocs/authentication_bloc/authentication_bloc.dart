@@ -52,15 +52,11 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
-    final user = await _userRepository.getUser();
-    await _userRepository.setToken(user);
     yield Unauthenticated();
     _userRepository.signOut();
   }
 
   Stream<AuthenticationState> _mapDeleteUsersAccountToState() async* {
-    final user = await _userRepository.getUser();
-    await _userRepository.setToken(user);
     yield Unauthenticated();
     _userRepository.deleteAccount();
   }

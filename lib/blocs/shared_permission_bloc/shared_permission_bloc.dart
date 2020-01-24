@@ -32,12 +32,19 @@ class SharedPermissionBloc
   Stream<SharedPermissionState> _mapLoadCommonlySharedWithToState(
       LoadSharedPermission event) async* {
     _sharedPermissionSubscription?.cancel();
-    _sharedPermissionSubscription =
-        _listRepository.streamListSharedWithYouIsAllowed(event.list).listen(
-              (value) => add(
-                SharedPermissionUpdated(isAllowed: value),
-              ),
-            );
+    _sharedPermissionSubscription = _listRepository
+        .streamListSharedWithYouIsAllowed(event.list)
+        .listen((value) {
+      if (_listRepository.isOwner(event.list)) {
+        add(
+          SharedPermissionUpdated(isAllowed: true),
+        );
+      } else {
+        add(
+          SharedPermissionUpdated(isAllowed: value),
+        );
+      }
+    });
   }
 
   Stream<SharedPermissionState> _mapCommonlySharedWithUpdatedToState(

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:list_metadata_repository/list_metadata_repository.dart';
 
@@ -12,15 +13,16 @@ abstract class ListMetadataEvent extends Equatable {
 class LoadListsMetadata extends ListMetadataEvent {}
 
 class AddList extends ListMetadataEvent {
+  final BuildContext context;
   final ListMetadata list;
 
-  AddList(this.list);
+  AddList(this.list, this.context);
 
   @override
-  List<Object> get props => [list];
+  List<Object> get props => [list, context];
 
   @override
-  String toString() => 'AddList | list: $list';
+  String toString() => 'AddList | list: $list, context: $context';
 }
 
 class UpdateListMetadata extends ListMetadataEvent {

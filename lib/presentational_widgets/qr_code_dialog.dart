@@ -16,7 +16,7 @@ class QrCodeAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        'Share List With QR Code',
+        'Share List via QR Code',
         textAlign: TextAlign.center,
       ),
       content: Container(

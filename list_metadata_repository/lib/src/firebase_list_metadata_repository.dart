@@ -18,10 +18,12 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   final String _userId;
 
   @override
-  Future<void> addNewList(ListMetadata list) {
-    return _collection.add(
+  Future<ListMetadata> addNewList(ListMetadata list) async {
+    final doc = await _collection.add(
       list.toEntity().toDocument(),
     );
+    final snap = await doc.get();
+    return ListMetadata.fromEntity(ListMetadataEntity.fromSnapshot(snap));
   }
 
   @override
@@ -247,7 +249,7 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   }
 
   bool isOwner(ListMetadata list) {
-    return list.id == _userId;
+    return list.docRef.parent().parent().documentID == _userId;
   }
 
   Future<void> setListPermission(

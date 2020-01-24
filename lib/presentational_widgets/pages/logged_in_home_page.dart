@@ -128,6 +128,7 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
           BlocProvider.of<NavigatorBloc>(context)
               .add(NavigatorPopAllAndPushTo(NotLoggedInPage.routeName));
         }
+
         return Center(
           child: CircularProgressIndicator(),
         );

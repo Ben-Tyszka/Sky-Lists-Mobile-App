@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/sky_list_share_with_page.dart';
-import 'package:sky_lists/utils/sky_list_page_arguments.dart';
 
 import 'package:list_metadata_repository/list_metadata_repository.dart';
+import 'package:sky_lists/utils/sky_list_page_arguments.dart';
 
 class ShareListButton extends StatelessWidget {
   ShareListButton({
@@ -28,6 +29,7 @@ class ShareListButton extends StatelessWidget {
           BlocProvider.of<NavigatorBloc>(context).add(
             NavigatorPushTo(
               SkyListShareWithPage.routeName,
+              arguments: SkyListPageArguments(list),
             ),
           );
         } else {

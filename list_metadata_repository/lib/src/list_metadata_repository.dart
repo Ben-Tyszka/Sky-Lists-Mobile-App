@@ -9,7 +9,7 @@ enum ListPermission {
 }
 
 abstract class ListMetadataRepository {
-  Future<void> addNewList(ListMetadata list);
+  Future<ListMetadata> addNewList(ListMetadata list);
 
   Future<void> deleteList(ListMetadata list);
 

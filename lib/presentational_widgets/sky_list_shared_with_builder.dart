@@ -20,23 +20,17 @@ class SkyListSharedWithBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(
-          'Shared With',
-          style: Theme.of(context).primaryTextTheme.title,
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        if (listSharedWith.isEmpty) ...[
+    if (listSharedWith.isNotEmpty) {
+      return Column(
+        children: <Widget>[
           Text(
-            'List has not been shared with anyone.',
-            style: Theme.of(context).primaryTextTheme.body1,
+            'Shared With',
+            style: Theme.of(context).primaryTextTheme.title,
             textAlign: TextAlign.center,
           ),
-        ] else ...[
+          SizedBox(
+            height: 10,
+          ),
           ListView.builder(
             controller: controller,
             itemCount: listSharedWith.length,
@@ -55,7 +49,12 @@ class SkyListSharedWithBuilder extends StatelessWidget {
             },
           ),
         ],
-      ],
+      );
+    }
+    return Text(
+      'People you share the list with will appear here',
+      style: Theme.of(context).primaryTextTheme.subtitle,
+      textAlign: TextAlign.center,
     );
   }
 }

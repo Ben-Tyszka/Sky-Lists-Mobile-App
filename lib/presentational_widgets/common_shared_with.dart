@@ -20,23 +20,17 @@ class _CommonSharedWithState extends State<CommonSharedWith> {
     return BlocBuilder<CommonlySharedWithBloc, CommonlySharedWithState>(
       builder: (context, state) {
         if (state is CommonlySharedWithLoaded) {
-          return Column(
-            children: <Widget>[
-              Text(
-                'Suggestions',
-                style: Theme.of(context).primaryTextTheme.title,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              if (state.profiles.isEmpty) ...[
+          if (state.profiles.isNotEmpty) {
+            return Column(
+              children: <Widget>[
                 Text(
-                  'None at this time, use the app to generate suggestions',
-                  style: Theme.of(context).primaryTextTheme.body1,
+                  'Suggestions',
+                  style: Theme.of(context).primaryTextTheme.title,
                   textAlign: TextAlign.center,
                 ),
-              ] else ...[
+                SizedBox(
+                  height: 10,
+                ),
                 ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: state.profiles.length,
@@ -49,8 +43,9 @@ class _CommonSharedWithState extends State<CommonSharedWith> {
                   },
                 ),
               ],
-            ],
-          );
+            );
+          }
+          return Container();
         } else {
           return Center(
             child: CircularProgressIndicator(),

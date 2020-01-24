@@ -54,7 +54,7 @@ class ListMetadata {
     bool othersCanDeleteItems,
   }) {
     return ListMetadata(
-      name,
+      name ?? this.name,
       archived: archived ?? this.archived,
       docRef: docRef ?? this.docRef,
       hidden: hidden ?? this.hidden,

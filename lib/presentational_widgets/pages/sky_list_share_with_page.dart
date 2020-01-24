@@ -5,8 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sky_lists/blocs/authentication_bloc/bloc.dart';
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
-import 'package:sky_lists/blocs/shared_permission_bloc/shared_permission_bloc.dart';
-import 'package:sky_lists/blocs/shared_permission_bloc/shared_permission_event.dart';
+import 'package:sky_lists/blocs/shared_permission_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/qr_code_dialog.dart';
@@ -28,49 +27,49 @@ class SkyListShareWithPage extends StatelessWidget {
       builder: (context, state) {
         if (state is Authenticated) {
           final repo = FirebaseListMetadataRepository(state.user.uid);
-          return Scaffold(
-            appBar: AppBar(
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(CustomIcons.qrcode),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<ListMetadataBloc>(
+                create: (_) => ListMetadataBloc(
+                  listsRepository: repo,
+                )..add(
+                    LoadListMetadata(args.list),
+                  ),
+              ),
+              BlocProvider<SharedPermissionBloc>(
+                create: (_) => SharedPermissionBloc(
+                  listRepository: repo,
+                )..add(
+                    LoadSharedPermission(list: args.list),
+                  ),
+              ),
+            ],
+            child: Scaffold(
+              appBar: AppBar(
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(CustomIcons.qrcode),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => QrCodeAlertDialog(
+                          list: args.list,
+                        ),
+                      );
+                    },
+                  ),
+                ],
+                title: Text('Share List'),
+                leading: IconButton(
+                  icon: Icon(Icons.close),
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => QrCodeAlertDialog(
-                        list: args.list,
-                      ),
-                    );
+                    Navigator.pop(context);
                   },
                 ),
-              ],
-              title: Text('Share'),
-              leading: IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
               ),
-            ),
-            body: MultiBlocProvider(
-              providers: [
-                BlocProvider<ListMetadataBloc>(
-                  create: (_) => ListMetadataBloc(
-                    listsRepository: repo,
-                  )..add(
-                      LoadListMetadata(args.list),
-                    ),
-                ),
-                BlocProvider<SharedPermissionBloc>(
-                  create: (_) => SharedPermissionBloc(
-                    listRepository: repo,
-                  )..add(
-                      LoadSharedPermission(list: args.list),
-                    ),
-                ),
-              ],
-              child: SingleChildScrollView(
-                child: Provider(
-                  create: (_) => repo,
+              body: Provider(
+                create: (_) => repo,
+                child: SingleChildScrollView(
                   child: ShareWithPageColumn(),
                 ),
               ),

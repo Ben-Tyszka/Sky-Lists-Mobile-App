@@ -21,69 +21,59 @@ import 'package:list_metadata_repository/list_metadata_repository.dart';
 class ShareWithPageColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SharedPermissionBloc, SharedPermissionState>(
-      listener: (context, state) {
-        final repo = Provider.of<FirebaseListMetadataRepository>(
-          context,
-          listen: false,
-        );
-
-        if (BlocProvider.of<ListMetadataBloc>(context).state is! ListLoaded)
-          return;
-        if (state is SharedPermissionNotAllowed &&
-            !repo.isOwner(
-                (BlocProvider.of<ListMetadataBloc>(context).state as ListLoaded)
-                    .list)) {
+    return BlocBuilder<SharedPermissionBloc, SharedPermissionState>(
+      builder: (context, _) {
+        if (_ is SharedPermissionNotAllowed) {
           BlocProvider.of<NavigatorBloc>(context).add(
             NavigatorPushTo(
               LoggedInHomePage.routeName,
             ),
           );
         }
-      },
-      child: BlocBuilder<ListMetadataBloc, ListMetadataState>(
-        builder: (context, state) {
-          if (state is ListLoaded) {
-            final repo = Provider.of<FirebaseListMetadataRepository>(context);
-            return Column(
-              children: <Widget>[
-                if (repo.isOwner(state.list) ||
-                    state.list.othersCanShareList) ...[
-                  BlocProvider(
-                    create: (_) => ShareListBloc(
-                      listMetadataRepository: repo,
+        return BlocBuilder<ListMetadataBloc, ListMetadataState>(
+          builder: (context, state) {
+            if (state is ListLoaded) {
+              final repo = Provider.of<FirebaseListMetadataRepository>(context);
+              return Column(
+                children: <Widget>[
+                  if (repo.isOwner(state.list) ||
+                      state.list.othersCanShareList) ...[
+                    BlocProvider(
+                      create: (_) => ShareListBloc(
+                        listMetadataRepository: repo,
+                      ),
+                      child: ShareWithForm(),
                     ),
-                    child: ShareWithForm(),
-                  ),
-                  if (repo.isOwner(state.list)) ...[
-                    ListShareSettingsButton(),
+                    if (repo.isOwner(state.list)) ...[
+                      ListShareSettingsButton(list: state.list),
+                    ],
+                    BlocProvider(
+                      create: (_) => CommonlySharedWithBloc(
+                        listRepository: repo,
+                      )..add(LoadCommonlySharedWith()),
+                      child: CommonSharedWith(),
+                    ),
                   ],
+                  Divider(),
                   BlocProvider(
-                    create: (_) => CommonlySharedWithBloc(
+                    create: (_) => ListSharedWithBloc(
                       listRepository: repo,
-                    )..add(LoadCommonlySharedWith()),
-                    child: CommonSharedWith(),
+                    )..add(
+                        LoadListSharedWith(
+                          list: state.list,
+                        ),
+                      ),
+                    child: SkyListSharedWithPagination(repo),
                   ),
                 ],
-                Divider(),
-                BlocProvider(
-                  create: (_) => ListSharedWithBloc(
-                    listRepository: repo,
-                  )..add(
-                      LoadListSharedWith(
-                        list: state.list,
-                      ),
-                    ),
-                  child: SkyListSharedWithPagination(repo),
-                ),
-              ],
+              );
+            }
+            return Center(
+              child: CircularProgressIndicator(),
             );
-          }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      ),
+          },
+        );
+      },
     );
   }
 }

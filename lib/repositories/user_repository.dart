@@ -63,14 +63,8 @@ class UserRepository {
 
   Future<void> signOut() async {
     final user = await FirebaseAuth.instance.currentUser();
-    String fcmToken = await FirebaseMessaging().getToken();
 
-    Firestore.instance
-        .collection('users')
-        .document(user.uid)
-        .collection('tokens')
-        .document(fcmToken)
-        .delete();
+    await removeCurrentToken(user);
 
     return Future.wait([
       _firebaseAuth.signOut(),
@@ -126,12 +120,15 @@ class UserRepository {
       });
     });
 
+    await removeCurrentToken(user);
+
     await Firestore.instance
         .collection('shopping lists')
         .document(user.uid)
         .delete();
 
     await Firestore.instance.collection('users').document(user.uid).delete();
+
     // Note: Share history is preserved with users that had shared a list with this user
     user.delete();
   }

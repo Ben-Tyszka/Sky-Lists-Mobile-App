@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
+import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
+import 'package:sky_lists/utils/sky_list_page_arguments.dart';
 
 import './bloc.dart';
 import 'package:list_metadata_repository/list_metadata_repository.dart';
@@ -72,7 +76,16 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
       state is ListMetadatasLoaded && state.hasReachedMax;
 
   Stream<ListMetadataState> _mapAddListToState(AddList event) async* {
-    _listsRepository.addNewList(event.list);
+    final list = await _listsRepository.addNewList(event.list);
+
+    BlocProvider.of<NavigatorBloc>(event.context).add(
+      NavigatorPushTo(
+        SkyListPage.routeName,
+        arguments: SkyListPageArguments(
+          list,
+        ),
+      ),
+    );
   }
 
   Stream<ListMetadataState> _mapUpdateListToState(
