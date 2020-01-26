@@ -9,7 +9,8 @@ import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 import 'package:sky_lists/blocs/share_list_bloc/bloc.dart';
 import 'package:sky_lists/blocs/shared_permission_bloc/bloc.dart';
 
-import 'package:sky_lists/presentational_widgets/common_shared_with.dart';
+import 'package:sky_lists/presentational_widgets/common_shared_with.dart'
+    as CommonSharedWithWidget;
 import 'package:sky_lists/presentational_widgets/list_share_settings_button.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 
@@ -47,12 +48,12 @@ class ShareWithPageColumn extends StatelessWidget {
                     if (isOwner) ...[
                       ListShareSettingsButton(list: state.list),
                     ],
-                    // BlocProvider(
-                    //   create: (_) => CommonlySharedWithBloc(
-                    //     listRepository: repo,
-                    //   )..add(LoadCommonlySharedWith()),
-                    //   child: CommonSharedWith(),
-                    // ),
+                    BlocProvider(
+                      create: (_) => CommonlySharedWithBloc(
+                        listRepository: repo,
+                      )..add(LoadCommonlySharedWith()),
+                      child: CommonSharedWithWidget.CommonSharedWith(),
+                    ),
                   ],
                   Divider(),
                   BlocProvider(

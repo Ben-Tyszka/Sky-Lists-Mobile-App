@@ -33,8 +33,8 @@ class CommonlySharedWithBloc
     _commonlySharedWithSubscription?.cancel();
     _commonlySharedWithSubscription =
         _listRepository.streamCommonSharedWith().listen(
-              (profiles) => add(
-                CommonlySharedWithUpdated(profiles),
+              (commonSharedWith) => add(
+                CommonlySharedWithUpdated(commonSharedWith),
               ),
             );
   }
@@ -42,7 +42,7 @@ class CommonlySharedWithBloc
   Stream<CommonlySharedWithState> _mapCommonlySharedWithUpdatedToState(
       CommonlySharedWithUpdated event) async* {
     yield CommonlySharedWithLoaded(
-      event.profiles,
+      event.commonSharedWith,
     );
   }
 

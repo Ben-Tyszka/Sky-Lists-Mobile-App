@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -119,7 +118,7 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
     return query.documents.first.documentID;
   }
 
-  Stream<List<UserProfile>> streamCommonSharedWith() {
+  Stream<List<CommonSharedWith>> streamCommonSharedWith() {
     return Firestore.instance
         .collection('users')
         .document(_userId)
@@ -127,13 +126,15 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
         .orderBy('count', descending: true)
         .limit(4)
         .snapshots()
-        .map((query) => query.documents
-            .map(
-              (doc) => UserProfile.fromEntity(
-                UserProfileEntity.fromSnapshot(doc),
-              ),
-            )
-            .toList());
+        .map(
+          (query) => query.documents
+              .map(
+                (doc) => CommonSharedWith.fromEntity(
+                  CommonSharedWithEntity.fromSnapshot(doc),
+                ),
+              )
+              .toList(),
+        );
   }
 
   @override
@@ -273,6 +274,20 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
           (query) => query.documents
               .where((doc) => doc.documentID == _userId)
               .isNotEmpty,
+        );
+  }
+
+  @override
+  Stream<UserProfile> streamUserProfileFromListCommonlySharedWith(
+      CommonSharedWith listSharedWith) {
+    return Firestore.instance
+        .collection('users')
+        .document(listSharedWith.id)
+        .snapshots()
+        .map(
+          (docSnapshot) => UserProfile.fromEntity(
+            UserProfileEntity.fromSnapshot(docSnapshot),
+          ),
         );
   }
 }

@@ -12,25 +12,26 @@ abstract class CommonlySharedWithState extends Equatable {
 class CommonlySharedWithLoading extends CommonlySharedWithState {}
 
 class CommonlySharedWithLoaded extends CommonlySharedWithState {
-  final List<UserProfile> profiles;
+  final List<CommonSharedWith> commonSharedWith;
 
   CommonlySharedWithLoaded(
-    this.profiles,
+    this.commonSharedWith,
   );
 
   CommonlySharedWithLoaded copyWith({
-    List<UserProfile> profiles,
+    List<UserProfile> commonSharedWith,
   }) {
     return CommonlySharedWithLoaded(
-      profiles ?? this.profiles,
+      commonSharedWith ?? this.commonSharedWith,
     );
   }
 
   @override
-  List<Object> get props => [profiles];
+  List<Object> get props => [commonSharedWith];
 
   @override
-  String toString() => 'CommonlySharedWithLoaded | profiles: $profiles';
+  String toString() =>
+      'CommonlySharedWithLoaded | commonSharedWith: $commonSharedWith';
 }
 
 class CommonlySharedWithNotLoaded extends CommonlySharedWithState {}

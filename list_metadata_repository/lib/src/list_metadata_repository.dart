@@ -29,7 +29,7 @@ abstract class ListMetadataRepository {
 
   Future<String> getUserUidFromEmail(String emailToSearchWith);
 
-  Stream<List<UserProfile>> streamCommonSharedWith();
+  Stream<List<CommonSharedWith>> streamCommonSharedWith();
 
   Stream<List<ListSharedWith>> streamListSharedWith(
     ListMetadata list, {
@@ -46,6 +46,9 @@ abstract class ListMetadataRepository {
 
   Stream<UserProfile> streamUserProfileFromListSharedWith(
       ListSharedWith listSharedWith);
+
+  Stream<UserProfile> streamUserProfileFromListCommonlySharedWith(
+      CommonSharedWith listSharedWith);
 
   Stream<ListMetadata> streamListMetaFromSharedWithMe(
       SharedWithMe sharedWithMe);

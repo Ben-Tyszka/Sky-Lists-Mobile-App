@@ -12,10 +12,10 @@ abstract class CommonlySharedWithEvent extends Equatable {
 class LoadCommonlySharedWith extends CommonlySharedWithEvent {}
 
 class CommonlySharedWithUpdated extends CommonlySharedWithEvent {
-  final List<UserProfile> profiles;
+  final List<CommonSharedWith> commonSharedWith;
 
-  CommonlySharedWithUpdated(this.profiles);
+  CommonlySharedWithUpdated(this.commonSharedWith);
 
   @override
-  List<Object> get props => [profiles];
+  List<Object> get props => [commonSharedWith];
 }
