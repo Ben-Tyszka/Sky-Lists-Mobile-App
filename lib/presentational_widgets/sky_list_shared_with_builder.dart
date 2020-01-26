@@ -25,13 +25,12 @@ class SkyListSharedWithBuilder extends StatelessWidget {
         children: <Widget>[
           Text(
             'Shared With',
-            style: Theme.of(context).primaryTextTheme.title,
+            style: Theme.of(context).primaryTextTheme.display1,
             textAlign: TextAlign.center,
           ),
-          SizedBox(
-            height: 10,
-          ),
           ListView.builder(
+            shrinkWrap: true,
+            physics: ScrollPhysics(),
             controller: controller,
             itemCount: listSharedWith.length,
             itemBuilder: (context, index) {

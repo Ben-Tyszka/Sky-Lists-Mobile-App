@@ -76,7 +76,7 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
     ListMetadata list,
     String toShareWith,
   }) async {
-    await list.docRef.collection('sharedwith').document(toShareWith).updateData(
+    await list.docRef.collection('sharedwith').document(toShareWith).setData(
       {
         'sharedAt': FieldValue.serverTimestamp(),
       },
@@ -86,7 +86,7 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
         .document(toShareWith)
         .collection('sharedwithme')
         .document(list.id)
-        .updateData(
+        .setData(
       {
         'owner': list.docRef.parent().parent().documentID,
         'sharedAt': FieldValue.serverTimestamp(),
@@ -97,7 +97,7 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
         .document(list.docRef.parent().parent().documentID)
         .collection('sharehistory')
         .document(toShareWith)
-        .updateData(
+        .setData(
       {
         'count': FieldValue.increment(1),
         'lastShared': FieldValue.serverTimestamp(),

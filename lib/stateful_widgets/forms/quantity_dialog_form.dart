@@ -78,6 +78,7 @@ class _QuantityDialogFormState extends State<QuantityDialogForm> {
       UpdateListItem(
         widget.item.copyWith(
           quantity: int.parse(_quantityController.text),
+          descriptor: descriptor,
         ),
       ),
     );

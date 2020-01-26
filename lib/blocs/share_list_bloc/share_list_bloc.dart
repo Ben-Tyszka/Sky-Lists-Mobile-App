@@ -69,7 +69,7 @@ class ShareListBloc extends Bloc<ShareListEvent, ShareListState> {
       );
       yield ShareListState.success();
     } catch (_) {
-      yield ShareListState.failure('Email not found');
+      yield ShareListState.failure('Something went wrong');
     }
   }
 }

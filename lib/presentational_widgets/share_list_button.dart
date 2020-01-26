@@ -36,7 +36,10 @@ class ShareListButton extends StatelessWidget {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('Please Verify Email'),
+              title: Text(
+                'Please Verify Email',
+                textAlign: TextAlign.center,
+              ),
               content: Text(
                   'You must verify your email before you can share a list.'),
               actions: <Widget>[

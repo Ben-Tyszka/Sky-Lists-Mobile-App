@@ -87,7 +87,7 @@ class AccountPage extends StatelessWidget {
                             child: Column(
                               children: <Widget>[
                                 Text(
-                                  'Your email is not veified, some features may be disabled.',
+                                  'Your email is not verified, some features may be disabled.',
                                   textAlign: TextAlign.center,
                                   style:
                                       Theme.of(context).primaryTextTheme.title,

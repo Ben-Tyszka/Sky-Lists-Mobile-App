@@ -47,12 +47,12 @@ class ShareWithPageColumn extends StatelessWidget {
                     if (isOwner) ...[
                       ListShareSettingsButton(list: state.list),
                     ],
-                    BlocProvider(
-                      create: (_) => CommonlySharedWithBloc(
-                        listRepository: repo,
-                      )..add(LoadCommonlySharedWith()),
-                      child: CommonSharedWith(),
-                    ),
+                    // BlocProvider(
+                    //   create: (_) => CommonlySharedWithBloc(
+                    //     listRepository: repo,
+                    //   )..add(LoadCommonlySharedWith()),
+                    //   child: CommonSharedWith(),
+                    // ),
                   ],
                   Divider(),
                   BlocProvider(
