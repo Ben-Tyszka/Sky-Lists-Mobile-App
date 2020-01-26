@@ -32,7 +32,7 @@ class ListSharedWithEntity extends Equatable {
   static ListSharedWithEntity fromSnapshot(DocumentSnapshot snapshot) {
     return ListSharedWithEntity(
       docRef: snapshot.reference,
-      sharedWithId: snapshot['sharedWithId'] ?? '',
+      sharedWithId: snapshot.documentID ?? '',
       sharedAt: snapshot['sharedAt'] ?? Timestamp.now(),
     );
   }

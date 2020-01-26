@@ -24,7 +24,7 @@ class ListSharedWithConvertProfileBloc extends Bloc<
     ListSharedWithConvertProfileEvent event,
   ) async* {
     if (event is LoadListSharedWithConvertProfile) {
-      _mapLoadListSharedWithConvertProfileToState(event);
+      yield* _mapLoadListSharedWithConvertProfileToState(event);
     } else if (event is ListSharedWithConvertProfileUpdated) {
       yield* _mapListSharedWithConvertProfileUpdatedToState(event);
     }
