@@ -19,3 +19,13 @@ class CommonlySharedWithUpdated extends CommonlySharedWithEvent {
   @override
   List<Object> get props => [commonSharedWith];
 }
+
+class CommonlySharedWithShareWithUser extends CommonlySharedWithEvent {
+  final UserProfile user;
+  final ListMetadata list;
+
+  CommonlySharedWithShareWithUser(this.user, this.list);
+
+  @override
+  List<Object> get props => [user, list];
+}

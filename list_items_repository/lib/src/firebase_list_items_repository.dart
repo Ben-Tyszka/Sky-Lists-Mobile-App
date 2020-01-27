@@ -20,6 +20,11 @@ class FirebaseListItemsRepository implements ListItemsRepository {
 
   @override
   Future<void> addNewItem(ListItem item) async {
+    item.docRef.parent().parent().updateData(
+      {
+        'lastModified': FieldValue.serverTimestamp(),
+      },
+    );
     return _collection.add(
       item.toEntity().toDocument(),
     );
@@ -27,6 +32,11 @@ class FirebaseListItemsRepository implements ListItemsRepository {
 
   @override
   Future<void> deleteItem(ListItem item) async {
+    item.docRef.parent().parent().updateData(
+      {
+        'lastModified': FieldValue.serverTimestamp(),
+      },
+    );
     return _collection.document(item.id).delete();
   }
 
@@ -56,6 +66,11 @@ class FirebaseListItemsRepository implements ListItemsRepository {
 
   @override
   Future<void> updateItem(ListItem item) {
+    item.docRef.parent().parent().updateData(
+      {
+        'lastModified': FieldValue.serverTimestamp(),
+      },
+    );
     return item.docRef.updateData(
       item.toEntity().toDocument(),
     );

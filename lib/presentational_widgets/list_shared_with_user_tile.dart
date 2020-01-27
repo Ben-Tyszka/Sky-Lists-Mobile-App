@@ -34,12 +34,14 @@ class ListSharedWithUserTile extends StatelessWidget {
             ),
             trailing: shouldShowDeleteIcon
                 ? IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: Icon(Icons.close),
                     onPressed: () {
                       BlocProvider.of<ListSharedWithBloc>(context).add(
                         ListSharedWithUnshareUser(
                           profile: state.userProfile,
-                          list: Provider.of<ListMetadata>(context),
+                          list: (BlocProvider.of<ListMetadataBloc>(context)
+                                  .state as ListLoaded)
+                              .list,
                         ),
                       );
                     },

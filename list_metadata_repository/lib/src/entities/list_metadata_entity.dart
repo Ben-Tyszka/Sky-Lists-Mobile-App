@@ -69,7 +69,7 @@ class ListMetadataEntity extends Equatable {
     return {
       'name': name,
       'archived': archived,
-      'lastModified': lastModified,
+      'lastModified': FieldValue.serverTimestamp(),
       'hidden': hidden,
       'othersCanShareList': othersCanShareList,
       'othersCanDeleteItems': othersCanDeleteItems,

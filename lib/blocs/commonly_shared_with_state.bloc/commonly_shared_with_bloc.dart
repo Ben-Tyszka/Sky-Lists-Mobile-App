@@ -25,6 +25,8 @@ class CommonlySharedWithBloc
       yield* _mapLoadCommonlySharedWithToState(event);
     } else if (event is CommonlySharedWithUpdated) {
       yield* _mapCommonlySharedWithUpdatedToState(event);
+    } else if (event is CommonlySharedWithShareWithUser) {
+      yield* _mapCommonlySharedWithShareWithUserToState(event);
     }
   }
 
@@ -43,6 +45,14 @@ class CommonlySharedWithBloc
       CommonlySharedWithUpdated event) async* {
     yield CommonlySharedWithLoaded(
       event.commonSharedWith,
+    );
+  }
+
+  Stream<CommonlySharedWithState> _mapCommonlySharedWithShareWithUserToState(
+      CommonlySharedWithShareWithUser event) async* {
+    _listRepository.shareListWith(
+      list: event.list,
+      toShareWith: event.user.docRef.documentID,
     );
   }
 
