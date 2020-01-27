@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/commonly_shared_with_convert_to_user_profile_bloc/bloc.dart';
-import 'package:sky_lists/blocs/commonly_shared_with_state.bloc/bloc.dart';
+import 'package:sky_lists/blocs/commonly_shared_with_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/commonly_shared_with_chip.dart';
 

@@ -13,8 +13,7 @@ import 'package:sky_lists/blocs/shared_with_me_bloc/shared_with_me_event.dart';
 
 import 'package:sky_lists/presentational_widgets/add_list_fab.dart';
 import 'package:sky_lists/presentational_widgets/bottom_nav_bar_logged_in_page.dart';
-import 'package:sky_lists/presentational_widgets/logged_in_home_page_action.dart';
-import 'package:sky_lists/presentational_widgets/logged_in_home_page_leading.dart';
+import 'package:sky_lists/presentational_widgets/qr_scanner_icon.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 
 import 'package:sky_lists/stateful_widgets/shared_sky_lists_pagination.dart';
@@ -81,14 +80,34 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
               ),
             ],
             child: Scaffold(
+              drawer: Drawer(
+                child: ListView(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.timer),
+                      title: Text('Scheduled Lists'),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.trending_up),
+                      title: Text('Trending Lists'),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.account_circle),
+                      title: Text('My Account'),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.settings),
+                      title: Text('Settings'),
+                    ),
+                  ],
+                ),
+              ),
               appBar: AppBar(
-                automaticallyImplyLeading: false,
                 title: Text(
                   'Sky Lists',
                 ),
-                leading: LoggedInHomePageLeading(),
                 actions: <Widget>[
-                  LoggedInHomePageAction(),
+                  QrScannerIcon(),
                 ],
               ),
               body: Provider(

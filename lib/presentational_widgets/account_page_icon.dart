@@ -3,19 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
-import 'package:sky_lists/presentational_widgets/pages/qr_scanner_page.dart';
+import 'package:sky_lists/presentational_widgets/pages/account_page.dart';
 
-class LoggedInHomePageLeading extends StatelessWidget {
+class AccountPageIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(
-        Icons.camera,
-      ),
+      icon: Icon(Icons.account_circle),
       onPressed: () {
         BlocProvider.of<NavigatorBloc>(context).add(
           NavigatorPushTo(
-            QRScannerPage.routeName,
+            AccountPage.routeName,
           ),
         );
       },
