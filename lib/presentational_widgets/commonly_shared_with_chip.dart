@@ -16,7 +16,6 @@ class CommonlySharedWithChip extends StatelessWidget {
               //TODO: Share list with user
             },
             label: Text(state.userProfile.name),
-            backgroundColor: RandomColor().randomColor(),
           );
         }
         return Center(

@@ -43,7 +43,7 @@ class SkyListPage extends StatelessWidget {
                 create: (_) => ListItemsBloc(
                   itemsRepository: FirebaseListItemsRepository(
                     args.list,
-                    state.user.uid,
+                    args.list.docRef.parent().parent().documentID,
                   ),
                 )..add(LoadListItems()),
               ),

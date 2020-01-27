@@ -62,7 +62,9 @@ class ShareListBloc extends Bloc<ShareListEvent, ShareListState> {
     yield ShareListState.loading();
     try {
       final id = await _listMetadataRepository.getUserUidFromEmail(email);
-      if (email == null) yield ShareListState.failure('Email not found');
+      if (id == null) yield ShareListState.failure('Email not found');
+      if (id == 'SELF')
+        yield ShareListState.failure('Cannot share with yourself');
       await _listMetadataRepository.shareListWith(
         list: list,
         toShareWith: id,

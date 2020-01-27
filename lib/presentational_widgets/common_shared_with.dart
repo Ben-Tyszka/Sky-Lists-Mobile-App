@@ -27,6 +27,7 @@ class _CommonSharedWithState extends State<CommonSharedWith> {
         if (state is CommonlySharedWithLoaded) {
           if (state.commonSharedWith.isNotEmpty) {
             return Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
                   'Suggestions',
@@ -36,25 +37,30 @@ class _CommonSharedWithState extends State<CommonSharedWith> {
                 SizedBox(
                   height: 10,
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state.commonSharedWith.length,
-                  itemBuilder: (context, index) {
-                    return BlocProvider(
-                      create: (_) => CommonlySharedWithConvertToUserProfileBloc(
-                        listRepository:
-                            Provider.of<FirebaseListMetadataRepository>(
-                                context),
-                      )..add(
-                          LoadCommonlySharedWithConvertToUserProfile(
-                            commonSharedWith: state.commonSharedWith[index],
-                          ),
-                        ),
-                      child: CommonlySharedWithChip(),
-                    );
-                  },
+                SizedBox(
+                  height: 50,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: state.commonSharedWith.length,
+                    itemBuilder: (context, index) {
+                      return BlocProvider(
+                        create: (_) =>
+                            CommonlySharedWithConvertToUserProfileBloc(
+                          listRepository:
+                              Provider.of<FirebaseListMetadataRepository>(
+                                  context),
+                        )..add(
+                                LoadCommonlySharedWithConvertToUserProfile(
+                                  commonSharedWith:
+                                      state.commonSharedWith[index],
+                                ),
+                              ),
+                        child: CommonlySharedWithChip(),
+                      );
+                    },
+                  ),
                 ),
               ],
             );

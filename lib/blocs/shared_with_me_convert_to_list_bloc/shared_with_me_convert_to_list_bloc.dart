@@ -24,7 +24,7 @@ class SharedWithMeConvertToListBloc extends Bloc<SharedWithMeConvertToListEvent,
     SharedWithMeConvertToListEvent event,
   ) async* {
     if (event is LoadSharedWithMeConvertToList) {
-      _mapLoadSharedWithMeConvertToListToState(event);
+      yield* _mapLoadSharedWithMeConvertToListToState(event);
     } else if (event is SharedWithMeConvertToListUpdated) {
       yield* _mapSharedWithMeConvertToListUpdatedToState(event);
     }

@@ -115,6 +115,8 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
         )
         .getDocuments();
     if (query.documents.isEmpty) return null;
+    if (_userId == query.documents.first.documentID) return 'SELF';
+
     return query.documents.first.documentID;
   }
 
@@ -127,13 +129,12 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
         .limit(4)
         .snapshots()
         .map(
-          (query) => query.documents
-              .map(
-                (doc) => CommonSharedWith.fromEntity(
-                  CommonSharedWithEntity.fromSnapshot(doc),
-                ),
-              )
-              .toList(),
+          (query) => query.documents.map(
+            (doc) {
+              return CommonSharedWith.fromEntity(
+                  CommonSharedWithEntity.fromSnapshot(doc));
+            },
+          ).toList(),
         );
   }
 
