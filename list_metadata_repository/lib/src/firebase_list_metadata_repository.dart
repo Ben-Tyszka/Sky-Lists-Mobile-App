@@ -39,18 +39,9 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   }) {
     final baseQuery = _collection
         .limit(limit)
-        .orderBy(
-          'lastModified',
-          descending: true,
-        )
-        .where(
-          'archived',
-          isEqualTo: showArchived,
-        )
-        .where(
-          'hidden',
-          isEqualTo: false,
-        );
+        .where('hidden', isEqualTo: false)
+        .where('archived', isEqualTo: showArchived);
+
     final startAfterQuery = baseQuery.startAfter([startAfterTimestamp]);
     final query = startAfterTimestamp == null ? baseQuery : startAfterQuery;
 

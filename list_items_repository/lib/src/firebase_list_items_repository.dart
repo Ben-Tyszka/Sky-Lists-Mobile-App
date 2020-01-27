@@ -20,13 +20,13 @@ class FirebaseListItemsRepository implements ListItemsRepository {
 
   @override
   Future<void> addNewItem(ListItem item) async {
-    item.docRef.parent().parent().updateData(
+    final docRef = await _collection.add(
+      item.toEntity().toDocument(),
+    );
+    return docRef.parent().parent().updateData(
       {
         'lastModified': FieldValue.serverTimestamp(),
       },
-    );
-    return _collection.add(
-      item.toEntity().toDocument(),
     );
   }
 
@@ -45,15 +45,7 @@ class FirebaseListItemsRepository implements ListItemsRepository {
     Timestamp addedAtTimestamp,
     int limit = 10,
   }) {
-    final baseQuery = _collection
-        .limit(limit)
-        .orderBy(
-          'addedAt',
-        )
-        .where(
-          'hidden',
-          isEqualTo: false,
-        );
+    final baseQuery = _collection.limit(limit).orderBy('addedAt');
 
     final startAfterQuery = baseQuery.startAfter([addedAtTimestamp]);
     final query = addedAtTimestamp == null ? baseQuery : startAfterQuery;

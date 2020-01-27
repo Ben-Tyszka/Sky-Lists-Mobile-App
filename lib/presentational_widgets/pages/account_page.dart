@@ -7,10 +7,11 @@ import 'package:sky_lists/blocs/name_change_bloc/bloc.dart';
 import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/change_password_page.dart';
-import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
+
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/require_reauthentication_page.dart';
 import 'package:sky_lists/presentational_widgets/sign_out_button.dart';
+import 'package:sky_lists/presentational_widgets/sky_lists_drawer.dart';
 
 import 'package:sky_lists/stateful_widgets/about_app.dart';
 import 'package:sky_lists/stateful_widgets/forms/name_change_form.dart';
@@ -28,18 +29,9 @@ class AccountPage extends StatelessWidget {
       builder: (context, state) {
         if (state is Authenticated) {
           return Scaffold(
+            drawer: SkyListsDrawwer(),
             appBar: AppBar(
               title: Text('Your Account'),
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  BlocProvider.of<NavigatorBloc>(context).add(
-                    NavigatorPushTo(
-                      LoggedInHomePage.routeName,
-                    ),
-                  );
-                },
-              ),
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.info_outline),

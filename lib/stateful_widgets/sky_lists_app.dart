@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/navigator_bloc/navigator_bloc.dart';
 
+import 'package:sky_lists/presentational_widgets/pages/archived_lists_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/change_password_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/create_account_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
@@ -51,6 +52,7 @@ class SkyListsApp extends StatelessWidget {
           ChangePasswordPage.routeName: (context) => ChangePasswordPage(),
           RequireReauthenticationPage.routeName: (context) =>
               RequireReauthenticationPage(),
+          ArchivedListsPage.routeName: (context) => ArchivedListsPage(),
         },
         initialRoute: StartupPage.routeName,
         //Track route transitions

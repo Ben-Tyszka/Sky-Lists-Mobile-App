@@ -50,7 +50,7 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
     return BlocBuilder<ListMetadataBloc, ListMetadataState>(
       builder: (context, state) {
         if (state is ListMetadatasLoaded) {
-          Provider(
+          return Provider(
             create: (_) => widget.showArchived,
             child: SkyListsBuilder(
               controller: _scrollController,
