@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/presentational_widgets/sky_list_tile.dart';
 
@@ -26,11 +27,13 @@ class SkyListsBuilder extends StatelessWidget {
             style: Theme.of(context).primaryTextTheme.display1,
             textAlign: TextAlign.center,
           ),
-          Text(
-            'Tap below to add',
-            style: Theme.of(context).primaryTextTheme.body1,
-            textAlign: TextAlign.center,
-          ),
+          if (!Provider.of<bool>(context)) ...[
+            Text(
+              'Tap below to add',
+              style: Theme.of(context).primaryTextTheme.body1,
+              textAlign: TextAlign.center,
+            ),
+          ],
         ],
       );
     return ListView.builder(

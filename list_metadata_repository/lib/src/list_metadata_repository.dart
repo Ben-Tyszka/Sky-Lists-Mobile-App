@@ -16,6 +16,7 @@ abstract class ListMetadataRepository {
   Stream<List<ListMetadata>> streamLists({
     Timestamp startAfterTimestamp,
     int limit = 10,
+    bool showArchived = false,
   });
 
   Future<void> updateList(ListMetadata list);

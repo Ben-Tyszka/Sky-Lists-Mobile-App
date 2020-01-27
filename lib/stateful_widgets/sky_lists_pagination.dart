@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/sky_lists_builder.dart';
 
 class SkyListsPagination extends StatefulWidget {
+  SkyListsPagination({this.showArchived = false});
+
+  final bool showArchived;
   @override
   _SkyListsPaginationState createState() => _SkyListsPaginationState();
 }
@@ -27,7 +31,11 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
     final currentScroll = _scrollController.position.pixels;
     final delta = MediaQuery.of(context).size.height;
     if (maxScroll - currentScroll <= delta) {
-      _bloc.add(LoadListsMetadata());
+      _bloc.add(
+        LoadListsMetadata(
+          showArchived: widget.showArchived,
+        ),
+      );
     }
   }
 
@@ -42,10 +50,13 @@ class _SkyListsPaginationState extends State<SkyListsPagination> {
     return BlocBuilder<ListMetadataBloc, ListMetadataState>(
       builder: (context, state) {
         if (state is ListMetadatasLoaded) {
-          return SkyListsBuilder(
-            controller: _scrollController,
-            hasReachedMax: state.hasReachedMax,
-            lists: state.lists,
+          Provider(
+            create: (_) => widget.showArchived,
+            child: SkyListsBuilder(
+              controller: _scrollController,
+              hasReachedMax: state.hasReachedMax,
+              lists: state.lists,
+            ),
           );
         }
         return Center(

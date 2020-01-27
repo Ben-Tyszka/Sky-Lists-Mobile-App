@@ -35,10 +35,21 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   Stream<List<ListMetadata>> streamLists({
     Timestamp startAfterTimestamp,
     int limit = 10,
+    bool showArchived = false,
   }) {
-    final baseQuery = _collection.limit(limit).orderBy(
+    final baseQuery = _collection
+        .limit(limit)
+        .orderBy(
           'lastModified',
           descending: true,
+        )
+        .where(
+          'archived',
+          isEqualTo: showArchived,
+        )
+        .where(
+          'hidden',
+          isEqualTo: false,
         );
     final startAfterQuery = baseQuery.startAfter([startAfterTimestamp]);
     final query = startAfterTimestamp == null ? baseQuery : startAfterQuery;

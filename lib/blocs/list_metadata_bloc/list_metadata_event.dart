@@ -10,7 +10,19 @@ abstract class ListMetadataEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadListsMetadata extends ListMetadataEvent {}
+class LoadListsMetadata extends ListMetadataEvent {
+  final bool showArchived;
+
+  LoadListsMetadata({
+    this.showArchived = false,
+  });
+
+  @override
+  List<Object> get props => [showArchived];
+
+  @override
+  String toString() => 'LoadListsMetadata | showArchived: $showArchived';
+}
 
 class AddList extends ListMetadataEvent {
   final BuildContext context;

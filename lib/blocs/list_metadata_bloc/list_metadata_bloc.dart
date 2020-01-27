@@ -31,7 +31,9 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
         _listsSubscription?.cancel();
 
         if (currentState is ListMetadataLoading) {
-          _listsSubscription = _listsRepository.streamLists().listen(
+          _listsSubscription = _listsRepository
+              .streamLists(showArchived: event.showArchived)
+              .listen(
                 (lists) => add(ListsUpdated(lists, true)),
               );
         }
@@ -39,6 +41,7 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
           _listsSubscription = _listsRepository
               .streamLists(
             startAfterTimestamp: currentState.lists.last.lastModified,
+            showArchived: event.showArchived,
           )
               .listen(
             (lists) {

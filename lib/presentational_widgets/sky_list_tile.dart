@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 
 import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
@@ -18,24 +20,59 @@ class SkyListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(list.name),
-      subtitle: Text(
-        timestampToFormmatedDate(list.lastModified),
-        style: Theme.of(context).primaryTextTheme.body1.copyWith(
-              color: secondaryTextColor,
+    return !Provider.of<bool>(context)
+        ? Dismissible(
+            onDismissed: (_) {
+              BlocProvider.of<ListMetadataBloc>(context).add(
+                UpdateListMetadata(
+                  list.copyWith(
+                    archived: true,
+                  ),
+                ),
+              );
+            },
+            direction: DismissDirection.startToEnd,
+            key: ObjectKey(list.id),
+            child: ListTile(
+              title: Text(list.name),
+              subtitle: Text(
+                timestampToFormmatedDate(list.lastModified),
+                style: Theme.of(context).primaryTextTheme.body1.copyWith(
+                      color: secondaryTextColor,
+                    ),
+              ),
+              onTap: () {
+                BlocProvider.of<NavigatorBloc>(context).add(
+                  NavigatorPushTo(
+                    SkyListPage.routeName,
+                    arguments: SkyListPageArguments(
+                      list,
+                    ),
+                  ),
+                );
+              },
             ),
-      ),
-      onTap: () {
-        BlocProvider.of<NavigatorBloc>(context).add(
-          NavigatorPushTo(
-            SkyListPage.routeName,
-            arguments: SkyListPageArguments(
-              list,
+          )
+        : ListTile(
+            title: Text(list.name),
+            subtitle: Text(
+              timestampToFormmatedDate(list.lastModified),
+              style: Theme.of(context).primaryTextTheme.body1.copyWith(
+                    color: secondaryTextColor,
+                  ),
             ),
-          ),
-        );
-      },
-    );
+            trailing: IconButton(
+              icon: Icon(Icons.unarchive),
+              onPressed: () {
+                BlocProvider.of<ListMetadataBloc>(context).add(
+                  UpdateListMetadata(
+                    list.copyWith(
+                      archived: false,
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
   }
 }

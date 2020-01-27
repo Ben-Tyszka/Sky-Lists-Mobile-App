@@ -15,6 +15,7 @@ import 'package:sky_lists/presentational_widgets/add_list_fab.dart';
 import 'package:sky_lists/presentational_widgets/bottom_nav_bar_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/qr_scanner_icon.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
+import 'package:sky_lists/presentational_widgets/sky_lists_drawer.dart';
 
 import 'package:sky_lists/stateful_widgets/shared_sky_lists_pagination.dart';
 import 'package:sky_lists/stateful_widgets/sky_lists_pagination.dart';
@@ -80,28 +81,7 @@ class _LoggedInHomePageState extends State<LoggedInHomePage>
               ),
             ],
             child: Scaffold(
-              drawer: Drawer(
-                child: ListView(
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.timer),
-                      title: Text('Scheduled Lists'),
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.trending_up),
-                      title: Text('Trending Lists'),
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.account_circle),
-                      title: Text('My Account'),
-                    ),
-                    ListTile(
-                      leading: Icon(Icons.settings),
-                      title: Text('Settings'),
-                    ),
-                  ],
-                ),
-              ),
+              drawer: SkyListsDrawwer(),
               appBar: AppBar(
                 title: Text(
                   'Sky Lists',
