@@ -22,6 +22,17 @@ class SkyListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return !Provider.of<bool>(context)
         ? Dismissible(
+            background: Container(
+              color: Colors.yellow,
+              child: Container(
+                child: Center(
+                  child: Icon(
+                    Icons.archive,
+                    color: Theme.of(context).primaryIconTheme.color,
+                  ),
+                ),
+              ),
+            ),
             onDismissed: (_) {
               BlocProvider.of<ListMetadataBloc>(context).add(
                 UpdateListMetadata(
@@ -53,25 +64,50 @@ class SkyListTile extends StatelessWidget {
               },
             ),
           )
-        : ListTile(
-            title: Text(list.name),
-            subtitle: Text(
-              timestampToFormmatedDate(list.lastModified),
-              style: Theme.of(context).primaryTextTheme.body1.copyWith(
-                    color: secondaryTextColor,
+        : Dismissible(
+            background: Container(
+              color: Theme.of(context).errorColor,
+              child: Container(
+                child: Center(
+                  child: Icon(
+                    Icons.delete_forever,
+                    color: Theme.of(context).accentIconTheme.color,
                   ),
+                ),
+              ),
             ),
-            trailing: IconButton(
-              icon: Icon(Icons.unarchive),
-              onPressed: () {
-                BlocProvider.of<ListMetadataBloc>(context).add(
-                  UpdateListMetadata(
-                    list.copyWith(
-                      archived: false,
+            direction: DismissDirection.startToEnd,
+            onDismissed: (_) {
+              BlocProvider.of<ListMetadataBloc>(context).add(
+                DeleteListMetadata(list),
+              );
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('List Deleted'),
+                ),
+              );
+            },
+            key: ObjectKey(list.id),
+            child: ListTile(
+              title: Text(list.name),
+              subtitle: Text(
+                timestampToFormmatedDate(list.lastModified),
+                style: Theme.of(context).primaryTextTheme.body1.copyWith(
+                      color: secondaryTextColor,
                     ),
-                  ),
-                );
-              },
+              ),
+              trailing: IconButton(
+                icon: Icon(Icons.unarchive),
+                onPressed: () {
+                  BlocProvider.of<ListMetadataBloc>(context).add(
+                    UpdateListMetadata(
+                      list.copyWith(
+                        archived: false,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           );
   }

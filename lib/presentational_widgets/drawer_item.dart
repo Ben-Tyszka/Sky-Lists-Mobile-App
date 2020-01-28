@@ -24,6 +24,9 @@ class DrawerItem extends StatelessWidget {
             }
           : () {
               BlocProvider.of<NavigatorBloc>(context).add(
+                NavigatorPop(),
+              );
+              BlocProvider.of<NavigatorBloc>(context).add(
                 NavigatorPushTo(
                   routeName,
                 ),

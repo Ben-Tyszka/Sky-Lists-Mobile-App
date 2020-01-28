@@ -28,8 +28,10 @@ class ArchivedListsPage extends StatelessWidget {
               create: (_) => ListMetadataBloc(
                 listsRepository: repository,
               )..add(LoadListsMetadata(showArchived: true)),
-              child: SkyListsPagination(
-                showArchived: true,
+              child: Center(
+                child: SkyListsPagination(
+                  showArchived: true,
+                ),
               ),
             );
           } else if (state is Unauthenticated) {
