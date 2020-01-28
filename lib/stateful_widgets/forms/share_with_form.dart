@@ -67,13 +67,17 @@ class _ShareWithFormState extends State<ShareWithForm> {
   Widget build(BuildContext context) {
     return BlocListener<ShareListBloc, ShareListState>(
       listener: (context, state) {
-        if (state.isFailure) {
-          setState(() {
-            errorMessage = state.failureMessage;
-          });
-        } else if (state.isSubmitting || state.isSuccess) {
+        if (state.isSubmitting) {
           setState(() {
             errorMessage = '';
+          });
+        }
+        if (state.isFailure) {
+          print('failure');
+          _emailController.text = '';
+
+          setState(() {
+            errorMessage = state.failureMessage;
           });
         }
       },

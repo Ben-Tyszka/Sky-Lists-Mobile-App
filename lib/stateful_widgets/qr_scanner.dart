@@ -16,9 +16,8 @@ class _QRScannerState extends State<QRScanner> {
   bool _scanned = false;
 
   void _onResult(List<Barcode> barcodes) {
-    if (!mounted || _scanned) {
-      return;
-    }
+    if (!mounted || _scanned || barcodes.isEmpty) return;
+
     setState(() {
       _scanned = true;
     });

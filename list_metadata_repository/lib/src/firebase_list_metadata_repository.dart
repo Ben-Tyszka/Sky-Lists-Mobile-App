@@ -28,6 +28,20 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
 
   @override
   Future<void> deleteList(ListMetadata list) async {
+    final docs =
+        await _collection.document(list.id).collection('items').getDocuments();
+    docs.documents.forEach((doc) {
+      doc.reference.delete();
+    });
+
+    final sharedDocs = await _collection
+        .document(list.id)
+        .collection('sharedwith')
+        .getDocuments();
+    sharedDocs.documents.forEach((doc) {
+      doc.reference.delete();
+    });
+
     return _collection.document(list.id).delete();
   }
 
@@ -117,7 +131,7 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
         )
         .getDocuments();
     if (query.documents.isEmpty) return null;
-    if (_userId == query.documents.first.documentID) return 'SELF';
+    if (_userId == query.documents.first.documentID) return null;
 
     return query.documents.first.documentID;
   }
