@@ -38,6 +38,8 @@ dependencies:
     path: list_metadata_repository
   list_items_repository:
     path: list_items_repository
+  publish_list_repository:
+    path: publish_list_repository
 
 dev_dependencies:
   flutter_test:

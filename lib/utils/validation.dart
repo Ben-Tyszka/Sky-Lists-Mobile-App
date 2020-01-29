@@ -60,3 +60,19 @@ String validateAgreements(bool value) {
 
   return null;
 }
+
+String validateListName(String value) {
+  if (value.isEmpty) {
+    return 'List name cannot be empty';
+  }
+
+  return null;
+}
+
+String validateDescription(String value) {
+  if (value.isEmpty) {
+    return 'List description cannot be empty';
+  }
+
+  return null;
+}
