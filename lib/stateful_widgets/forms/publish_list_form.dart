@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/blocs/publish_list_bloc/bloc.dart';
 
@@ -87,7 +88,29 @@ class _PublishListFormState extends State<PublishListForm> {
           });
         }
         if (state.isSuccess) {
-          //TODO: Do something
+          Future.delayed(
+            Duration(
+              milliseconds: 1600,
+            ),
+            () {
+              BlocProvider.of<NavigatorBloc>(context).add(NavigatorPop());
+              BlocProvider.of<NavigatorBloc>(context).add(NavigatorPop());
+            },
+          );
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: Text('List Published!'),
+              content: Center(
+                child: Icon(
+                  Icons.check,
+                  color: Colors.lightGreen[400],
+                  size: 42,
+                ),
+              ),
+            ),
+            barrierDismissible: false,
+          );
         } else if (state.isFailure) {
           _nameController.text = '';
           _descriptionController.text = '';

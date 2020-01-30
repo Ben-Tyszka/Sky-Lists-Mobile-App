@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:list_metadata_repository/list_metadata_repository.dart';
 import 'package:provider/provider.dart';
-
-import 'package:sky_lists/presentational_widgets/publish_list_dialog.dart';
+import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
+import 'package:sky_lists/presentational_widgets/pages/pusblish_list_page.dart';
 
 class PublishListAction extends StatelessWidget {
   PublishListAction({
@@ -18,8 +19,8 @@ class PublishListAction extends StatelessWidget {
             tooltip: 'Publish List',
             icon: Icon(Icons.public),
             onPressed: () {
-              showDialog(
-                  context: context, builder: (context) => PublishListDialog());
+              BlocProvider.of<NavigatorBloc>(context)
+                  .add(NavigatorPushTo(PublishListPage.routeName));
             },
           )
         : Container();
