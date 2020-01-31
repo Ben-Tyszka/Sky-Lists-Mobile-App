@@ -4,48 +4,48 @@ import 'package:meta/meta.dart';
 import '../entities/entities.dart';
 
 @immutable
-class PublishList {
-  /// List last modified time, used for ordering
-  final dynamic addedAt;
-
+class PublishListItem {
   /// The doc reference for the firestore document this class represents
   final DocumentReference docRef;
 
-  /// Name of the list
+  /// Name of the item
   final String name;
 
   final String description;
 
   final String id;
 
-  final String ownerId;
+  final String descriptor;
 
-  PublishList(
-    this.name,
-    this.ownerId, {
+  final int quantity;
+
+  PublishListItem(
+    this.name, {
     String id,
     String description,
-    dynamic addedAt,
+    String descriptor,
+    int quantity,
     DocumentReference docRef,
-  })  : this.addedAt = addedAt ?? FieldValue.serverTimestamp(),
+  })  : this.quantity = quantity ?? 0,
         this.id = id ?? '',
-        this.docRef = docRef ?? null,
-        this.description = description ?? '';
+        this.descriptor = descriptor ?? '',
+        this.description = description ?? '',
+        this.docRef = docRef ?? null;
 
-  PublishList copyWith({
+  PublishListItem copyWith({
     String name,
     String id,
     String description,
-    dynamic addedAt,
+    String descriptor,
+    int quantity,
     DocumentReference docRef,
-    String ownerId,
   }) {
-    return PublishList(
+    return PublishListItem(
       name ?? this.name,
-      ownerId ?? this.ownerId,
+      descriptor: descriptor ?? this.descriptor,
       docRef: docRef ?? this.docRef,
       id: id ?? this.id,
-      addedAt: addedAt ?? this.addedAt,
+      quantity: quantity ?? this.quantity,
       description: description ?? this.description,
     );
   }
@@ -56,44 +56,44 @@ class PublishList {
       description.hashCode ^
       id.hashCode ^
       docRef.hashCode ^
-      addedAt.hashCode ^
-      ownerId.hashCode;
+      quantity.hashCode ^
+      descriptor.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PublishList &&
+      other is PublishListItem &&
           runtimeType == other.runtimeType &&
           name == other.name &&
           docRef == other.docRef &&
           id == other.id &&
-          addedAt == other.addedAt &&
+          descriptor == other.descriptor &&
           description == other.description &&
-          ownerId == other.ownerId;
+          quantity == other.quantity;
 
   @override
   String toString() {
-    return 'PublishList | name: $name, id: $id, description: $description, addedAt: ${addedAt.toString()}, owner:$ownerId,';
+    return 'PublishListItem | name: $name, id: $id, description: $description, addedAt: ${quantity.toString()}, descriptor:$descriptor,';
   }
 
-  PublishListEntity toEntity() {
-    return PublishListEntity(
-      addedAt: addedAt,
+  PublishListItemEntity toEntity() {
+    return PublishListItemEntity(
+      descriptor: descriptor,
       docRef: docRef,
       id: id,
       name: name,
       description: description,
-      ownerId: ownerId,
+      quantity: quantity,
     );
   }
 
-  static PublishList fromEntity(PublishListEntity entity) {
-    return PublishList(
+  static PublishListItem fromEntity(PublishListItemEntity entity) {
+    return PublishListItem(
       entity.name,
-      entity.ownerId,
+      quantity: entity.quantity,
       docRef: entity.docRef,
       id: entity.id,
-      addedAt: entity.addedAt,
+      descriptor: entity.descriptor,
       description: entity.description,
     );
   }
