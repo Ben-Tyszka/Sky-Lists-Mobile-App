@@ -79,7 +79,13 @@ class PublishListBloc extends Bloc<PublishListEvent, PublishListState> {
         null,
         description: description,
       );
-      await _publishListRepository.publishList(list);
+      final doc = await (await _publishListRepository.publishList(list)).get();
+
+      final pubList =
+          PublishList.fromEntity(PublishListEntity.fromSnapshot(doc));
+
+      _publishListRepository.addListItems(pubList);
+
       yield PublishListState.success();
     } on PlatformException catch (error) {
       log(

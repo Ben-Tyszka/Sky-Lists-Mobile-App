@@ -12,6 +12,7 @@ import 'package:sky_lists/presentational_widgets/pages/create_account_page.dart'
 import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/privacy_policy_page.dart';
+import 'package:sky_lists/presentational_widgets/pages/pusblish_list_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/qr_scanner_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/require_reauthentication_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/send_password_reset_page.dart';
@@ -53,6 +54,7 @@ class SkyListsApp extends StatelessWidget {
           RequireReauthenticationPage.routeName: (context) =>
               RequireReauthenticationPage(),
           ArchivedListsPage.routeName: (context) => ArchivedListsPage(),
+          PublishListPage.routeName: (context) => PublishListPage(),
         },
         initialRoute: StartupPage.routeName,
         //Track route transitions

@@ -5,9 +5,6 @@ import '../entities/entities.dart';
 
 @immutable
 class PublishList {
-  /// List last modified time, used for ordering
-  final dynamic addedAt;
-
   /// The doc reference for the firestore document this class represents
   final DocumentReference docRef;
 
@@ -20,17 +17,24 @@ class PublishList {
 
   final String ownerId;
 
+  final int likes;
+
+  /// List last modified time, used for ordering
+  final dynamic addedAt;
+
   PublishList(
     this.name,
     this.ownerId, {
     String id,
     String description,
-    dynamic addedAt,
+    int likes,
     DocumentReference docRef,
-  })  : this.addedAt = addedAt ?? FieldValue.serverTimestamp(),
-        this.id = id ?? '',
+    dynamic addedAt,
+  })  : this.id = id ?? '',
         this.docRef = docRef ?? null,
-        this.description = description ?? '';
+        this.description = description ?? '',
+        this.likes = likes ?? 0,
+        this.addedAt = addedAt ?? FieldValue.serverTimestamp();
 
   PublishList copyWith({
     String name,
@@ -39,14 +43,16 @@ class PublishList {
     dynamic addedAt,
     DocumentReference docRef,
     String ownerId,
+    int likes,
   }) {
     return PublishList(
       name ?? this.name,
       ownerId ?? this.ownerId,
       docRef: docRef ?? this.docRef,
       id: id ?? this.id,
-      addedAt: addedAt ?? this.addedAt,
+      likes: likes ?? this.likes,
       description: description ?? this.description,
+      addedAt: addedAt ?? this.addedAt,
     );
   }
 
@@ -56,8 +62,9 @@ class PublishList {
       description.hashCode ^
       id.hashCode ^
       docRef.hashCode ^
-      addedAt.hashCode ^
-      ownerId.hashCode;
+      likes.hashCode ^
+      ownerId.hashCode ^
+      addedAt.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -67,23 +74,24 @@ class PublishList {
           name == other.name &&
           docRef == other.docRef &&
           id == other.id &&
-          addedAt == other.addedAt &&
           description == other.description &&
-          ownerId == other.ownerId;
+          ownerId == other.ownerId &&
+          likes == other.likes;
 
   @override
   String toString() {
-    return 'PublishList | name: $name, id: $id, description: $description, addedAt: ${addedAt.toString()}, owner:$ownerId,';
+    return 'PublishList | name: $name, id: $id, description: $description, owner:$ownerId, likes: $likes, addedAt:${addedAt.toString()}';
   }
 
   PublishListEntity toEntity() {
     return PublishListEntity(
-      addedAt: addedAt,
       docRef: docRef,
       id: id,
       name: name,
       description: description,
       ownerId: ownerId,
+      likes: likes,
+      addedAt: addedAt,
     );
   }
 
@@ -93,8 +101,9 @@ class PublishList {
       entity.ownerId,
       docRef: entity.docRef,
       id: entity.id,
-      addedAt: entity.addedAt,
+      likes: entity.likes,
       description: entity.description,
+      addedAt: entity.addedAt,
     );
   }
 }

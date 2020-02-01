@@ -17,6 +17,8 @@ class PublishListEntity extends Equatable {
 
   final String ownerId;
 
+  final int likes;
+
   PublishListEntity({
     this.name,
     this.docRef,
@@ -24,21 +26,16 @@ class PublishListEntity extends Equatable {
     this.addedAt,
     this.id,
     this.ownerId,
+    this.likes,
   });
 
   @override
-  List<Object> get props => [
-        name,
-        docRef,
-        addedAt,
-        description,
-        id,
-        ownerId,
-      ];
+  List<Object> get props =>
+      [name, docRef, addedAt, description, id, ownerId, likes];
 
   @override
   String toString() {
-    return 'PublishList | id: $id, name: $name, addedAt ${addedAt.toString()}, description: $description, owner:$ownerId';
+    return 'PublishList | id: $id, name: $name, addedAt ${addedAt.toString()}, description: $description, owner:$ownerId, likes:$likes';
   }
 
   static PublishListEntity fromSnapshot(DocumentSnapshot snapshot) {
@@ -49,6 +46,7 @@ class PublishListEntity extends Equatable {
       description: snapshot['description'] ?? '',
       addedAt: snapshot['addedAt'] ?? Timestamp.now(),
       ownerId: snapshot['owner'] ?? '',
+      likes: snapshot['likes'] ?? '',
     );
   }
 
@@ -58,6 +56,7 @@ class PublishListEntity extends Equatable {
       'addedAt': FieldValue.serverTimestamp(),
       'description': description,
       'owner': ownerId,
+      'likes': likes,
     };
   }
 }
