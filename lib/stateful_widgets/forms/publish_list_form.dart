@@ -4,21 +4,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 
 import 'package:sky_lists/blocs/publish_list_bloc/bloc.dart';
+import 'package:sky_lists/presentational_widgets/pages/logged_in_home_page.dart';
 
 import 'package:sky_lists/presentational_widgets/publish_list.dart';
 
+import 'package:list_metadata_repository/list_metadata_repository.dart';
+
 class PublishListForm extends StatefulWidget {
+  final ListMetadata list;
+  PublishListForm({@required this.list});
+
   @override
   _PublishListFormState createState() => _PublishListFormState();
 }
 
 class _PublishListFormState extends State<PublishListForm> {
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   PublishListBloc _publishBloc;
-
+  TextEditingController _nameController;
   String nameVal;
   String descriptionVal;
   String errorMessage = '';
@@ -33,6 +38,7 @@ class _PublishListFormState extends State<PublishListForm> {
   @override
   void initState() {
     super.initState();
+    _nameController = TextEditingController(text: widget.list.name);
     _publishBloc = BlocProvider.of<PublishListBloc>(context);
     _nameController.addListener(_onNameChanged);
     _descriptionController.addListener(_onDescriptionChanged);
@@ -90,26 +96,15 @@ class _PublishListFormState extends State<PublishListForm> {
         if (state.isSuccess) {
           Future.delayed(
             Duration(
-              milliseconds: 1600,
+              milliseconds: 800,
             ),
             () {
-              BlocProvider.of<NavigatorBloc>(context).add(NavigatorPop());
-              BlocProvider.of<NavigatorBloc>(context).add(NavigatorPop());
-            },
-          );
-          showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              title: Text('List Published!'),
-              content: Center(
-                child: Icon(
-                  Icons.check,
-                  color: Colors.lightGreen[400],
-                  size: 42,
+              BlocProvider.of<NavigatorBloc>(context).add(
+                NavigatorPopAllAndPushTo(
+                  LoggedInHomePage.routeName,
                 ),
-              ),
-            ),
-            barrierDismissible: false,
+              );
+            },
           );
         } else if (state.isFailure) {
           _nameController.text = '';
@@ -121,6 +116,24 @@ class _PublishListFormState extends State<PublishListForm> {
       },
       child: BlocBuilder<PublishListBloc, PublishListState>(
         builder: (context, state) {
+          if (state.isSuccess)
+            return Center(
+              child: Column(
+                children: <Widget>[
+                  Center(
+                    child: Icon(
+                      Icons.check,
+                      color: Colors.lightGreen[400],
+                      size: 42,
+                    ),
+                  ),
+                  Text(
+                    'List Published!',
+                    style: Theme.of(context).primaryTextTheme.display1,
+                  ),
+                ],
+              ),
+            );
           return PublishList(
             formKey: _formKey,
             nameController: _nameController,

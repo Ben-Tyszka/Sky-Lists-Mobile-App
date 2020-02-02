@@ -55,10 +55,6 @@ class SkyListsDrawwer extends StatelessWidget {
             leading: Icon(Icons.timer),
             title: Text('Scheduled Lists'),
           ),
-          ListTile(
-            leading: Icon(Icons.trending_up),
-            title: Text('Trending Lists'),
-          ),
           DrawerItem(
             icon: Icons.archive,
             routeName: ArchivedListsPage.routeName,

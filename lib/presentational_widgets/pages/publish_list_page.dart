@@ -44,7 +44,7 @@ class PublishListPage extends StatelessWidget {
                     args.list,
                   ),
                 ),
-                child: PublishListForm(),
+                child: PublishListForm(list: args.list),
               ),
             ],
           ),

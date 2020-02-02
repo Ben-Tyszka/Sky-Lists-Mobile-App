@@ -57,7 +57,6 @@ class PublishList extends StatelessWidget {
             ),
             TextFormField(
               controller: descriptionController,
-              maxLengthEnforced: false,
               maxLines: 10,
               decoration: InputDecoration(
                 filled: true,
