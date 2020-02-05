@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:list_metadata_repository/src/scheduling.dart';
 import 'package:meta/meta.dart';
 import '../entities/entities.dart';
 
@@ -26,6 +27,12 @@ class ListMetadata {
 
   final bool othersCanDeleteItems;
 
+  final Schedule schedule;
+
+  final String scheduleTime;
+
+  final Map<DayOfWeek, bool> daysOfWeek;
+
   ListMetadata(
     this.name, {
     bool archived,
@@ -35,13 +42,28 @@ class ListMetadata {
     DocumentReference docRef,
     bool othersCanShareList,
     bool othersCanDeleteItems,
+    Schedule schedule,
+    String scheduleTime,
+    Map<DayOfWeek, bool> daysOfWeek,
   })  : this.archived = archived ?? false,
         this.hidden = hidden ?? false,
         this.lastModified = lastModified ?? FieldValue.serverTimestamp(),
         this.id = id ?? '',
         this.docRef = docRef ?? null,
         this.othersCanShareList = othersCanShareList ?? true,
-        this.othersCanDeleteItems = othersCanDeleteItems ?? true;
+        this.othersCanDeleteItems = othersCanDeleteItems ?? true,
+        this.schedule = schedule ?? Schedule.values[0],
+        this.scheduleTime = scheduleTime ?? '',
+        this.daysOfWeek = daysOfWeek ??
+            {
+              DayOfWeek.SUN: false,
+              DayOfWeek.MON: false,
+              DayOfWeek.TUE: false,
+              DayOfWeek.WED: false,
+              DayOfWeek.TH: false,
+              DayOfWeek.FRI: false,
+              DayOfWeek.SAT: false,
+            };
 
   ListMetadata copyWith({
     String id,
@@ -52,6 +74,9 @@ class ListMetadata {
     String name,
     bool othersCanShareList,
     bool othersCanDeleteItems,
+    Schedule schedule,
+    String scheduleTime,
+    Map<DayOfWeek, bool> daysOfWeek,
   }) {
     return ListMetadata(
       name ?? this.name,
@@ -62,6 +87,9 @@ class ListMetadata {
       lastModified: lastModified ?? this.lastModified,
       othersCanShareList: othersCanShareList ?? this.othersCanShareList,
       othersCanDeleteItems: othersCanDeleteItems ?? this.othersCanDeleteItems,
+      daysOfWeek: daysOfWeek ?? this.daysOfWeek,
+      schedule: schedule ?? this.schedule,
+      scheduleTime: scheduleTime ?? this.scheduleTime,
     );
   }
 
@@ -74,7 +102,10 @@ class ListMetadata {
       docRef.hashCode ^
       lastModified.hashCode ^
       othersCanDeleteItems.hashCode ^
-      othersCanShareList.hashCode;
+      othersCanShareList.hashCode ^
+      schedule.hashCode ^
+      scheduleTime.hashCode ^
+      daysOfWeek.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -88,11 +119,14 @@ class ListMetadata {
           archived == other.archived &&
           lastModified == other.lastModified &&
           othersCanDeleteItems == other.othersCanDeleteItems &&
-          othersCanShareList == other.othersCanShareList;
+          othersCanShareList == other.othersCanShareList &&
+          daysOfWeek == other.daysOfWeek &&
+          schedule == other.schedule &&
+          scheduleTime == other.scheduleTime;
 
   @override
   String toString() {
-    return 'ListMetadata | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden, othersCanShareList: $othersCanShareList, othersCanDeleteItems: $othersCanDeleteItems';
+    return 'ListMetadata | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden, othersCanShareList: $othersCanShareList, othersCanDeleteItems: $othersCanDeleteItems, schedule: $schedule, scheduleTime: $scheduleTime, dayOfWeek:$daysOfWeek';
   }
 
   ListMetadataEntity toEntity() {
@@ -105,6 +139,9 @@ class ListMetadata {
       name: name,
       othersCanDeleteItems: othersCanDeleteItems,
       othersCanShareList: othersCanShareList,
+      daysOfWeek: daysOfWeek,
+      schedule: schedule,
+      scheduleTime: scheduleTime,
     );
   }
 
@@ -118,6 +155,9 @@ class ListMetadata {
       lastModified: entity.lastModified,
       othersCanDeleteItems: entity.othersCanDeleteItems,
       othersCanShareList: entity.othersCanShareList,
+      daysOfWeek: entity.daysOfWeek,
+      schedule: entity.schedule,
+      scheduleTime: entity.scheduleTime,
     );
   }
 }

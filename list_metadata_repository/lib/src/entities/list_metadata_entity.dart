@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:list_metadata_repository/src/scheduling.dart';
 
 class ListMetadataEntity extends Equatable {
   /// Unqiue identifier for this list
@@ -24,6 +25,12 @@ class ListMetadataEntity extends Equatable {
 
   final bool othersCanDeleteItems;
 
+  final Schedule schedule;
+
+  final String scheduleTime;
+
+  final Map<DayOfWeek, bool> daysOfWeek;
+
   ListMetadataEntity({
     this.id,
     this.name,
@@ -33,6 +40,9 @@ class ListMetadataEntity extends Equatable {
     this.lastModified,
     this.othersCanDeleteItems,
     this.othersCanShareList,
+    this.schedule,
+    this.scheduleTime,
+    this.daysOfWeek,
   });
 
   @override
@@ -45,11 +55,14 @@ class ListMetadataEntity extends Equatable {
         hidden,
         othersCanDeleteItems,
         othersCanShareList,
+        daysOfWeek,
+        schedule,
+        scheduleTime,
       ];
 
   @override
   String toString() {
-    return 'ListMetadataEntity | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden, othersCanShareList: $othersCanShareList, othersCanDeleteItems: $othersCanDeleteItems';
+    return 'ListMetadataEntity | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden, othersCanShareList: $othersCanShareList, othersCanDeleteItems: $othersCanDeleteItems, schedule: $schedule, scheduleTime: $scheduleTime, dayOfWeek:$daysOfWeek';
   }
 
   static ListMetadataEntity fromSnapshot(DocumentSnapshot snapshot) {
@@ -62,6 +75,9 @@ class ListMetadataEntity extends Equatable {
       hidden: snapshot['hidden'] ?? false,
       othersCanDeleteItems: snapshot['othersCanDeleteItems'] ?? true,
       othersCanShareList: snapshot['othersCanShareList'] ?? true,
+      daysOfWeek: snapshot['dayOfWeek'] ?? null,
+      schedule: Schedule.values[snapshot['schedule'] ?? 0],
+      scheduleTime: snapshot['scheduleTime'] ?? '',
     );
   }
 
@@ -73,6 +89,9 @@ class ListMetadataEntity extends Equatable {
       'hidden': hidden,
       'othersCanShareList': othersCanShareList,
       'othersCanDeleteItems': othersCanDeleteItems,
+      'daysOfWeek': daysOfWeek,
+      'schedule': schedule.index,
+      'scheduleTime': scheduleTime,
     };
   }
 }

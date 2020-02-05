@@ -9,6 +9,7 @@ import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 import 'package:sky_lists/blocs/shared_permission_bloc/bloc.dart';
 
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
+import 'package:sky_lists/presentational_widgets/schedule_list_button.dart';
 //import 'package:sky_lists/presentational_widgets/publish_list_action.dart';
 import 'package:sky_lists/presentational_widgets/share_list_button.dart';
 import 'package:sky_lists/presentational_widgets/sky_list_page_leading.dart';
@@ -62,6 +63,9 @@ class SkyListPage extends StatelessWidget {
                 appBar: AppBar(
                   actions: <Widget>[
                     //PublishListAction(list: args.list),
+                    ScheduleListButton(
+                      list: args.list,
+                    ),
                     ShareListButton(
                       user: state.user,
                       list: args.list,
