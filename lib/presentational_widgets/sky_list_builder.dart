@@ -28,7 +28,7 @@ class SkyListBuilder extends StatelessWidget {
           children: <Widget>[
             Text(
               'List is empty',
-              style: Theme.of(context).primaryTextTheme.display1,
+              style: Theme.of(context).primaryTextTheme.headline4,
               textAlign: TextAlign.center,
             ),
             AddFirstItemButton(),

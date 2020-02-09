@@ -20,8 +20,12 @@ class ItemTitle extends StatelessWidget {
       style: TextStyle(
         decoration: checked ? TextDecoration.lineThrough : TextDecoration.none,
         color: checked
-            ? Theme.of(context).primaryTextTheme.body1.color.withOpacity(0.45)
-            : Theme.of(context).primaryTextTheme.body1.color,
+            ? Theme.of(context)
+                .primaryTextTheme
+                .bodyText2
+                .color
+                .withOpacity(0.45)
+            : Theme.of(context).primaryTextTheme.bodyText2.color,
       ),
       enabled: !checked,
       maxLength: 100,

@@ -24,13 +24,13 @@ class SkyListsBuilder extends StatelessWidget {
         children: <Widget>[
           Text(
             'No Lists',
-            style: Theme.of(context).primaryTextTheme.display1,
+            style: Theme.of(context).primaryTextTheme.headline4,
             textAlign: TextAlign.center,
           ),
           if (!Provider.of<bool>(context)) ...[
             Text(
               'Tap below to add',
-              style: Theme.of(context).primaryTextTheme.body1,
+              style: Theme.of(context).primaryTextTheme.bodyText2,
               textAlign: TextAlign.center,
             ),
           ],

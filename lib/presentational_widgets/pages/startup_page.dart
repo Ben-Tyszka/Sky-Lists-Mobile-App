@@ -57,7 +57,7 @@ class _StartupPageState extends State<StartupPage> {
               children: <Widget>[
                 Text(
                   'Sky Lists',
-                  style: Theme.of(context).primaryTextTheme.display1,
+                  style: Theme.of(context).primaryTextTheme.headline4,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(

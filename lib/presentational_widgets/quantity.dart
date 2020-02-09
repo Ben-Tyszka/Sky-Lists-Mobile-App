@@ -44,7 +44,7 @@ class Quantity extends StatelessWidget {
     return AlertDialog(
       title: Text(
         'Select Quantity',
-        style: Theme.of(context).primaryTextTheme.title,
+        style: Theme.of(context).primaryTextTheme.headline6,
         textAlign: TextAlign.center,
       ),
       content: Form(

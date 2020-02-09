@@ -65,7 +65,7 @@ class ShareWith extends StatelessWidget {
             if (failureMessage.isNotEmpty && isFailure) ...[
               Text(
                 failureMessage,
-                style: Theme.of(context).primaryTextTheme.body1.copyWith(
+                style: Theme.of(context).primaryTextTheme.bodyText2.copyWith(
                       color: Theme.of(context).errorColor,
                     ),
               ),

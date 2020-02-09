@@ -126,7 +126,7 @@ class CreateAccount extends StatelessWidget {
                     Text.rich(
                       TextSpan(
                         text: 'I accept the ',
-                        style: Theme.of(context).textTheme.body1,
+                        style: Theme.of(context).textTheme.bodyText2,
                         children: <TextSpan>[
                           TextSpan(
                             recognizer: TapGestureRecognizer()
@@ -138,14 +138,15 @@ class CreateAccount extends StatelessWidget {
                                 );
                               },
                             text: 'Terms of Service',
-                            style: Theme.of(context).textTheme.body1.copyWith(
-                                  decoration: TextDecoration.underline,
-                                  color: Colors.blue,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodyText2.copyWith(
+                                      decoration: TextDecoration.underline,
+                                      color: Colors.blue,
+                                    ),
                           ),
                           TextSpan(
                             text: ' and\n',
-                            style: Theme.of(context).textTheme.body1,
+                            style: Theme.of(context).textTheme.bodyText2,
                           ),
                           TextSpan(
                             recognizer: TapGestureRecognizer()
@@ -157,10 +158,11 @@ class CreateAccount extends StatelessWidget {
                                 );
                               },
                             text: 'Privacy Policy',
-                            style: Theme.of(context).textTheme.body1.copyWith(
-                                  decoration: TextDecoration.underline,
-                                  color: Colors.blue,
-                                ),
+                            style:
+                                Theme.of(context).textTheme.bodyText2.copyWith(
+                                      decoration: TextDecoration.underline,
+                                      color: Colors.blue,
+                                    ),
                           ),
                         ],
                       ),
@@ -176,7 +178,7 @@ class CreateAccount extends StatelessWidget {
             if (isFailure) ...[
               Text(
                 failureMessage,
-                style: Theme.of(context).primaryTextTheme.body1.copyWith(
+                style: Theme.of(context).primaryTextTheme.bodyText2.copyWith(
                       color: Theme.of(context).errorColor,
                     ),
               ),

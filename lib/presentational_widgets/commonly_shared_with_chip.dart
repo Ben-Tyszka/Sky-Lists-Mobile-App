@@ -25,7 +25,7 @@ class CommonlySharedWithChip extends StatelessWidget {
               );
             },
             label: Text(state.userProfile.name),
-            labelStyle: Theme.of(context).primaryTextTheme.body1,
+            labelStyle: Theme.of(context).primaryTextTheme.bodyText2,
           );
         }
         return Center(

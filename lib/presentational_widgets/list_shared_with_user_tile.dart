@@ -28,7 +28,7 @@ class ListSharedWithUserTile extends StatelessWidget {
             title: Text(state.userProfile.name),
             subtitle: Text(
               state.userProfile.email,
-              style: Theme.of(context).primaryTextTheme.subtitle.copyWith(
+              style: Theme.of(context).primaryTextTheme.subtitle2.copyWith(
                     color: secondaryTextColor,
                   ),
             ),

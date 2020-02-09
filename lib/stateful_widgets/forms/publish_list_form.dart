@@ -129,7 +129,7 @@ class _PublishListFormState extends State<PublishListForm> {
                   ),
                   Text(
                     'List Published!',
-                    style: Theme.of(context).primaryTextTheme.display1,
+                    style: Theme.of(context).primaryTextTheme.headline4,
                   ),
                 ],
               ),

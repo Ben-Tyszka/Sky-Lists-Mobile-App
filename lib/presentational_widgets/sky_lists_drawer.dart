@@ -34,14 +34,14 @@ class SkyListsDrawwer extends StatelessWidget {
             ),
             accountName: Text(
               user.user.displayName,
-              style: Theme.of(context).accentTextTheme.title,
+              style: Theme.of(context).accentTextTheme.headline6,
             ),
             accountEmail: Text(user.user.email,
-                style: Theme.of(context).accentTextTheme.subtitle),
+                style: Theme.of(context).accentTextTheme.subtitle2),
             currentAccountPicture: CircleAvatar(
               child: Text(
                 _getInitials(user.user.displayName),
-                style: Theme.of(context).accentTextTheme.body2,
+                style: Theme.of(context).accentTextTheme.bodyText1,
               ),
               backgroundColor: Theme.of(context).primaryColorDark,
             ),

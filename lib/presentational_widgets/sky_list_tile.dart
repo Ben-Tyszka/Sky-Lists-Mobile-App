@@ -48,7 +48,7 @@ class SkyListTile extends StatelessWidget {
               title: Text(list.name),
               subtitle: Text(
                 timestampToFormmatedDate(list.lastModified),
-                style: Theme.of(context).primaryTextTheme.body1.copyWith(
+                style: Theme.of(context).primaryTextTheme.bodyText2.copyWith(
                       color: secondaryTextColor,
                     ),
               ),
@@ -92,7 +92,7 @@ class SkyListTile extends StatelessWidget {
               title: Text(list.name),
               subtitle: Text(
                 timestampToFormmatedDate(list.lastModified),
-                style: Theme.of(context).primaryTextTheme.body1.copyWith(
+                style: Theme.of(context).primaryTextTheme.bodyText2.copyWith(
                       color: secondaryTextColor,
                     ),
               ),

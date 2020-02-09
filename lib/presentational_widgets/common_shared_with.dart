@@ -31,7 +31,7 @@ class _CommonSharedWithState extends State<CommonSharedWith> {
               children: <Widget>[
                 Text(
                   'Suggestions',
-                  style: Theme.of(context).primaryTextTheme.title,
+                  style: Theme.of(context).primaryTextTheme.headline6,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(

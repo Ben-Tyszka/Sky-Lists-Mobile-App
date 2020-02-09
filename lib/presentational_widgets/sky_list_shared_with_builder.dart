@@ -25,7 +25,7 @@ class SkyListSharedWithBuilder extends StatelessWidget {
         children: <Widget>[
           Text(
             'Shared With',
-            style: Theme.of(context).primaryTextTheme.display1,
+            style: Theme.of(context).primaryTextTheme.headline4,
             textAlign: TextAlign.center,
           ),
           ListView.builder(
@@ -52,7 +52,7 @@ class SkyListSharedWithBuilder extends StatelessWidget {
     }
     return Text(
       'Not Shared',
-      style: Theme.of(context).primaryTextTheme.display1,
+      style: Theme.of(context).primaryTextTheme.headline4,
       textAlign: TextAlign.center,
     );
   }

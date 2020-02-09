@@ -64,16 +64,16 @@ ThemeData _buildLightTheme() {
 TextTheme _buildAppTextTheme(TextTheme base) {
   return GoogleFonts.openSansTextTheme()
       .copyWith(
-        display1: base.display1.copyWith(
+        headline4: base.headline4.copyWith(
           fontWeight: FontWeight.w200,
         ),
-        display2: base.display2.copyWith(
+        headline3: base.headline3.copyWith(
           fontWeight: FontWeight.w200,
         ),
-        headline: base.headline.copyWith(
+        headline5: base.headline5.copyWith(
           fontWeight: FontWeight.w500,
         ),
-        title: base.title.copyWith(
+        headline6: base.headline6.copyWith(
           fontWeight: FontWeight.w400,
           fontSize: 18.0,
         ),
@@ -81,7 +81,7 @@ TextTheme _buildAppTextTheme(TextTheme base) {
           fontWeight: FontWeight.w400,
           fontSize: 14.0,
         ),
-        subtitle: base.subtitle.copyWith(
+        subtitle2: base.subtitle2.copyWith(
           fontWeight: FontWeight.w400,
         ),
       )

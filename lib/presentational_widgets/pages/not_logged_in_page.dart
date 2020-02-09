@@ -45,14 +45,14 @@ class NotLoggedInPage extends StatelessWidget {
                     ),
                     Text(
                       'Sky Lists',
-                      style: Theme.of(context).primaryTextTheme.display2,
+                      style: Theme.of(context).primaryTextTheme.headline3,
                     ),
                     SizedBox(
                       height: 4.0,
                     ),
                     Text(
                       'simple and connected',
-                      style: Theme.of(context).primaryTextTheme.display1,
+                      style: Theme.of(context).primaryTextTheme.headline4,
                     ),
                     SizedBox(height: 15.0),
                     LoginForm(),

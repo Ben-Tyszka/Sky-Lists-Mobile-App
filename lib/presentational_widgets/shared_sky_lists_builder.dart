@@ -28,7 +28,7 @@ class SharedSkyListsBuilder extends StatelessWidget {
           children: <Widget>[
             Text(
               'No lists are shared with you',
-              style: Theme.of(context).primaryTextTheme.display1,
+              style: Theme.of(context).primaryTextTheme.headline4,
               textAlign: TextAlign.center,
             ),
           ],

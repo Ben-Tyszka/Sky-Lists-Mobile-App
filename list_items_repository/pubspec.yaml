@@ -11,3 +11,5 @@ dependencies:
   cloud_firestore: ^0.13.0+1
   rxdart: ^0.23.0
   equatable: ^1.0.2
+  list_metadata_repository:
+    path: ../list_metadata_repository

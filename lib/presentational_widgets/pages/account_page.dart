@@ -88,8 +88,9 @@ class AccountPage extends StatelessWidget {
                                 Text(
                                   'Your email is not verified, some features may be disabled.',
                                   textAlign: TextAlign.center,
-                                  style:
-                                      Theme.of(context).primaryTextTheme.title,
+                                  style: Theme.of(context)
+                                      .primaryTextTheme
+                                      .headline6,
                                 ),
                               ],
                             ),
