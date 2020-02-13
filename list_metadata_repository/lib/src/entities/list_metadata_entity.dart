@@ -76,13 +76,21 @@ class ListMetadataEntity extends Equatable {
       othersCanDeleteItems: snapshot['othersCanDeleteItems'] ?? true,
       othersCanShareList: snapshot['othersCanShareList'] ?? true,
       daysOfWeek:
-          (snapshot['dayOfWeek'] as Map<int, bool>).map<DayOfWeek, bool>(
+          Map<String, bool>.from(snapshot['daysOfWeek'])?.map<DayOfWeek, bool>(
                 (dayIndex, flag) => MapEntry(
-                  DayOfWeek.values[dayIndex],
+                  DayOfWeek.values[int.parse(dayIndex)],
                   flag,
                 ),
               ) ??
-              null,
+              {
+                DayOfWeek.SUN: false,
+                DayOfWeek.MON: false,
+                DayOfWeek.TUE: false,
+                DayOfWeek.WED: false,
+                DayOfWeek.TH: false,
+                DayOfWeek.FRI: false,
+                DayOfWeek.SAT: false,
+              },
       schedule: Schedule.values[snapshot['schedule'] ?? 0],
       scheduleTime: snapshot['scheduleTime'] ?? '',
     );
@@ -96,9 +104,9 @@ class ListMetadataEntity extends Equatable {
       'hidden': hidden,
       'othersCanShareList': othersCanShareList,
       'othersCanDeleteItems': othersCanDeleteItems,
-      'daysOfWeek': daysOfWeek.map<int, bool>(
+      'daysOfWeek': daysOfWeek.map<String, bool>(
         (day, flag) => MapEntry(
-          day.index,
+          day.index.toString(),
           flag,
         ),
       ),

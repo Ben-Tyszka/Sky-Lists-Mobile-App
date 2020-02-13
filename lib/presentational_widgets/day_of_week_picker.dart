@@ -22,37 +22,43 @@ class DayOfWeekPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: days.length,
-      itemBuilder: (context, index) {
-        final currentDay = DayOfWeek.values[index];
-        return GestureDetector(
-          onTap: () {
-            final copyOfDaysOfWeek = list.daysOfWeek;
-            list.daysOfWeek[currentDay] = !list.daysOfWeek[currentDay];
-
-            BlocProvider.of<ListMetadataBloc>(context).add(
-              ListUpdated(
-                list.copyWith(
-                  daysOfWeek: copyOfDaysOfWeek,
-                ),
-              ),
-            );
-          },
-          child: ClipOval(
-            child: Container(
-              color: list.daysOfWeek[currentDay] ? Colors.blue : Colors.grey,
-              height: 64.0,
-              width: 64.0,
-              child: Center(
-                child: Text(
-                  days[index],
-                ),
-              ),
+    return SizedBox(
+      height: 60,
+      child: ListView.builder(
+        itemCount: days.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          final currentDay = DayOfWeek.values[index];
+          return Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 4.0,
             ),
-          ),
-        );
-      },
+            child: RawMaterialButton(
+              key: ObjectKey(currentDay),
+              onPressed: () {
+                final copyOfDaysOfWeek = list.daysOfWeek;
+                copyOfDaysOfWeek[currentDay] = !copyOfDaysOfWeek[currentDay];
+
+                BlocProvider.of<ListMetadataBloc>(context).add(
+                  UpdateListMetadata(
+                    list.copyWith(
+                      daysOfWeek: copyOfDaysOfWeek,
+                    ),
+                  ),
+                );
+              },
+              child: Text(
+                days[index],
+                style: Theme.of(context).primaryTextTheme.bodyText1,
+              ),
+              shape: CircleBorder(),
+              elevation: 2.0,
+              fillColor:
+                  list.daysOfWeek[currentDay] ? Colors.blue : Colors.grey,
+            ),
+          );
+        },
+      ),
     );
   }
 }

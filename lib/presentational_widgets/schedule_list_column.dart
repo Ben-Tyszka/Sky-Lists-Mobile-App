@@ -10,7 +10,6 @@ import 'package:sky_lists/presentational_widgets/time_picker.dart';
 
 class ScheduleListColumn extends StatelessWidget {
   final _scheduleTypes = [
-    '',
     'Daily',
     'Weekly',
     'Biweekly',
