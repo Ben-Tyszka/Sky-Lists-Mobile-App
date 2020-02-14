@@ -14,7 +14,10 @@ class DrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(icon),
-      title: Text(text),
+      title: Text(
+        text,
+        style: Theme.of(context).primaryTextTheme.bodyText2,
+      ),
       selected: ModalRoute.of(context).settings.name == routeName,
       onTap: ModalRoute.of(context).settings.name == routeName
           ? () {

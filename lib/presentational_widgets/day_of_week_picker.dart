@@ -52,9 +52,10 @@ class DayOfWeekPicker extends StatelessWidget {
                 style: Theme.of(context).primaryTextTheme.bodyText1,
               ),
               shape: CircleBorder(),
-              elevation: 2.0,
-              fillColor:
-                  list.daysOfWeek[currentDay] ? Colors.blue : Colors.grey,
+              elevation: 3.0,
+              fillColor: list.daysOfWeek[currentDay]
+                  ? Theme.of(context).accentColor
+                  : Colors.grey,
             ),
           );
         },

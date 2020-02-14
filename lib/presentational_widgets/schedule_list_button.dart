@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:list_metadata_repository/list_metadata_repository.dart';
-import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
-import 'package:sky_lists/presentational_widgets/pages/schedule_list_page.dart';
-import 'package:sky_lists/utils/sky_list_page_arguments.dart';
+import 'package:sky_lists/presentational_widgets/schedule_list_dialog.dart';
 
 class ScheduleListButton extends StatelessWidget {
   final ListMetadata list;
@@ -17,10 +15,10 @@ class ScheduleListButton extends StatelessWidget {
     return IconButton(
       icon: Icon(Icons.schedule),
       onPressed: () {
-        BlocProvider.of<NavigatorBloc>(context).add(
-          NavigatorPushTo(
-            ScheduleListPage.routeName,
-            arguments: SkyListPageArguments(list),
+        showDialog(
+          context: context,
+          builder: (_) => ScheduleListDialog(
+            list: list,
           ),
         );
       },

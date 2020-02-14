@@ -62,7 +62,7 @@ ThemeData _buildLightTheme() {
 }
 
 TextTheme _buildAppTextTheme(TextTheme base) {
-  return GoogleFonts.openSansTextTheme()
+  return GoogleFonts.latoTextTheme()
       .copyWith(
         headline4: base.headline4.copyWith(
           fontWeight: FontWeight.w200,
@@ -75,36 +75,19 @@ TextTheme _buildAppTextTheme(TextTheme base) {
         ),
         headline6: base.headline6.copyWith(
           fontWeight: FontWeight.w400,
-          fontSize: 18.0,
         ),
         caption: base.caption.copyWith(
-          fontWeight: FontWeight.w400,
-          fontSize: 14.0,
-        ),
-        subtitle2: base.subtitle2.copyWith(
           fontWeight: FontWeight.w400,
         ),
       )
       .apply(
         displayColor: primaryTextColor,
         bodyColor: primaryTextColor,
+      )
+      .copyWith(
+        subtitle2: base.subtitle2.copyWith(
+          fontWeight: FontWeight.w400,
+          color: secondaryTextColor,
+        ),
       );
 }
-
-// /// Bright theme for app
-// final brightTheme = ThemeData(
-//   brightness: Brightness.light,
-//   primaryColor: Color(0xFFE91E63),
-//   accentColor: Color(0xFFFF5722),
-//   accentColorBrightness: Brightness.light,
-//   // primaryColor: Color(0xFF2862f4),
-//   // accentColor: Color(0xFFf43e72),
-// );
-
-/// Dark theme for app
-final darkTheme = ThemeData(
-  brightness: Brightness.dark,
-  primarySwatch: Colors.deepOrange,
-  // primaryColor: Color(0xFF20304d),
-  // accentColor: Color(0xFFb30033),
-);

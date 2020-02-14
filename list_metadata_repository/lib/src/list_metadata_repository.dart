@@ -63,4 +63,10 @@ abstract class ListMetadataRepository {
       ListPermission permission, bool state, ListMetadata list);
 
   Stream<bool> streamListSharedWithYouIsAllowed(ListMetadata list);
+
+  Stream<List<ListMetadata>> streamListsThatHaveSchedules({
+    Timestamp startAfterTimestamp,
+    int limit = 10,
+    bool showArchived = false,
+  });
 }

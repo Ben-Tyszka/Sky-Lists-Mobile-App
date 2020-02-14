@@ -62,10 +62,11 @@ class SkyListPage extends StatelessWidget {
               child: Scaffold(
                 appBar: AppBar(
                   actions: <Widget>[
-                    //PublishListAction(list: args.list),
-                    ScheduleListButton(
-                      list: args.list,
-                    ),
+                    if (repo.isOwner(args.list)) ...[
+                      ScheduleListButton(
+                        list: args.list,
+                      ),
+                    ],
                     ShareListButton(
                       user: state.user,
                       list: args.list,

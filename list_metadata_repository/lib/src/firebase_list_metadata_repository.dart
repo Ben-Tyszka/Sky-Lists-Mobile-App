@@ -307,4 +307,33 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
           ),
         );
   }
+
+  @override
+  Stream<List<ListMetadata>> streamListsThatHaveSchedules({
+    Timestamp startAfterTimestamp,
+    int limit = 10,
+    bool showArchived = false,
+  }) {
+    final baseQuery = _collection
+        .limit(limit)
+        .where('hidden', isEqualTo: false)
+        .where('archived', isEqualTo: showArchived)
+        .where('schedule', isNull: false)
+        .where('scheduleTime', isNull: false);
+
+    final startAfterQuery = baseQuery.startAfter([startAfterTimestamp]);
+    final query = startAfterTimestamp == null ? baseQuery : startAfterQuery;
+
+    return query.snapshots().map(
+      (snapshot) {
+        return snapshot.documents
+            .map(
+              (doc) => ListMetadata.fromEntity(
+                ListMetadataEntity.fromSnapshot(doc),
+              ),
+            )
+            .toList();
+      },
+    );
+  }
 }

@@ -15,7 +15,6 @@ import 'package:sky_lists/presentational_widgets/pages/privacy_policy_page.dart'
 import 'package:sky_lists/presentational_widgets/pages/publish_list_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/qr_scanner_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/require_reauthentication_page.dart';
-import 'package:sky_lists/presentational_widgets/pages/schedule_list_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/scheduled_lists_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/send_password_reset_page.dart';
 import 'package:sky_lists/presentational_widgets/pages/sky_list_page.dart';
@@ -58,7 +57,6 @@ class SkyListsApp extends StatelessWidget {
           ArchivedListsPage.routeName: (context) => ArchivedListsPage(),
           PublishListPage.routeName: (context) => PublishListPage(),
           ScheduledListsPage.routeName: (context) => ScheduledListsPage(),
-          ScheduleListPage.routeName: (context) => ScheduleListPage(),
         },
         initialRoute: StartupPage.routeName,
         //Track route transitions

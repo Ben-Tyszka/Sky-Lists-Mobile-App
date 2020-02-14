@@ -52,8 +52,8 @@ class ListMetadata {
         this.docRef = docRef ?? null,
         this.othersCanShareList = othersCanShareList ?? true,
         this.othersCanDeleteItems = othersCanDeleteItems ?? true,
-        this.schedule = schedule ?? Schedule.values[0],
-        this.scheduleTime = scheduleTime ?? '',
+        this.schedule = schedule ?? null,
+        this.scheduleTime = scheduleTime ?? null,
         this.daysOfWeek = daysOfWeek ??
             {
               DayOfWeek.SUN: false,

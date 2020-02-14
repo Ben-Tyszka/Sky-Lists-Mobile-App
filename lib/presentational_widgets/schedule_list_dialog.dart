@@ -10,27 +10,24 @@ import 'package:sky_lists/blocs/navigator_bloc/bloc.dart';
 import 'package:sky_lists/presentational_widgets/pages/not_logged_in_page.dart';
 import 'package:sky_lists/presentational_widgets/schedule_list_column.dart';
 
-import 'package:sky_lists/utils/sky_list_page_arguments.dart';
+class ScheduleListDialog extends StatelessWidget {
+  ScheduleListDialog({
+    @required this.list,
+  });
 
-class ScheduleListPage extends StatelessWidget {
-  static final String routeName = '/schedule_list';
-
+  final ListMetadata list;
   @override
   Widget build(BuildContext context) {
-    final SkyListPageArguments args = ModalRoute.of(context).settings.arguments;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Schedule List'),
-      ),
-      body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+    return AlertDialog(
+      title: Text('Schedule List'),
+      content: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is Authenticated) {
             return BlocProvider<ListMetadataBloc>(
               create: (_) => ListMetadataBloc(
                 listsRepository: FirebaseListMetadataRepository(state.user.uid),
               )..add(
-                  LoadListMetadata(args.list),
+                  LoadListMetadata(list),
                 ),
               child: ScheduleListColumn(),
             );
