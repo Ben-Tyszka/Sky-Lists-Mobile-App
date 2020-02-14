@@ -3,11 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 final brightTheme = _buildLightTheme();
 
-final primaryColor = Color(0xFF3F51B5);
-final accentColor = Color(0xFFFF4081);
+final primaryColor = Color(0xFF152837);
+final accentColor = Color(0xFFd62f54);
 final backgroundColor = Color(0xFFFFFFFF);
 final primaryTextColor = Color(0xFF212121);
-final secondaryTextColor = Color(0xFF757575);
+final secondaryTextColor = Color(0xFF3e5061);
 
 ThemeData _buildLightTheme() {
   final ThemeData base = ThemeData.light();

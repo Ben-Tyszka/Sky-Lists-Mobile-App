@@ -33,6 +33,8 @@ class ListMetadata {
 
   final Map<DayOfWeek, bool> daysOfWeek;
 
+  final bool enableSchedule;
+
   ListMetadata(
     this.name, {
     bool archived,
@@ -45,6 +47,7 @@ class ListMetadata {
     Schedule schedule,
     String scheduleTime,
     Map<DayOfWeek, bool> daysOfWeek,
+    bool enableSchedule,
   })  : this.archived = archived ?? false,
         this.hidden = hidden ?? false,
         this.lastModified = lastModified ?? FieldValue.serverTimestamp(),
@@ -54,6 +57,7 @@ class ListMetadata {
         this.othersCanDeleteItems = othersCanDeleteItems ?? true,
         this.schedule = schedule ?? null,
         this.scheduleTime = scheduleTime ?? null,
+        this.enableSchedule = enableSchedule ?? false,
         this.daysOfWeek = daysOfWeek ??
             {
               DayOfWeek.SUN: false,
@@ -77,6 +81,7 @@ class ListMetadata {
     Schedule schedule,
     String scheduleTime,
     Map<DayOfWeek, bool> daysOfWeek,
+    bool enableSchedule,
   }) {
     return ListMetadata(
       name ?? this.name,
@@ -90,6 +95,7 @@ class ListMetadata {
       daysOfWeek: daysOfWeek ?? this.daysOfWeek,
       schedule: schedule ?? this.schedule,
       scheduleTime: scheduleTime ?? this.scheduleTime,
+      enableSchedule: enableSchedule ?? this.enableSchedule,
     );
   }
 
@@ -105,7 +111,8 @@ class ListMetadata {
       othersCanShareList.hashCode ^
       schedule.hashCode ^
       scheduleTime.hashCode ^
-      daysOfWeek.hashCode;
+      daysOfWeek.hashCode ^
+      enableSchedule.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -122,11 +129,12 @@ class ListMetadata {
           othersCanShareList == other.othersCanShareList &&
           daysOfWeek == other.daysOfWeek &&
           schedule == other.schedule &&
-          scheduleTime == other.scheduleTime;
+          scheduleTime == other.scheduleTime &&
+          enableSchedule == other.enableSchedule;
 
   @override
   String toString() {
-    return 'ListMetadata | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden, othersCanShareList: $othersCanShareList, othersCanDeleteItems: $othersCanDeleteItems, schedule: $schedule, scheduleTime: $scheduleTime, dayOfWeek:$daysOfWeek';
+    return 'ListMetadata | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden, othersCanShareList: $othersCanShareList, othersCanDeleteItems: $othersCanDeleteItems, schedule: $schedule, scheduleTime: $scheduleTime, dayOfWeek:$daysOfWeek, enableSchedule:$enableSchedule';
   }
 
   ListMetadataEntity toEntity() {
@@ -142,6 +150,7 @@ class ListMetadata {
       daysOfWeek: daysOfWeek,
       schedule: schedule,
       scheduleTime: scheduleTime,
+      enableSchedule: enableSchedule,
     );
   }
 

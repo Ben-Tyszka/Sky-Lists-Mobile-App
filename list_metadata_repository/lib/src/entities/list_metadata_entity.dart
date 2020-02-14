@@ -31,6 +31,8 @@ class ListMetadataEntity extends Equatable {
 
   final Map<DayOfWeek, bool> daysOfWeek;
 
+  final bool enableSchedule;
+
   ListMetadataEntity({
     this.id,
     this.name,
@@ -43,6 +45,7 @@ class ListMetadataEntity extends Equatable {
     this.schedule,
     this.scheduleTime,
     this.daysOfWeek,
+    this.enableSchedule,
   });
 
   @override
@@ -58,11 +61,12 @@ class ListMetadataEntity extends Equatable {
         daysOfWeek,
         schedule,
         scheduleTime,
+        enableSchedule,
       ];
 
   @override
   String toString() {
-    return 'ListMetadataEntity | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden, othersCanShareList: $othersCanShareList, othersCanDeleteItems: $othersCanDeleteItems, schedule: $schedule, scheduleTime: $scheduleTime, dayOfWeek:$daysOfWeek';
+    return 'ListMetadataEntity | name: $name, id: $id, archived: $archived, modified: ${lastModified.toString()}, hidden: $hidden, othersCanShareList: $othersCanShareList, othersCanDeleteItems: $othersCanDeleteItems, schedule: $schedule, scheduleTime: $scheduleTime, dayOfWeek:$daysOfWeek, enableSchedule$enableSchedule';
   }
 
   static ListMetadataEntity fromSnapshot(DocumentSnapshot snapshot) {
@@ -75,6 +79,7 @@ class ListMetadataEntity extends Equatable {
       hidden: snapshot['hidden'] ?? false,
       othersCanDeleteItems: snapshot['othersCanDeleteItems'] ?? true,
       othersCanShareList: snapshot['othersCanShareList'] ?? true,
+      enableSchedule: snapshot['enableSchedule'] ?? false,
       daysOfWeek:
           Map<String, bool>.from(snapshot['daysOfWeek'])?.map<DayOfWeek, bool>(
                 (dayIndex, flag) => MapEntry(
@@ -102,6 +107,7 @@ class ListMetadataEntity extends Equatable {
       'archived': archived,
       'lastModified': FieldValue.serverTimestamp(),
       'hidden': hidden,
+      'enableSchedule': enableSchedule,
       'othersCanShareList': othersCanShareList,
       'othersCanDeleteItems': othersCanDeleteItems,
       'daysOfWeek': daysOfWeek.map<String, bool>(

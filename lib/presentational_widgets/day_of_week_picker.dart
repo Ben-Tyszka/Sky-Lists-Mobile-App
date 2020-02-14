@@ -6,7 +6,10 @@ import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
 class DayOfWeekPicker extends StatelessWidget {
   DayOfWeekPicker({
     @required this.list,
+    @required this.state,
   });
+
+  final ListLoaded state;
 
   final ListMetadata list;
 
@@ -43,6 +46,10 @@ class DayOfWeekPicker extends StatelessWidget {
                   UpdateListMetadata(
                     list.copyWith(
                       daysOfWeek: copyOfDaysOfWeek,
+                      enableSchedule: state.list.schedule == Schedule.DAILY ||
+                          (state.list.schedule != Schedule.DAILY &&
+                              state.list.daysOfWeek.containsValue(true) &&
+                              state.list.scheduleTime.isNotEmpty),
                     ),
                   ),
                 );
