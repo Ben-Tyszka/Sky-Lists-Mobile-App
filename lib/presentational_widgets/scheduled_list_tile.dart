@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:sky_lists/blocs/list_metadata_bloc/bloc.dart';
+import 'package:sky_lists/presentational_widgets/schedule_list_dialog.dart';
 
 import 'package:sky_lists/utils/sky_lists_app_theme.dart';
 
@@ -53,6 +57,22 @@ class ScheduledListTile extends StatelessWidget {
               color: secondaryTextColor,
             ),
       ),
+      trailing: IconButton(
+          icon: Icon(Icons.edit),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => BlocProvider<ListMetadataBloc>(
+                create: (_) => ListMetadataBloc(
+                  listsRepository:
+                      Provider.of<FirebaseListMetadataRepository>(context),
+                )..add(
+                    LoadListMetadata(list),
+                  ),
+                child: ScheduleListDialog(),
+              ),
+            );
+          }),
     );
   }
 }
