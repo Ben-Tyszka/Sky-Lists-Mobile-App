@@ -67,6 +67,5 @@ abstract class ListMetadataRepository {
   Stream<List<ListMetadata>> streamListsThatHaveSchedules({
     Timestamp startAfterTimestamp,
     int limit = 10,
-    bool showArchived = false,
   });
 }

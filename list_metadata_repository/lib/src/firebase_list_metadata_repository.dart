@@ -312,14 +312,14 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
   Stream<List<ListMetadata>> streamListsThatHaveSchedules({
     Timestamp startAfterTimestamp,
     int limit = 10,
-    bool showArchived = false,
   }) {
     final baseQuery = _collection
         .limit(limit)
         .where('hidden', isEqualTo: false)
-        .where('archived', isEqualTo: showArchived)
+        .where('archived', isEqualTo: false)
         .where('schedule', isNull: false)
-        .where('scheduleTime', isNull: false);
+        .where('scheduleTime', isNull: false)
+        .where('enableSchedule', isEqualTo: true);
 
     final startAfterQuery = baseQuery.startAfter([startAfterTimestamp]);
     final query = startAfterTimestamp == null ? baseQuery : startAfterQuery;
