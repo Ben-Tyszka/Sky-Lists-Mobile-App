@@ -89,3 +89,12 @@ class ListUpdated extends ListMetadataEvent {
   @override
   List<Object> get props => [list];
 }
+
+class CopyAndSaveScheduleList extends ListMetadataEvent {
+  final ListMetadata list;
+
+  CopyAndSaveScheduleList(this.list);
+
+  @override
+  List<Object> get props => [list];
+}

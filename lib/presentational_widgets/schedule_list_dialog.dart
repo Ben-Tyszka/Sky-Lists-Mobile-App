@@ -26,12 +26,14 @@ class ScheduleListDialog extends StatelessWidget {
               FlatButton(
                 onPressed: saveEnabled
                     ? () {
+                        final listCopy = state.list.copyWith(
+                          enableSchedule: true,
+                        );
                         BlocProvider.of<ListMetadataBloc>(context).add(
-                          UpdateListMetadata(
-                            state.list.copyWith(
-                              enableSchedule: true,
-                            ),
-                          ),
+                          UpdateListMetadata(listCopy),
+                        );
+                        BlocProvider.of<ListMetadataBloc>(context).add(
+                          CopyAndSaveScheduleList(listCopy),
                         );
                       }
                     : null,

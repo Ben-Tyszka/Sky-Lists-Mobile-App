@@ -72,6 +72,8 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
       yield* _mapLoadListToState(event);
     } else if (event is ListUpdated) {
       yield* _mapListUpdateToState(event);
+    } else if (event is CopyAndSaveScheduleList) {
+      yield* _mapCopyAndSaveScheduleListToState(event);
     }
   }
 
@@ -120,6 +122,11 @@ class ListMetadataBloc extends Bloc<ListMetadataEvent, ListMetadataState> {
     yield ListLoaded(
       event.list,
     );
+  }
+
+  Stream<ListMetadataState> _mapCopyAndSaveScheduleListToState(
+      CopyAndSaveScheduleList event) async* {
+    _listsRepository.copyAndSaveScheduleList(event.list);
   }
 
   @override

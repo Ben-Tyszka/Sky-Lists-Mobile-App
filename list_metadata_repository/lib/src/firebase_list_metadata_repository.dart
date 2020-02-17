@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:list_metadata_repository/list_metadata_repository.dart';
+import 'package:list_metadata_repository/src/models/schedule_list.dart';
 import 'entities/entities.dart';
 
 class FirebaseListMetadataRepository implements ListMetadataRepository {
@@ -335,5 +336,21 @@ class FirebaseListMetadataRepository implements ListMetadataRepository {
             .toList();
       },
     );
+  }
+
+  Future<void> copyAndSaveScheduleList(ListMetadata list) {
+    return Firestore.instance
+        .collection('users')
+        .document(_userId)
+        .collection('scheduledlists')
+        .document(list.id)
+        .setData(
+          ScheduleList(
+            daysOfWeek: list.daysOfWeek,
+            id: list.id,
+            schedule: list.schedule,
+            scheduleTime: list.scheduleTime,
+          ).toEntity().toDocument(),
+        );
   }
 }

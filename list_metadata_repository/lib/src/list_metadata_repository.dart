@@ -68,4 +68,6 @@ abstract class ListMetadataRepository {
     Timestamp startAfterTimestamp,
     int limit = 10,
   });
+
+  Future<void> copyAndSaveScheduleList(ListMetadata list);
 }

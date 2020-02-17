@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,8 @@ import 'package:list_metadata_repository/list_metadata_repository.dart';
 
 class LoggedInHomePage extends StatefulWidget {
   static final String routeName = '/logged_in_home_init';
+  static final platform =
+      MethodChannel('schedulingsystem.skylists.app/schedule');
 
   @override
   _LoggedInHomePageState createState() => _LoggedInHomePageState();
