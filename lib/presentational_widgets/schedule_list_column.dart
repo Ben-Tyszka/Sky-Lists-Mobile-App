@@ -15,6 +15,7 @@ class ScheduleListColumn extends StatelessWidget {
 
   final ListLoaded state;
   final _scheduleTypes = [
+    '',
     'Daily',
     'Weekly',
     'Biweekly',
@@ -24,7 +25,6 @@ class ScheduleListColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String value;
-
     if (state.list.schedule == Schedule.DAILY) {
       value = 'Daily';
     } else if (state.list.schedule == Schedule.BIWEEKLY) {
@@ -36,7 +36,9 @@ class ScheduleListColumn extends StatelessWidget {
     } else {
       value = '';
     }
+
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         DropdownButton<String>(
           value: value,
@@ -58,27 +60,40 @@ class ScheduleListColumn extends StatelessWidget {
               flag = Schedule.WEEKLY;
             } else if (val == 'Monthy') {
               flag = Schedule.MONTHLY;
+            } else {
+              flag = Schedule.EMPTY;
             }
             BlocProvider.of<ListMetadataBloc>(context).add(
               UpdateListMetadata(
                 state.list.copyWith(
                   schedule: flag,
-                  enableSchedule: state.list.schedule == Schedule.DAILY ||
-                      (state.list.schedule != Schedule.DAILY &&
-                          state.list.daysOfWeek.containsValue(true) &&
-                          state.list.scheduleTime.isNotEmpty),
+                  scheduleTime: '',
+                  daysOfWeek: {
+                    DayOfWeek.SUN: false,
+                    DayOfWeek.MON: false,
+                    DayOfWeek.TUE: false,
+                    DayOfWeek.WED: false,
+                    DayOfWeek.TH: false,
+                    DayOfWeek.FRI: false,
+                    DayOfWeek.SAT: false,
+                  },
+                  enableSchedule: false,
                 ),
               ),
             );
           },
         ),
-        if (state.list.schedule != Schedule.DAILY) ...[
+        if (state.list.schedule != Schedule.DAILY &&
+            state.list.schedule != Schedule.EMPTY) ...[
           DayOfWeekPicker(
             list: state.list,
             state: state,
           ),
         ],
-        if (state.list.daysOfWeek.containsValue(true)) ...[
+        if ((state.list.schedule == Schedule.DAILY) ||
+            (state.list.schedule != Schedule.DAILY &&
+                state.list.schedule != Schedule.EMPTY &&
+                state.list.daysOfWeek.containsValue(true))) ...[
           TimePicker(state: state),
         ],
       ],

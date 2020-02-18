@@ -25,7 +25,8 @@ class ScheduleListButton extends StatelessWidget {
           builder: (_) => BlocProvider<ListMetadataBloc>(
             create: (_) => ListMetadataBloc(
               listsRepository: FirebaseListMetadataRepository(
-                (BlocProvider.of<AuthenticationBloc>(context) as Authenticated)
+                (BlocProvider.of<AuthenticationBloc>(context).state
+                        as Authenticated)
                     .user
                     .uid,
               ),

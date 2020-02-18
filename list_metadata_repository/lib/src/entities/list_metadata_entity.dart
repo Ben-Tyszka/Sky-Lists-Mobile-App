@@ -116,7 +116,7 @@ class ListMetadataEntity extends Equatable {
           flag,
         ),
       ),
-      'schedule': schedule.index,
+      'schedule': schedule?.index,
       'scheduleTime': scheduleTime,
     };
   }

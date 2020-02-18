@@ -1,4 +1,5 @@
 enum Schedule {
+  EMPTY,
   DAILY,
   WEEKLY,
   BIWEEKLY,

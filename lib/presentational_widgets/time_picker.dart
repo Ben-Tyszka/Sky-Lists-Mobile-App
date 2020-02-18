@@ -13,7 +13,6 @@ class TimePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text('At ${state.list.scheduleTime}'),
         FlatButton.icon(
           onPressed: () {
             showTimePicker(
@@ -21,14 +20,10 @@ class TimePicker extends StatelessWidget {
               initialTime: TimeOfDay.now(),
             ).then(
               (val) {
-                BlocProvider.of(context).add(
-                  ListUpdated(
+                BlocProvider.of<ListMetadataBloc>(context).add(
+                  UpdateListMetadata(
                     state.list.copyWith(
-                      scheduleTime: val.toString(),
-                      enableSchedule: state.list.schedule == Schedule.DAILY ||
-                          (state.list.schedule != Schedule.DAILY &&
-                              state.list.daysOfWeek.containsValue(true) &&
-                              state.list.scheduleTime.isNotEmpty),
+                      scheduleTime: val.format(context),
                     ),
                   ),
                 );
@@ -36,7 +31,11 @@ class TimePicker extends StatelessWidget {
             );
           },
           icon: Icon(Icons.timer),
-          label: Text('Set Time'),
+          label: Text(
+            state.list.scheduleTime.isEmpty
+                ? 'Set Time'
+                : state.list.scheduleTime,
+          ),
         ),
       ],
     );

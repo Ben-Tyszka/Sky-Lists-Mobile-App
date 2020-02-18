@@ -46,10 +46,6 @@ class DayOfWeekPicker extends StatelessWidget {
                   UpdateListMetadata(
                     list.copyWith(
                       daysOfWeek: copyOfDaysOfWeek,
-                      enableSchedule: state.list.schedule == Schedule.DAILY ||
-                          (state.list.schedule != Schedule.DAILY &&
-                              state.list.daysOfWeek.containsValue(true) &&
-                              state.list.scheduleTime.isNotEmpty),
                     ),
                   ),
                 );
